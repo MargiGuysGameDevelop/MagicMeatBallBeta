@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: aa2f089a51f8e1d429cca8f41b7fdfbd
-timeCreated: 1464541959
+timeCreated: 1464536188
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -67,7 +67,6 @@ ModelImporter:
     100118: weapon_IK_R
     100120: "\u5713"
     100122: "\u5E73\u9762"
-    100124: "\u5713\u67F1\u9AD4"
     400000: amerture
     400002: arm_1_L
     400004: arm_1_R
@@ -130,16 +129,12 @@ ModelImporter:
     400118: weapon_IK_R
     400120: "\u5713"
     400122: "\u5E73\u9762"
-    400124: "\u5713\u67F1\u9AD4"
     2300000: "\u5713"
-    2300002: "\u5713\u67F1\u9AD4"
     3300000: "\u5713"
-    3300002: "\u5713\u67F1\u9AD4"
     4300000: "\u5713"
     4300002: "\u5E73\u9762"
     4300004: handandleg
     4300006: meetball_retop
-    4300008: "\u5713\u67F1\u9AD4"
     7400000: Stand
     7400002: Walk
     7400004: RollingForward
@@ -147,9 +142,6 @@ ModelImporter:
     7400008: SingleAttack2
     7400010: SingleAttack3
     7400012: Aria
-    7400014: MagicAttack
-    7400016: Hurt
-    7400018: Tpose
     9500000: //RootNode
     13700000: handandleg
     13700002: meetball_retop
@@ -168,7 +160,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -209,7 +201,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    rootMotionBoneName: root
+    rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
