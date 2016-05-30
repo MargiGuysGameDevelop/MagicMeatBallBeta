@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour {
 
 
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		RotateAroundTarget();
@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour {
 	}
 
 	void Follow(){
-		
+
 		transform.position = Vector3.Lerp( transform.position, target.transform.position, moveSmooth * Time.deltaTime);
 	}
 
