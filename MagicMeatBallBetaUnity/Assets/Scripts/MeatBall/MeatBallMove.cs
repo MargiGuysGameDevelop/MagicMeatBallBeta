@@ -12,40 +12,51 @@ public class MeatBallMove : NetworkBehaviour {
 	void Start () {
 		meatBallAnimator = GetComponent<Animator>();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		//ensure player control himself
 		if(!isLocalPlayer)
 			return;
-		
+		float move=0f;
 		float vertical = Input.GetAxis("Vertical"); //sw
 		float horizontal = Input.GetAxis("Horizontal"); //ad
+		if(vertical < 0)
+			move-=vertical;
+		else
+			move+=vertical;
+		if(horizontal < 0)
+			move-=horizontal;
+		else
+			move+=horizontal;
 
+		//Charater rotate
+		float mouseMoveX = Input.GetAxis("Mouse X");
+		transform.Rotate(Vector3.up , mouseMoveX * 75f * Time.deltaTime);
+
+		meatBallAnimator.SetFloat("Move",move);
+		meatBallAnimator.SetFloat("Vertical",vertical);
+		meatBallAnimator.SetFloat("Horizontal",horizontal);
 		if( vertical < 0)
 			vertical *= -1f;
 		if(horizontal < 0)
 			horizontal *= -1f;
 
-		Direct(vertical,horizontal);
-		Move(vertical,horizontal);
 
 
+		//Direct(vertical,horizontal);
+		//Move(vertical,horizontal);
 
 	}
-
+	/*
 	void Move( float vertical, float horizontal){
 		if(vertical + horizontal > 0.1f){
 			gameObject.transform.Translate( Vector3.forward* meatBallSpeed* Time.deltaTime);
 		}
 	}
-
+	*/
 	void Direct( float vertical, float horizontal){
 
-
-
-
-		meatBallAnimator.SetFloat("Move",vertical + horizontal);
 		//rotate immediately
 		if(Input.GetKey("w") && Input.GetKey("a")){
 			rotateAngel = 315;
