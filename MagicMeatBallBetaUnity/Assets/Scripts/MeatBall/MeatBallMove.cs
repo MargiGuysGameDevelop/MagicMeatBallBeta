@@ -3,12 +3,24 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class MeatBallMove : NetworkBehaviour {
+	/*
+	private enum MeatBallState{ Movement,Jump };
 
+	[SerializeField]
+	MeatBallState meatBallState;
+*/
+	AnimatorStateInfo currentState; 
 	Animator meatBallAnimator;
+
+	public float vertical;
+	public float horizontal;
+
 	public float rotateAngel;
 	public float meatBallSpeed;
 	public GameObject playerView;
 	// Use this for initialization
+
+
 	void Start () {
 		meatBallAnimator = GetComponent<Animator>();
 	}
@@ -18,78 +30,59 @@ public class MeatBallMove : NetworkBehaviour {
 		//ensure player control himself
 		if(!isLocalPlayer)
 			return;
-		float move=0f;
-		float vertical = Input.GetAxis("Vertical"); //sw
-		float horizontal = Input.GetAxis("Horizontal"); //ad
-		if(vertical < 0)
-			move-=vertical;
-		else
-			move+=vertical;
-		if(horizontal < 0)
-			move-=horizontal;
-		else
-			move+=horizontal;
 
-		//Charater rotate
+		currentState = meatBallAnimator.GetCurrentAnimatorStateInfo (0);
+
+
+		vertical = Input.GetAxis("Vertical"); //sw
+		horizontal = Input.GetAxis("Horizontal"); //ad
+
 		float mouseMoveX = Input.GetAxis("Mouse X");
 		transform.Rotate(Vector3.up , mouseMoveX * 75f * Time.deltaTime);
 
-		meatBallAnimator.SetFloat("Move",move);
 		meatBallAnimator.SetFloat("Vertical",vertical);
 		meatBallAnimator.SetFloat("Horizontal",horizontal);
-		if( vertical < 0)
-			vertical *= -1f;
-		if(horizontal < 0)
-			horizontal *= -1f;
 
+		if (Input.GetKeyDown("space")) {
+			Jump();
+		}
 
-
-		//Direct(vertical,horizontal);
-		//Move(vertical,horizontal);
 
 	}
-	/*
-	void Move( float vertical, float horizontal){
-		if(vertical + horizontal > 0.1f){
-			gameObject.transform.Translate( Vector3.forward* meatBallSpeed* Time.deltaTime);
-		}
-	}
-	*/
-	void Direct( float vertical, float horizontal){
 
-		//rotate immediately
-		if(Input.GetKey("w") && Input.GetKey("a")){
-			rotateAngel = 315;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
-		}
-		else if(Input.GetKey("w")  && Input.GetKey("d")){
-			rotateAngel = 45f;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
-		}
-		else if(Input.GetKey("s") && Input.GetKey("a")){
-			rotateAngel = 225f;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
-		}
-		else if(Input.GetKey("s") && Input.GetKey("d")){
-			rotateAngel = 135f;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
-		}
-		else if(Input.GetKey("a")){
-			rotateAngel = 270f;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
-		}
-		else if(Input.GetKey("d")){
-			rotateAngel = 90f;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
-		}
-		else if(Input.GetKey("w")){
-			rotateAngel = 0f;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
-		}
-		else if(Input.GetKey("s")){
-			rotateAngel = 180f;
-			gameObject.transform.eulerAngles = new Vector3( 0, playerView.transform.eulerAngles.y + rotateAngel, 0);
+
+
+
+
+	public void Jump(){
+		if (CanJump()) {
+			CmdSetAnimTrigger ("Jump");
 		}
 	}
+	private bool CanJump(){
+		//check state
+		if (currentState.nameHash == Animator.StringToHash ("Base Layer.Movement"))
+			return true;
+		else
+			return false;
+	}
+
+
+	[Command]
+	public void CmdSetAnimTrigger(string triggerName)
+	{
+		if(!isServer)
+		{
+			meatBallAnimator.SetTrigger(triggerName);
+		}
+		RpcSetAnimTrigger(triggerName);
+	}
+
+	[ClientRpc]
+	public void RpcSetAnimTrigger(string triggerName)
+	{
+		meatBallAnimator.SetTrigger(triggerName);
+	}
+
 
 }

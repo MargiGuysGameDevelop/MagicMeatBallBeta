@@ -7,7 +7,8 @@ public class ClientController : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		if(!isLocalPlayer){
-			camera.SetActive(false);
+			
+			Destroy (camera);
 		}
 	}
 	
