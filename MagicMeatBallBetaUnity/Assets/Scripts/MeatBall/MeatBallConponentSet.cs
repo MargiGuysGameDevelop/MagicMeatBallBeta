@@ -19,6 +19,7 @@ using UnityEditor;
 [RequireComponent(typeof(MeatBallMove))]
 [RequireComponent(typeof(MeatBallStatus))]
 [RequireComponent(typeof(Combat))]
+[RequireComponent(typeof(ClientController))]
 #endregion
 
 public class MeatBallConponentSet : MonoBehaviour {
@@ -53,12 +54,19 @@ public class MeatBallConponentSet : MonoBehaviour {
 		rig.constraints = RigidbodyConstraints.FreezeRotation;
 
 		MeatBallMove move = GetComponent<MeatBallMove> ();
+		move.meatBallSpeed = 4;
 
 		MeatBallStatus sta = GetComponent<MeatBallStatus> ();
 		sta.damage = 20;
 		sta.MaxHP = 100;
 
 		Combat com = GetComponent<Combat> ();
+		com.selfStatus = sta;
+
+		ClientController client = GetComponent<ClientController> ();
+
+		CameraController cc = GetComponentInChildren<CameraController> ();
+		cc.target = this.gameObject;
 	}
 
 }

@@ -6,10 +6,15 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: BSMLSowrd
     400000: //RootNode
+    400002: BSMLSowrd
     2300000: //RootNode
+    2300002: BSMLSowrd
     3300000: //RootNode
+    3300002: BSMLSowrd
     4300000: "\u5E73\u9762.001"
+    4300002: BSMLSowrd
   materials:
     importMaterials: 1
     materialName: 0
