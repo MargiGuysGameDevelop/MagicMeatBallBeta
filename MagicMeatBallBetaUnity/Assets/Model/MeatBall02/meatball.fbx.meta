@@ -69,6 +69,10 @@ ModelImporter:
     100122: weapon_IK_R
     100124: "\u5E73\u9762"
     100126: head
+    100128: eyeR
+    100130: eyeR.001
+    100132: mouse
+    100134: eyeL
     400000: amerture
     400002: arm_1_L
     400004: arm_1_R
@@ -133,9 +137,19 @@ ModelImporter:
     400122: weapon_IK_R
     400124: "\u5E73\u9762"
     400126: head
+    400128: eyeR
+    400130: eyeR.001
+    400132: mouse
+    400134: eyeL
+    2300000: //RootNode
+    3300000: //RootNode
     4300000: "\u5E73\u9762"
     4300002: handandleg
     4300004: meatball02_retop
+    4300006: mouse
+    4300008: eyeR.001
+    4300010: eyeR
+    4300012: eyeL
     7400000: Tpose
     7400002: Stand
     7400004: ForwardWalk
@@ -179,6 +193,10 @@ ModelImporter:
     13700000: handandleg
     13700002: meatball02_retop
     13700004: "\u5E73\u9762"
+    13700006: eyeR
+    13700008: eyeR.001
+    13700010: mouse
+    13700012: eyeL
   materials:
     importMaterials: 1
     materialName: 0
