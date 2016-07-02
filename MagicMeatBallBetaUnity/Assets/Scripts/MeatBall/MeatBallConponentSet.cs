@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 #region NetWork
 [RequireComponent(typeof(NetworkIdentity))]
@@ -66,11 +69,12 @@ public class MeatBallConponentSet : MonoBehaviour {
 		ClientController client = GetComponent<ClientController> ();
 
 		CameraController cc = GetComponentInChildren<CameraController> ();
-		cc.target = this.gameObject;
+		cc.target = this.gameObject.transform;
 	}
 
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(MeatBallConponentSet))]
 public class MeatBallConponentSetUI :Editor{
 	public override void OnInspectorGUI(){
@@ -79,3 +83,4 @@ public class MeatBallConponentSetUI :Editor{
 		}
 	}
 }
+#endif

@@ -20,9 +20,23 @@ public class MeatBallMove : NetworkBehaviour {
 	public GameObject playerView;
 	// Use this for initialization
 
+	private GameObject sceneCamera;
+
+	void Awake(){
+		sceneCamera = GameObject.FindGameObjectWithTag ("MainCamera");
+		//sceneCamera.SetActive (false);
+	}
 
 	void Start () {
-		meatBallAnimator = GetComponent<Animator>();
+
+		if (isLocalPlayer) {
+			meatBallAnimator = GetComponent<Animator> ();
+			gameObject.name = "ME";
+			gameObject.tag = "Player";
+			gameObject.transform.Find ("amerture/root").tag = "PlayerBodyBone";
+			//sceneCamera.SetActive (true);
+			sceneCamera.GetComponent<CameraController>().Initial();
+		}
 	}
 
 	// Update is called once per frame

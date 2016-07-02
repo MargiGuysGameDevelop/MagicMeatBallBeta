@@ -17,7 +17,7 @@ public class Weapon : MonoBehaviour {
 		
 
 	void OnTriggerEnter(Collider other){
-		print ("triggeriN");
+		//print ("triggeriN");
 		Combat combat = other.GetComponent<Combat> ();
 		if (combat) {
 			//print ("find combat");
@@ -25,6 +25,5 @@ public class Weapon : MonoBehaviour {
 		}
 
 	}
-
 
 }

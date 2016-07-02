@@ -16,7 +16,7 @@ public class Combat : NetworkBehaviour {
 
 	}
 
-
+	/*take damege is current by local this version*/
 	public void TakeDamage(float damage){
 		if (!isServer)
 			return;
