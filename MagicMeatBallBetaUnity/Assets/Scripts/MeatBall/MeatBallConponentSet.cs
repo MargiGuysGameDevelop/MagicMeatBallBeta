@@ -8,7 +8,7 @@ using UnityEditor;
 
 #region NetWork
 [RequireComponent(typeof(NetworkIdentity))]
-[RequireComponent(typeof(NetworkTransform))]
+/*[RequireComponent(typeof(NetworkTransform))]*/
 [RequireComponent(typeof(NetworkAnimator))]
 #endregion
 
@@ -19,7 +19,7 @@ using UnityEditor;
 #endregion
 
 #region script
-[RequireComponent(typeof(MeatBallMove))]
+[RequireComponent(typeof(MeatBall))]
 [RequireComponent(typeof(MeatBallStatus))]
 [RequireComponent(typeof(Combat))]
 [RequireComponent(typeof(ClientController))]
@@ -56,11 +56,11 @@ public class MeatBallConponentSet : MonoBehaviour {
 		Rigidbody rig = GetComponent<Rigidbody> ();
 		rig.constraints = RigidbodyConstraints.FreezeRotation;
 
-		MeatBallMove move = GetComponent<MeatBallMove> ();
+		MeatBall move = GetComponent<MeatBall> ();
 		move.meatBallSpeed = 4;
 
 		MeatBallStatus sta = GetComponent<MeatBallStatus> ();
-		sta.damage = 20;
+		//sta.damage = 20;
 		sta.MaxHP = 100;
 
 		Combat com = GetComponent<Combat> ();

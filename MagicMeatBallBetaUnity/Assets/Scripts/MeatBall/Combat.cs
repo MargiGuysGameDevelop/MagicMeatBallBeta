@@ -10,23 +10,21 @@ public class Combat : NetworkBehaviour {
 	void Awake () {
 		//selfStatus = GetComponent<MeatBallStatus> ();
 	}
-	
 	// Update is called once per frame
 	void Update () {
 
 	}
 
-	/*take damege is current by local this version*/
-	public void TakeDamage(float damage){
-		if (!isServer)
-			return;
-		
+
+	/**take damage only on sever**/
+	[Command]
+	public void CmdTakeDamage(float damage){
 		selfStatus.HP -= damage;
-		SetHpValue ();
 	}
 
 
 	public void SetHpValue(){
 		GetComponentInChildren<Slider> ().value = selfStatus.HP;
+		Debug.Log ("set HP : " + selfStatus.HP);
 	}
 }

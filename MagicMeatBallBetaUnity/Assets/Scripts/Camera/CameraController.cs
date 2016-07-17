@@ -4,6 +4,7 @@ using System.Collections;
 /********************************/
 /*this script need some TAG******/
 /*Tag : Player , PlayerBodyBone,*/
+/*and those setup in meatball script*/
 /********************************/
 public class CameraController : MonoBehaviour {
 	public Transform target;
@@ -79,9 +80,9 @@ public class CameraController : MonoBehaviour {
 		float mouseMoveY = Input.GetAxis("Mouse Y");
 
 
-		focusBallHeight += mouseMoveY * focusBallHeightRate * 0.1f;
+		focusBallHeight += mouseMoveY * focusBallHeightRate * 0.05f;
 
-		cameraHeight -= mouseMoveY * cameraHeightRate * 0.1f;
+		cameraHeight -= mouseMoveY * cameraHeightRate * 0.05f;
 
 		focusBallHeight = Mathf.Clamp (focusBallHeight , focusBallHeightMin, focusBallHeightMax);
 		cameraHeight = Mathf.Clamp (cameraHeight, cameraHeightMin, cameraHeightMax);
