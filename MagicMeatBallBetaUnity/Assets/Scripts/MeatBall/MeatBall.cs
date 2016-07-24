@@ -14,7 +14,6 @@ public class MeatBall : NetworkBehaviour {
 
 	public MeatBallStatus selfStatus;
 
-
 	public float vertical;
 	public float horizontal;
 
@@ -33,13 +32,21 @@ public class MeatBall : NetworkBehaviour {
 	private GameObject sceneCamera;
 	private HpCanvas hpCanvas;
 
-	[SerializeField]GameObject[] rightHandWeaponList;
+	[SerializeField]Weapon[] rightHandWeaponList;
+
 
 	void Awake(){
+
 		sceneCamera = GameObject.FindGameObjectWithTag ("MainCamera");
 		meatBallAnimator = GetComponent<Animator> ();
-		rightHandWeaponList = GameObject.FindGameObjectsWithTag ("RightHandWeapon");
 		selfStatus = GetComponent<MeatBallStatus> ();
+
+		#region Weapon
+		SortWeaponCode ();
+		CloseAllWeapon ();
+		OpenWeapon ();
+		#endregion
+
 		//hpCanvas = GetComponentInChildren<HpCanvas> ();
 		//sceneCamera.SetActive (false);
 	}
@@ -87,10 +94,31 @@ public class MeatBall : NetworkBehaviour {
 
 	}
 
+	#region init
+	void SortWeaponCode(){
+		//get weapon
+		rightHandWeaponList = GetComponentsInChildren <Weapon>();
 
+		//sort
+		var gameObjectArrayBuffer = GetComponentsInChildren <Weapon>();
 
+		for(int i=0;i<gameObjectArrayBuffer.Length;i++){
+			var weapon = gameObjectArrayBuffer [i].GetComponent<Weapon> ();
+			rightHandWeaponList [weapon.weaponCode] = gameObjectArrayBuffer [i];
+		}
+	}
 
+	public void CloseAllWeapon(){
+		foreach(Weapon weapon in rightHandWeaponList){
+			weapon.gameObject.SetActive(false);
+		}
+	}
 
+	public void OpenWeapon(){
+		rightHandWeaponList [selfStatus.currentWeapon].gameObject.SetActive(true);
+	}
+	#endregion
+		
 	void GeneralAttack(){
 		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (0.1f,0.3f);
 	}
@@ -111,6 +139,7 @@ public class MeatBall : NetworkBehaviour {
 		meatBallAnimator.SetFloat("Horizontal",horizontal);
 	}
 
+	#region Jump
 	void DelaySetJump(){
 
 		if (jumpingBool) {
@@ -161,7 +190,9 @@ public class MeatBall : NetworkBehaviour {
 			transform.Translate (translate.normalized*distance*dis*Time.deltaTime);
 		}
 	}
+	#endregion 
 
+	#region Network
 	[Command]
 	public void CmdSetAnimTrigger(string triggerName)
 	{
@@ -173,6 +204,6 @@ public class MeatBall : NetworkBehaviour {
 	{
 		meatBallAnimator.SetTrigger(triggerName);
 	}
-
+	#endregion 
 
 }

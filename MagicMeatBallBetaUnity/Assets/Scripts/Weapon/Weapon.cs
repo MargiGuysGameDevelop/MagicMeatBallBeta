@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour {
 
@@ -9,18 +9,19 @@ public class Weapon : MonoBehaviour {
 
 	//public float damageFromMeatBallBase;
 	private float damageFromeWeapon;
-
 	private float canAttackKeeptime;
 	private float canAttackSetTrueTime;
 
 	private bool canAttack = false;
 
-	[SerializeField]public float weaponCode;
+	public int weaponCode;
+
+	public Text HPText;
+
 
 
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
@@ -29,12 +30,12 @@ public class Weapon : MonoBehaviour {
 	}
 		
 
-	void OnTriggerEnter(Collider other){
+	void OnTriggerStay(Collider other){
 		//print ("triggeriN");
 		Combat combat = other.GetComponent<Combat> ();
 		//Debug.Log ("combat is :" + combat);
 		//Debug.Log ("other (be hurt man ) : " + other);
-		if (combat && canAttack) {
+		if (combat) {
 			//print ("find combat");
 			combat.CmdTakeDamage (damage);
 		}
@@ -46,7 +47,6 @@ public class Weapon : MonoBehaviour {
 		if (canAttack == false) {
 			canAttackSetTrueTime = startTime;
 			canAttackKeeptime = keepTime;
-
 			StartCoroutine (SetAttackBoolByTime ());
 		}
 	}

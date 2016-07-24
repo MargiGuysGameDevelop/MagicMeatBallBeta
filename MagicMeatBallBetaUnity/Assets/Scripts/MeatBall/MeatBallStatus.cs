@@ -8,7 +8,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	Text DebugText;
 	int clickTime = 0;
 
-	[SyncVar(hook="OnHPChange")]
+	[SyncVar/*(hook="OnHPChange")*/]
 	public float HP;
 	/*[SyncVar]
 	public float MP;*/
@@ -20,10 +20,11 @@ public class MeatBallStatus : NetworkBehaviour {
 
 	public int currentWeapon = 0; //default =0
 
+	/*
 	void OnHPChange (float newHP){
 		HP = newHP;
 		GetComponent<Combat> ().SetHpValue ();
-	}
+	}*/
 
 
 	// Use this for initialization
@@ -51,5 +52,5 @@ public class MeatBallStatus : NetworkBehaviour {
 	void CmdDebugText(int click){
 		DebugText.text = click.ToString ();
 	}
-
+		
 }

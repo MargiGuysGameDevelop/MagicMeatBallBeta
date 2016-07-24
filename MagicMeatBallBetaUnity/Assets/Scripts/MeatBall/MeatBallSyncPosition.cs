@@ -39,7 +39,6 @@ public class MeatBallSyncPosition : NetworkBehaviour {
 	void SendLocalPlayerPositionToServer(){
 		if (isLocalPlayer) {
 			CmdSendClientPositionToServer (meatBallTransform.position);
-	
 		}
 	}
 }

@@ -6,9 +6,12 @@ using UnityEngine.UI;
 
 public class Combat : NetworkBehaviour {
 	public MeatBallStatus selfStatus;
-	// Use this for initialization
+	Text HPText ;
+
 	void Awake () {
-		//selfStatus = GetComponent<MeatBallStatus> ();
+		selfStatus = GetComponent<MeatBallStatus> ();
+		HPText = GetComponentInChildren<Text> ();
+		HPText.text = selfStatus.HP.ToString();
 	}
 	// Update is called once per frame
 	void Update () {
@@ -20,11 +23,18 @@ public class Combat : NetworkBehaviour {
 	[Command]
 	public void CmdTakeDamage(float damage){
 		selfStatus.HP -= damage;
+		RpcTakeDamage ();
+	}
+
+	[ClientRpc]
+	public void RpcTakeDamage(){
+		SetHpValue ();
 	}
 
 
 	public void SetHpValue(){
 		GetComponentInChildren<Slider> ().value = selfStatus.HP;
-		Debug.Log ("set HP : " + selfStatus.HP);
+		HPText.text = selfStatus.HP.ToString ();
+		//Debug.Log ("set HP : " + selfStatus.HP);
 	}
 }
