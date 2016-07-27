@@ -6,15 +6,10 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: BSMcloth
     400000: //RootNode
-    400002: BSMcloth
     2300000: //RootNode
-    2300002: BSMcloth
     3300000: //RootNode
-    3300002: BSMcloth
     4300000: "\u5713\u67F1\u9AD4"
-    4300002: BSMcloth
   materials:
     importMaterials: 1
     materialName: 0
