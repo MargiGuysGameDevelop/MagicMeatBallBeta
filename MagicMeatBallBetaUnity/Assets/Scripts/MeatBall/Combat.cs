@@ -7,33 +7,44 @@ using UnityEngine.UI;
 public class Combat : NetworkBehaviour {
 	public MeatBallStatus selfStatus;
 	Text HPText ;
-
+	Slider HPSlider;
 	void Awake () {
 		selfStatus = GetComponent<MeatBallStatus> ();
+
 		HPText = GetComponentInChildren<Text> ();
 		HPText.text = selfStatus.HP.ToString();
+		HPSlider = GetComponentInChildren<Slider> ();
+		HPSlider.value = selfStatus.HP;
 	}
 	// Update is called once per frame
 	void Update () {
-
-	}
-
-
-	/**take damage only on sever**/
-	[Command]
-	public void CmdTakeDamage(float damage){
-		selfStatus.HP -= damage;
-		RpcTakeDamage ();
-	}
-
-	[ClientRpc]
-	public void RpcTakeDamage(){
+		if(isLocalPlayer)
+			if (Input.GetKeyDown (KeyCode.K)) {
+				TakeDamage (5f);
+			}
+		//*no way to check whether player Hp is sync*//
 		SetHpValue ();
 	}
 
 
+	/**take damage only on sever**/
+	[ServerCallback]
+	public void TakeDamage(float damage){
+
+
+		selfStatus.HP -= damage;
+		//RpcTakeDamage ();
+	}
+
+	/*
+	[ClientRpc]
+	public void RpcTakeDamage(){
+		SetHpValue ();
+	}
+	*/
+
 	public void SetHpValue(){
-		GetComponentInChildren<Slider> ().value = selfStatus.HP;
+		HPSlider.value = selfStatus.HP;
 		HPText.text = selfStatus.HP.ToString ();
 		//Debug.Log ("set HP : " + selfStatus.HP);
 	}

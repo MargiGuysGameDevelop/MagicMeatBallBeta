@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Weapon : MonoBehaviour {
 
@@ -13,12 +14,13 @@ public class Weapon : MonoBehaviour {
 	private float canAttackSetTrueTime;
 
 	private bool canAttack = false;
+	private bool attackOnceBool = false;
 
 	public int weaponCode;
 
 	public Text HPText;
 
-
+	List<Combat> attackedList = new List<Combat>();
 
 	// Use this for initialization
 	void Start () {
@@ -26,30 +28,71 @@ public class Weapon : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		SetCanAttackBool ();
 	}
 		
 
 	void OnTriggerStay(Collider other){
-		//print ("triggeriN");
+
 		Combat combat = other.GetComponent<Combat> ();
-		//Debug.Log ("combat is :" + combat);
-		//Debug.Log ("other (be hurt man ) : " + other);
-		if (combat) {
-			//print ("find combat");
-			combat.CmdTakeDamage (damage);
+		if (combat && canAttack) {
+			if (!attackedList.Contains (combat)) {
+				attackedList.Add (combat);
+				combat.TakeDamage (damage);
+				//attackOnceBool = true;
+				//canAttack = false;
+			}
+			
+		}
+		/*
+		if (canAttack && combat) {
+
+			combat.TakeDamage (damage);
+			attackOnceBool = true;
+			canAttack = false;
+		}
+		*/
+	}
+
+	void SetAttackedListEmpty(){
+		attackedList.Clear ();
+
+	}
+
+	void SetCanAttackBool(){
+		
+		if (canAttackSetTrueTime > 0) {
+			canAttackSetTrueTime -= Time.deltaTime;
+		} 
+		else if (canAttackKeeptime > 0) {
+			canAttackKeeptime -= Time.deltaTime;
+			if (!attackOnceBool) 
+				canAttack = true;
+		}
+		else {
+			SetAttackedListEmpty ();
+			canAttack = false;
 		}
 
 	}
 
 	public void SetAttackKeepTime(float startTime,float keepTime){
 		//canAttack = true;
+		/*
 		if (canAttack == false) {
 			canAttackSetTrueTime = startTime;
 			canAttackKeeptime = keepTime;
 			StartCoroutine (SetAttackBoolByTime ());
 		}
+		*/
+		if (canAttackKeeptime <= 0) {
+			canAttackSetTrueTime = startTime;
+			canAttackKeeptime = keepTime;
+			attackOnceBool = false;
+		}
 	}
+
+
 
 	IEnumerator SetAttackBoolByTime(){
 		yield return new WaitForSeconds (canAttackSetTrueTime);

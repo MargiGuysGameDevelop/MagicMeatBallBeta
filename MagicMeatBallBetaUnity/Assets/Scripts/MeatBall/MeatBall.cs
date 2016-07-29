@@ -30,7 +30,7 @@ public class MeatBall : NetworkBehaviour {
 	// Use this for initialization
 
 	private GameObject sceneCamera;
-	private HpCanvas hpCanvas;
+	//private HpCanvas hpCanvas;
 
 	[SerializeField]Weapon[] rightHandWeaponList;
 
@@ -80,12 +80,16 @@ public class MeatBall : NetworkBehaviour {
 		if (IsJumpping ()) {
 			JumpMove (10);
 		}
-		DelaySetJump ();
+		//DelaySetJump ();
 
 		//Attack
 		if (Input.GetMouseButtonDown (0)) {
-			GeneralAttack ();
+			CmdSetAnimBool ("Attack",true);
+			/*CmdGeneralAttack ();*/
 		}
+
+		//dash
+
 
 		//skill
 
@@ -118,13 +122,23 @@ public class MeatBall : NetworkBehaviour {
 		rightHandWeaponList [selfStatus.currentWeapon].gameObject.SetActive(true);
 	}
 	#endregion
-		
-	void GeneralAttack(){
-		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (0.1f,0.3f);
+
+
+
+	[ServerCallback]
+	public void GeneralAttack(float attackStartTime,float attackKeepTime){
+		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (attackStartTime,attackKeepTime);
+	}
+
+	[Command]
+	void CmdGeneralAttack(){
+		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (0.1f,0.7f);
+
 	}
 
 
 
+	#region Movement
 	void Move(){
 		currentState = meatBallAnimator.GetCurrentAnimatorStateInfo (0);
 
@@ -135,28 +149,29 @@ public class MeatBall : NetworkBehaviour {
 		float mouseMoveX = Input.GetAxis("Mouse X");
 		transform.Rotate(Vector3.up , mouseMoveX * 75f * Time.deltaTime);
 
-		meatBallAnimator.SetFloat("Vertical",vertical);
-		meatBallAnimator.SetFloat("Horizontal",horizontal);
+		CmdSetAnimFloat("Vertical",vertical);
+		CmdSetAnimFloat("Horizontal",horizontal);
 	}
 
+
+	#endregion
+
 	#region Jump
-	void DelaySetJump(){
+	/*void DelaySetJump(){
 
 		if (jumpingBool) {
 			if (Time.time > jumpTimer + 0.5f)
 				jumpingBool = false;
 		}
-	}
+	}*/
 
 
 	public void Jump(){
-		if (CanJump() ) {
-			jumpX = horizontal;
-			jumpZ = vertical;
-			jumpingBool = true;
-			jumpTimer = Time.time;
-			CmdSetAnimTrigger ("Jump");
-		}
+		jumpX = horizontal;
+		jumpZ = vertical;
+		//jumpingBool = true;
+		//jumpTimer = Time.time;
+		CmdSetAnimBool ("Jump",true);
 	}
 	private bool IsJumpping(){
 		if (currentState.nameHash == Animator.StringToHash ("Base Layer.OrginJump2.5"))
@@ -164,13 +179,14 @@ public class MeatBall : NetworkBehaviour {
 		else
 			return false;
 	}
+	/*
 	private bool CanJump(){
 		//check state
 		if (currentState.nameHash == Animator.StringToHash ("Base Layer.Movement") && !jumpingBool )
 			return true;
 		else
 			return false;
-	}
+	}*/
 	private void JumpMove(float distance){
 		if (isLocalPlayer) {
 			Vector3 translate= new Vector3 (jumpX,0,jumpZ);
@@ -192,7 +208,35 @@ public class MeatBall : NetworkBehaviour {
 	}
 	#endregion 
 
-	#region Network
+
+
+	#region AnimationParameterSeendingNetwork
+
+	[Command]
+	public void CmdSetAnimFloat(string boolName,float setFloat)
+	{
+		RpcSetAnimFloat(boolName,setFloat);
+	}
+
+	[ClientRpc]
+	public void RpcSetAnimFloat(string boolName,float setFloat)
+	{
+		meatBallAnimator.SetFloat(boolName,setFloat);
+	}
+
+
+	[Command]
+	public void CmdSetAnimBool(string boolName,bool boolState)
+	{
+		RpcSetAnimBool(boolName,boolState);
+	}
+
+	[ClientRpc]
+	public void RpcSetAnimBool(string boolName,bool boolState)
+	{
+		meatBallAnimator.SetBool(boolName,boolState);
+	}
+		
 	[Command]
 	public void CmdSetAnimTrigger(string triggerName)
 	{
