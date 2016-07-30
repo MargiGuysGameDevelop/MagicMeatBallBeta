@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
+
 public class ClientController : NetworkBehaviour {
 	public GameObject camera;
 	// Use this for initialization

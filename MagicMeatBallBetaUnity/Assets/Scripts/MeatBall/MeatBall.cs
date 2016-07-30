@@ -35,6 +35,7 @@ public class MeatBall : NetworkBehaviour {
 	[SerializeField]Weapon[] rightHandWeaponList;
 
 
+
 	void Awake(){
 
 		sceneCamera = GameObject.FindGameObjectWithTag ("MainCamera");
@@ -54,16 +55,21 @@ public class MeatBall : NetworkBehaviour {
 	void Start () {
 
 		if (isLocalPlayer) {
-			
-			gameObject.name = "ME";
 			gameObject.tag = "Player";
 			gameObject.transform.Find ("amerture/root").tag = "PlayerBodyBone";
 			//sceneCamera.SetActive (true);
 			sceneCamera.GetComponent<CameraController>().Initial();
 			//hpCanvas.Initial();
 		}
+		gameObject.name = selfStatus.playerName;
 	}
 
+
+	public override void OnStartLocalPlayer ()
+	{
+
+		gameObject.name = selfStatus.playerName;
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -92,8 +98,6 @@ public class MeatBall : NetworkBehaviour {
 
 
 		//skill
-
-
 
 
 	}

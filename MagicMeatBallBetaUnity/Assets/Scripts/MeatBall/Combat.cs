@@ -6,15 +6,11 @@ using UnityEngine.UI;
 
 public class Combat : NetworkBehaviour {
 	public MeatBallStatus selfStatus;
-	Text HPText ;
-	Slider HPSlider;
+
+
+
 	void Awake () {
 		selfStatus = GetComponent<MeatBallStatus> ();
-
-		HPText = GetComponentInChildren<Text> ();
-		HPText.text = selfStatus.HP.ToString();
-		HPSlider = GetComponentInChildren<Slider> ();
-		HPSlider.value = selfStatus.HP;
 	}
 	// Update is called once per frame
 	void Update () {
@@ -23,7 +19,7 @@ public class Combat : NetworkBehaviour {
 				TakeDamage (5f);
 			}
 		//*no way to check whether player Hp is sync*//
-		SetHpValue ();
+
 	}
 
 
@@ -43,9 +39,5 @@ public class Combat : NetworkBehaviour {
 	}
 	*/
 
-	public void SetHpValue(){
-		HPSlider.value = selfStatus.HP;
-		HPText.text = selfStatus.HP.ToString ();
-		//Debug.Log ("set HP : " + selfStatus.HP);
-	}
+
 }
