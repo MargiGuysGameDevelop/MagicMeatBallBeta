@@ -26,8 +26,6 @@ public class Combat : NetworkBehaviour {
 	/**take damage only on sever**/
 	[ServerCallback]
 	public void TakeDamage(float damage){
-
-
 		selfStatus.HP -= damage;
 		//RpcTakeDamage ();
 	}

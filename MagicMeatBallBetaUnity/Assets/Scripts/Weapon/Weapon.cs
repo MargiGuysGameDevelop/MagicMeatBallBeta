@@ -2,9 +2,11 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class Weapon : MonoBehaviour {
+public class Weapon : NetworkBehaviour {
 
+	Collider weaponCollider ;
 
 	public float damage;
 
@@ -14,7 +16,7 @@ public class Weapon : MonoBehaviour {
 	private float canAttackSetTrueTime;
 
 	private bool canAttack = false;
-	private bool attackOnceBool = false;
+//	private bool attackOnceBool = false;
 
 	public int weaponCode;
 
@@ -22,27 +24,31 @@ public class Weapon : MonoBehaviour {
 
 	List<Combat> attackedList = new List<Combat>();
 
+	void Awake(){
+		weaponCollider = GetComponent<Collider> ();
+	}
+
 	// Use this for initialization
 	void Start () {
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		SetCanAttackBool ();
+		//SetCanAttackBool ();
 	}
 		
 
 	void OnTriggerStay(Collider other){
 
 		Combat combat = other.GetComponent<Combat> ();
-		if (combat && canAttack) {
+		if (combat) {
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
 				combat.TakeDamage (damage);
 				//attackOnceBool = true;
 				//canAttack = false;
 			}
-			
 		}
 		/*
 		if (canAttack && combat) {
@@ -66,8 +72,8 @@ public class Weapon : MonoBehaviour {
 		} 
 		else if (canAttackKeeptime > 0) {
 			canAttackKeeptime -= Time.deltaTime;
-			if (!attackOnceBool) 
-				canAttack = true;
+//			if (!attackOnceBool) 
+//				canAttack = true;
 		}
 		else {
 			SetAttackedListEmpty ();
@@ -88,7 +94,7 @@ public class Weapon : MonoBehaviour {
 		if (canAttackKeeptime <= 0) {
 			canAttackSetTrueTime = startTime;
 			canAttackKeeptime = keepTime;
-			attackOnceBool = false;
+//			attackOnceBool = false;
 		}
 	}
 
@@ -107,6 +113,16 @@ public class Weapon : MonoBehaviour {
 	
 	}*/
 
+	[ServerCallback]
+	public void WeaponCoilderOn(){
+		weaponCollider.enabled = true;
 
+	}
 
+	[ServerCallback]
+	public void WeaponCoilderOff(){
+		weaponCollider.enabled = false;
+
+		SetAttackedListEmpty ();
+	}
 }

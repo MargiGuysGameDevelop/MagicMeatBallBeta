@@ -26,6 +26,9 @@ public class MeatBall : NetworkBehaviour {
 	float jumpX;
 	float jumpZ;
 
+	float dodgeX;
+	float dodgeY;
+
 	//public GameObject playerView;
 	// Use this for initialization
 
@@ -94,12 +97,19 @@ public class MeatBall : NetworkBehaviour {
 			/*CmdGeneralAttack ();*/
 		}
 
-		//dash
-
+		//dodge
+		if(Input.GetKeyDown(KeyCode.LeftShift)){
+			Dodge ();
+		}
 
 		//skill
 
-
+		//rolling
+		if(Input.GetKeyDown(KeyCode.LeftAlt)){
+			CmdSetAnimBool ("Rolling",true);
+		}else if(Input.GetKeyUp(KeyCode.LeftAlt)){
+			CmdSetAnimBool("Rolling",false);
+		}
 	}
 
 	#region init
@@ -128,7 +138,7 @@ public class MeatBall : NetworkBehaviour {
 	#endregion
 
 
-
+	#region attack
 	[ServerCallback]
 	public void GeneralAttack(float attackStartTime,float attackKeepTime){
 		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (attackStartTime,attackKeepTime);
@@ -140,13 +150,26 @@ public class MeatBall : NetworkBehaviour {
 
 	}
 
+	[ServerCallback]
+	//只要Server的Coilder開並讓其他玩家扣HP就夠了
+	public void AttackColliderOn(){
+		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().WeaponCoilderOn ();
+		Debug.Log ("開");
+	}
 
+	[ServerCallback]
+	public void AttackColliderOff(){
+		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().WeaponCoilderOff();
+		Debug.Log ("關");
+	}
+	#endregion
 
 	#region Movement
 	void Move(){
 		currentState = meatBallAnimator.GetCurrentAnimatorStateInfo (0);
 
-
+		if (meatBallAnimator.GetBool ("Dodge"))
+			return;
 		vertical = Input.GetAxis("Vertical"); //sw
 		horizontal = Input.GetAxis("Horizontal"); //ad
 
@@ -212,7 +235,26 @@ public class MeatBall : NetworkBehaviour {
 	}
 	#endregion 
 
+	#region Dodge
+	void Dodge(){
 
+		dodgeX = dodgeY = 0f;
+
+		if (horizontal > 0.5f)
+			dodgeX = 1f;
+		else if (horizontal < -0.5f) {
+			dodgeX = -1f;
+		} else if (vertical < 0.5f)
+			dodgeY = -1f;
+		else  
+			dodgeY = 1f;
+
+		CmdSetAnimFloat ("Horizontal",dodgeX);
+		CmdSetAnimFloat ("Vertical",dodgeY);
+
+		CmdSetAnimBool ("Dodge",true);
+	}
+	#endregion
 
 	#region AnimationParameterSeendingNetwork
 
