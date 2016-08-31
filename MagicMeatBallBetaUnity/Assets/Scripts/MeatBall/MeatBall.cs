@@ -3,12 +3,10 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class MeatBall : NetworkBehaviour {
-	/*
-	private enum MeatBallState{ Movement,Jump };
+	
+	//all the meatballs' animations & skills do in this script
+	
 
-	[SerializeField]
-	MeatBallState meatBallState;
-*/
 	AnimatorStateInfo currentState; 
 	Animator meatBallAnimator;
 
@@ -36,6 +34,7 @@ public class MeatBall : NetworkBehaviour {
 	//private HpCanvas hpCanvas;
 
 	[SerializeField]Weapon[] rightHandWeaponList;
+
 
 
 
@@ -237,7 +236,7 @@ public class MeatBall : NetworkBehaviour {
 
 	#region Dodge
 	void Dodge(){
-
+		/*
 		dodgeX = dodgeY = 0f;
 
 		if (horizontal > 0.5f)
@@ -248,9 +247,9 @@ public class MeatBall : NetworkBehaviour {
 			dodgeY = -1f;
 		else  
 			dodgeY = 1f;
-
-		CmdSetAnimFloat ("Horizontal",dodgeX);
-		CmdSetAnimFloat ("Vertical",dodgeY);
+		*/
+		CmdSetAnimFloat ("Horizontal",horizontal);
+		CmdSetAnimFloat ("Vertical",vertical);
 
 		CmdSetAnimBool ("Dodge",true);
 	}

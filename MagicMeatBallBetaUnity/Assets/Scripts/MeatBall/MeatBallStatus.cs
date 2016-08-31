@@ -6,6 +6,12 @@ using UnityEngine.UI;
 using Prototype.NetworkLobby;
 public class MeatBallStatus : NetworkBehaviour {
 
+
+
+	[SyncVar]
+	public bool isDead;
+	public bool isDyingAniPlaying;
+
 	Text NameText;
 	Text HPText ;
 	Slider HPSlider;
@@ -16,8 +22,18 @@ public class MeatBallStatus : NetworkBehaviour {
 	public Color nameColor;
 	[SyncVar]
 	public float HP;
-	/*[SyncVar]
-	public float MP;*/
+	[SyncVar]
+	public float MP;
+
+	[SyncVar]
+	public int playerID;
+
+	[SyncVar]
+	public int scoreAmount;
+	[SyncVar]
+	public int deathAmount;
+	[SyncVar]
+	public int killAmount;
 
 	//public float damage;
 
@@ -26,22 +42,28 @@ public class MeatBallStatus : NetworkBehaviour {
 
 	public int currentWeapon = 0; //default =0
 
-	public LobbyPlayer[] lobbyPlayers;
 
-	// Use this for initialization
 	void Awake () {
 		MaxHP = 100f;
 		HP = MaxHP;
 		//MP = MaxMP;
-
-
 		TextInit ();
 	}
 
 	// Update is called once per frame
 	void Update () {
 		SetHpValue ();	
+		if (isDead) 
+		{
+			if (isDyingAniPlaying) {
+				PlayerDie ();
+			}
+			else {
+			
+			}
+		}
 	}
+
 
 
 	void TextInit(){
@@ -61,15 +83,39 @@ public class MeatBallStatus : NetworkBehaviour {
 
 	}
 
+
 	public override void OnStartLocalPlayer (){
-		
-		NameText.text = playerName;
+		//GameObject.Find ("GameManager").GetComponent<GameManager> ().AddPlayer (this);
+		int PID = (int)GetComponent<NetworkIdentity> ().netId.Value;
+		CmdSetPlayerID (PID);
+		//NameText.text = playerName;
 	}
+
+	[Command]
+	void CmdSetPlayerID(int PID){
+		playerID = PID;
+	}	
+
 	public void SetHpValue(){
 		NameText.text = playerName;
 		HPSlider.value = HP;
 		HPText.text = HP.ToString ();
 		//Debug.Log ("set HP : " + selfStatus.HP);
+	}
+
+	[ServerCallback]
+	public bool CheckIsDead(){
+		if (HP > 0) {
+			return false;
+		} else {
+			isDyingAniPlaying = true;
+			isDead = true;
+			return true;
+		}
+	}
+
+	void PlayerDie(){
+		
 	}
 
 }
