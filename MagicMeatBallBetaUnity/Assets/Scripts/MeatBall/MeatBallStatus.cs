@@ -42,6 +42,10 @@ public class MeatBallStatus : NetworkBehaviour {
 
 	public int currentWeapon = 0; //default =0
 
+	//id
+//	[SyncVar]
+	public int playerNetId = 0;
+	public bool allreadyGetNetId = false;
 
 	void Awake () {
 		MaxHP = 100f;
@@ -117,5 +121,10 @@ public class MeatBallStatus : NetworkBehaviour {
 	void PlayerDie(){
 		
 	}
+
+	public string GetPlayerNetId(){
+		return GetComponent<NetworkIdentity> ().netId.ToString();
+	}
+		
 
 }

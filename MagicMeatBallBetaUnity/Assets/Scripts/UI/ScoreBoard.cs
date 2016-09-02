@@ -21,6 +21,13 @@ public class ScoreBoard : MonoBehaviour {
 		}
 	}
 
+	#region DataDisplay
+	public void ChangeData(int index,string name,int score,int kill,int death){
+		var list = playerData [index].GetComponent<PlayerScore> ();
+		list.ChangeData (new string[] {name,score.ToString(),kill.ToString(),death.ToString()});
+	}
+	#endregion
+
 	#region DataLayout
 	[SerializeField]
 	GameObject property;
