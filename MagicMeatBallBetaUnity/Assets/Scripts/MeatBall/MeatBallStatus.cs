@@ -6,11 +6,13 @@ using UnityEngine.UI;
 using Prototype.NetworkLobby;
 public class MeatBallStatus : NetworkBehaviour {
 
-
-
 	[SyncVar]
-	public bool isDead;
-	public bool isDyingAniPlaying;
+	public bool isDead = false;
+//	看起來用不到
+//	public bool isDyingAniPlaying;
+	//死亡復活計時器
+	public float deadTimer = 0;
+	static public float rebrithTime = 3f;
 
 	Text NameText;
 	Text HPText ;
@@ -24,7 +26,6 @@ public class MeatBallStatus : NetworkBehaviour {
 	public float HP;
 	[SyncVar]
 	public float MP;
-
 	[SyncVar]
 	public int playerID;
 
@@ -35,7 +36,8 @@ public class MeatBallStatus : NetworkBehaviour {
 	[SyncVar]
 	public int killAmount;
 
-	//public float damage;
+	//存放最後攻擊者
+	public int attacker = -1;
 
 	public float MaxHP;
 	//public float MaxMP;
@@ -43,7 +45,6 @@ public class MeatBallStatus : NetworkBehaviour {
 	public int currentWeapon = 0; //default =0
 
 	//id
-//	[SyncVar]
 	public int playerNetId = 0;
 	public bool allreadyGetNetId = false;
 
@@ -59,11 +60,13 @@ public class MeatBallStatus : NetworkBehaviour {
 		SetHpValue ();	
 		if (isDead) 
 		{
-			if (isDyingAniPlaying) {
-				PlayerDie ();
-			}
-			else {
-			
+			deadTimer += Time.deltaTime;
+			if (deadTimer >= rebrithTime) {
+				GetComponent<MeatBall> ().CmdInitAnim ();
+				PlayerRebrith ();
+				HP = MaxHP;
+				deadTimer = 0f;
+				isDead = false;
 			}
 		}
 	}
@@ -112,18 +115,29 @@ public class MeatBallStatus : NetworkBehaviour {
 		if (HP > 0) {
 			return false;
 		} else {
-			isDyingAniPlaying = true;
-			isDead = true;
+			if (!isDead) {
+				isDead = true;
+				PlayerDie ();
+			}
 			return true;
 		}
 	}
-
-	void PlayerDie(){
 		
+	void PlayerDie(){
+		GetComponent<MeatBall> ().CmdSetAnimBool ("Dead",true);;
+		Debug.Log (this.gameObject.name + "被"+
+			GameManager.playerSenceData[attacker].gameObject.name + "殺死!");
+		GameManager.ChangeScoreData (playerNetId,ScoreKind.death);
+		GameManager.ChangeScoreData (attacker,ScoreKind.kill);
 	}
 
-	public string GetPlayerNetId(){
-		return GetComponent<NetworkIdentity> ().netId.ToString();
+	void PlayerRebrith(){
+		GetComponent<MeatBall> ();
+	}
+
+	public int GetPlayerNetId(){
+		playerNetId = int.Parse (GetComponent<NetworkIdentity> ().netId.ToString ());
+		return playerNetId;
 	}
 		
 

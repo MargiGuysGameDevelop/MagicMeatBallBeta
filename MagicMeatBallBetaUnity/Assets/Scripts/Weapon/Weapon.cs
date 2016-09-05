@@ -15,7 +15,7 @@ public class Weapon : NetworkBehaviour {
 	private float canAttackKeeptime;
 	private float canAttackSetTrueTime;
 
-	private bool canAttack = false;
+//	private bool canAttack = false;
 //	private bool attackOnceBool = false;
 
 	public int weaponCode;
@@ -24,13 +24,15 @@ public class Weapon : NetworkBehaviour {
 
 	List<Combat> attackedList = new List<Combat>();
 
+	public MeatBallStatus selfStatus;
+
 	void Awake(){
 		weaponCollider = GetComponent<Collider> ();
 	}
 
 	// Use this for initialization
 	void Start () {
-		
+		selfStatus = GetComponentInParent<MeatBallStatus> ();
 	}
 	
 	// Update is called once per frame
@@ -45,7 +47,7 @@ public class Weapon : NetworkBehaviour {
 		if (combat) {
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
-				combat.TakeDamage (damage);
+				combat.TakeDamage (damage,selfStatus.playerNetId);
 				//attackOnceBool = true;
 				//canAttack = false;
 			}
@@ -77,7 +79,7 @@ public class Weapon : NetworkBehaviour {
 		}
 		else {
 			SetAttackedListEmpty ();
-			canAttack = false;
+//			canAttack = false;
 		}
 
 	}
@@ -100,14 +102,14 @@ public class Weapon : NetworkBehaviour {
 
 
 
-	IEnumerator SetAttackBoolByTime(){
-		yield return new WaitForSeconds (canAttackSetTrueTime);
-		canAttack = true;
-		//Debug.Log ("canAttack = true");
-		yield return new WaitForSeconds (canAttackKeeptime);
-		canAttack = false;
-		//Debug.Log ("canAttack = false");
-	}
+//	IEnumerator SetAttackBoolByTime(){
+//		yield return new WaitForSeconds (canAttackSetTrueTime);
+//		canAttack = true;
+//		//Debug.Log ("canAttack = true");
+//		yield return new WaitForSeconds (canAttackKeeptime);
+//		canAttack = false;
+//		//Debug.Log ("canAttack = false");
+//	}
 
 	/*IEnumerator SetAttackBoolFalseByTime(){
 	

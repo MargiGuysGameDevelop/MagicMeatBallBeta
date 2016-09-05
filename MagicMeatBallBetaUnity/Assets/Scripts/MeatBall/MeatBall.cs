@@ -269,6 +269,16 @@ public class MeatBall : NetworkBehaviour {
 	#endregion
 
 	#region AnimationParameterSeendingNetwork
+	[Command]
+	public void CmdInitAnim(){
+		RpcInitAnim ();
+	}
+
+	[ClientRpc]
+	public void RpcInitAnim(){
+		Debug.Log ("重生");
+		meatBallAnimator.Play ("Movement");
+	}
 
 	[Command]
 	public void CmdSetAnimFloat(string boolName,float setFloat)

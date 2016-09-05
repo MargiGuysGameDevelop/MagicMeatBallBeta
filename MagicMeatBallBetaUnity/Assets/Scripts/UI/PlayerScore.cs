@@ -5,18 +5,17 @@ using UnityEngine.Networking;
 
 public class PlayerScore : NetworkBehaviour {
 
-	public string[] testData;
+	public string[] currentData;
 
-	Text[] dataProperty;
+	public Text[] dataProperty;
 
-	void Awake(){
+	void Start(){
 		dataProperty = GetComponentsInChildren<Text> ();
 	}
 
-	[ContextMenu("ChangeDataInEditor")]
-	public void ChangeDataTest(){
+	[ContextMenu("GetTextInEditor")]
+	public void GetText(){
 		dataProperty = GetComponentsInChildren<Text> ();
-		ChangeData (testData);
 	}
 
 //	public void ChangeDataTest(string[] data){
