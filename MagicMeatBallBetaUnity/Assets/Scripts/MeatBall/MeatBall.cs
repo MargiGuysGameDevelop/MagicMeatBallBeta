@@ -36,8 +36,6 @@ public class MeatBall : NetworkBehaviour {
 	[SerializeField]Weapon[] rightHandWeaponList;
 
 
-
-
 	void Awake(){
 
 		sceneCamera = GameObject.FindGameObjectWithTag ("MainCamera");
@@ -137,7 +135,7 @@ public class MeatBall : NetworkBehaviour {
 	#endregion
 
 
-	#region attack
+	#region Attacktion
 	[ServerCallback]
 	public void GeneralAttack(float attackStartTime,float attackKeepTime){
 		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (attackStartTime,attackKeepTime);
@@ -146,21 +144,36 @@ public class MeatBall : NetworkBehaviour {
 	[Command]
 	void CmdGeneralAttack(){
 		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (0.1f,0.7f);
-
 	}
 
 	[ServerCallback]
 	//只要Server的Coilder開並讓其他玩家扣HP就夠了
 	public void AttackColliderOn(){
 		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().WeaponCoilderOn ();
-		Debug.Log ("開");
 	}
 
 	[ServerCallback]
 	public void AttackColliderOff(){
 		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().WeaponCoilderOff();
-		Debug.Log ("關");
 	}
+
+	[Command]
+	public void CmdProject(){
+		Debug.Log ("發射物體");
+		RpcProject ();
+	}
+
+	[ClientRpc]
+	public void RpcProject(){
+		
+	}
+
+	[ServerCallback]
+	public void Invincible(){
+		Debug.Log ("無敵");
+	}
+		
+
 	#endregion
 
 	#region Movement
