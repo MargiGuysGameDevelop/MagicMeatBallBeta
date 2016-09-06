@@ -173,7 +173,7 @@ ModelImporter:
     7400040: NoMoveJump
     7400042: Deading
     7400044: Dead
-    7400046: HitFly
+    7400046: HitFlyStart
     7400048: HitLend
     7400050: Aria
     7400052: StarBustStream
@@ -210,6 +210,8 @@ ModelImporter:
     7400114: DodgeBack
     7400116: DodgeLeft
     7400118: HandsAttack3
+    7400120: HitFlyMid
+    7400122: HitFlyFall
     9500000: //RootNode
     13700000: handandleg
     13700002: meatball02_retop
@@ -1235,7 +1237,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -3564,10 +3566,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: HitFly
+      name: HitFlyStart
       takeName: HitFly
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -3577,7 +3579,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -3710,9 +3712,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -4501,7 +4509,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -4655,7 +4663,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -5129,7 +5137,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -5289,7 +5297,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -5449,7 +5457,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -5609,7 +5617,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -5769,7 +5777,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -5929,7 +5937,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -6089,7 +6097,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -6249,7 +6257,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -6409,7 +6417,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -6559,7 +6567,7 @@ ModelImporter:
       name: DodgeBack
       takeName: DodgeFor
       firstFrame: 0
-      lastFrame: 43
+      lastFrame: 29
       wrapMode: 0
       orientationOffsetY: -180
       level: 0
@@ -6569,7 +6577,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -6719,7 +6727,7 @@ ModelImporter:
       name: DodgeRight
       takeName: DodgeFor
       firstFrame: 0
-      lastFrame: 43
+      lastFrame: 29
       wrapMode: 0
       orientationOffsetY: -90
       level: 0
@@ -6729,7 +6737,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -6879,7 +6887,7 @@ ModelImporter:
       name: DodgeFor
       takeName: DodgeFor
       firstFrame: 0
-      lastFrame: 43
+      lastFrame: 29
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -7039,7 +7047,7 @@ ModelImporter:
       name: DodgeLeft
       takeName: DodgeFor
       firstFrame: 0
-      lastFrame: 43
+      lastFrame: 29
       wrapMode: 0
       orientationOffsetY: 90
       level: 0
@@ -7049,7 +7057,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -7209,7 +7217,7 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -7369,7 +7377,7 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -7529,6 +7537,326 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: amerture
+        weight: 1
+      - path: amerture/root
+        weight: 1
+      - path: amerture/root/arm_pole_L
+        weight: 1
+      - path: amerture/root/arm_pole_L/arm_pole_L_end
+        weight: 1
+      - path: amerture/root/arm_pole_R
+        weight: 1
+      - path: amerture/root/arm_pole_R/arm_pole_R_end
+        weight: 1
+      - path: amerture/root/body
+        weight: 1
+      - path: amerture/root/body/arm_1_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L/arm_4_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L/arm_4_L/hand_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L/arm_4_L/hand_L/hand_L_end
+        weight: 1
+      - path: amerture/root/body/arm_1_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R/arm_4_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R/arm_4_R/hand_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R/arm_4_R/hand_R/hand_R_end
+        weight: 1
+      - path: amerture/root/body/eye_L
+        weight: 1
+      - path: amerture/root/body/eye_L/eye_L_end
+        weight: 1
+      - path: amerture/root/body/eye_R
+        weight: 1
+      - path: amerture/root/body/eye_R/eye_R_end
+        weight: 1
+      - path: amerture/root/body/head
+        weight: 1
+      - path: amerture/root/body/head/cloak
+        weight: 1
+      - path: amerture/root/body/head/cloak/cloak_end
+        weight: 1
+      - path: amerture/root/body/head/hat
+        weight: 1
+      - path: amerture/root/body/head/hat/hat_end
+        weight: 1
+      - path: amerture/root/body/leg_1_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L/leg_6_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L/leg_6_L/feet_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L/leg_6_L/feet_L/feet_L_end
+        weight: 1
+      - path: amerture/root/body/leg_1_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R/leg_6_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R/leg_6_R/feet_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R/leg_6_R/feet_R/feet_R_end
+        weight: 1
+      - path: amerture/root/body/mouth
+        weight: 1
+      - path: amerture/root/body/mouth/mouth_end
+        weight: 1
+      - path: amerture/root/feet_pole_L
+        weight: 1
+      - path: amerture/root/feet_pole_L/feet_pole_L_end
+        weight: 1
+      - path: amerture/root/feet_pole_R
+        weight: 1
+      - path: amerture/root/feet_pole_R/feet_pole_R_end
+        weight: 1
+      - path: amerture/root/leg_IK_L
+        weight: 1
+      - path: amerture/root/leg_IK_L/leg_IK_L_end
+        weight: 1
+      - path: amerture/root/leg_IK_R
+        weight: 1
+      - path: amerture/root/leg_IK_R/leg_IK_R_end
+        weight: 1
+      - path: amerture/root/weapon_IK_L
+        weight: 1
+      - path: amerture/root/weapon_IK_L/arm_IK_L
+        weight: 1
+      - path: amerture/root/weapon_IK_L/arm_IK_L/arm_IK_L_end
+        weight: 1
+      - path: amerture/root/weapon_IK_R
+        weight: 1
+      - path: amerture/root/weapon_IK_R/arm_IK_R
+        weight: 1
+      - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
+        weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
+      - path: handandleg
+        weight: 1
+      - path: meatball02_retop
+        weight: 1
+      - path: mouse
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: HitFlyMid
+      takeName: HitFly
+      firstFrame: 24
+      lastFrame: 25
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: amerture
+        weight: 1
+      - path: amerture/root
+        weight: 1
+      - path: amerture/root/arm_pole_L
+        weight: 1
+      - path: amerture/root/arm_pole_L/arm_pole_L_end
+        weight: 1
+      - path: amerture/root/arm_pole_R
+        weight: 1
+      - path: amerture/root/arm_pole_R/arm_pole_R_end
+        weight: 1
+      - path: amerture/root/body
+        weight: 1
+      - path: amerture/root/body/arm_1_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L/arm_4_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L/arm_4_L/hand_L
+        weight: 1
+      - path: amerture/root/body/arm_1_L/arm_2_L/arm_3_L/arm_4_L/hand_L/hand_L_end
+        weight: 1
+      - path: amerture/root/body/arm_1_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R/arm_4_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R/arm_4_R/hand_R
+        weight: 1
+      - path: amerture/root/body/arm_1_R/arm_2_R/arm_3_R/arm_4_R/hand_R/hand_R_end
+        weight: 1
+      - path: amerture/root/body/eye_L
+        weight: 1
+      - path: amerture/root/body/eye_L/eye_L_end
+        weight: 1
+      - path: amerture/root/body/eye_R
+        weight: 1
+      - path: amerture/root/body/eye_R/eye_R_end
+        weight: 1
+      - path: amerture/root/body/head
+        weight: 1
+      - path: amerture/root/body/head/cloak
+        weight: 1
+      - path: amerture/root/body/head/cloak/cloak_end
+        weight: 1
+      - path: amerture/root/body/head/hat
+        weight: 1
+      - path: amerture/root/body/head/hat/hat_end
+        weight: 1
+      - path: amerture/root/body/leg_1_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L/leg_6_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L/leg_6_L/feet_L
+        weight: 1
+      - path: amerture/root/body/leg_1_L/leg_2_L/leg_3_L/leg_4_L/leg_5_L/leg_6_L/feet_L/feet_L_end
+        weight: 1
+      - path: amerture/root/body/leg_1_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R/leg_6_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R/leg_6_R/feet_R
+        weight: 1
+      - path: amerture/root/body/leg_1_R/leg_2_R/leg_3_R/leg_4_R/leg_5_R/leg_6_R/feet_R/feet_R_end
+        weight: 1
+      - path: amerture/root/body/mouth
+        weight: 1
+      - path: amerture/root/body/mouth/mouth_end
+        weight: 1
+      - path: amerture/root/feet_pole_L
+        weight: 1
+      - path: amerture/root/feet_pole_L/feet_pole_L_end
+        weight: 1
+      - path: amerture/root/feet_pole_R
+        weight: 1
+      - path: amerture/root/feet_pole_R/feet_pole_R_end
+        weight: 1
+      - path: amerture/root/leg_IK_L
+        weight: 1
+      - path: amerture/root/leg_IK_L/leg_IK_L_end
+        weight: 1
+      - path: amerture/root/leg_IK_R
+        weight: 1
+      - path: amerture/root/leg_IK_R/leg_IK_R_end
+        weight: 1
+      - path: amerture/root/weapon_IK_L
+        weight: 1
+      - path: amerture/root/weapon_IK_L/arm_IK_L
+        weight: 1
+      - path: amerture/root/weapon_IK_L/arm_IK_L/arm_IK_L_end
+        weight: 1
+      - path: amerture/root/weapon_IK_R
+        weight: 1
+      - path: amerture/root/weapon_IK_R/arm_IK_R
+        weight: 1
+      - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
+        weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
+      - path: handandleg
+        weight: 1
+      - path: meatball02_retop
+        weight: 1
+      - path: mouse
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: HitFlyFall
+      takeName: HitFly
+      firstFrame: 58
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
       loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0

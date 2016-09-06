@@ -35,7 +35,6 @@ public class ScoreBoard : MonoBehaviour {
 	}
 
 	public void ChangeName(int index,string name){
-		print (index);
 		playerData [index].dataProperty [(int)ScoreKind.name].text = name;
 		for(int i=1;i<playerData[index].dataProperty.Length;i++){
 			playerData [index].dataProperty [i].text = 0.ToString();

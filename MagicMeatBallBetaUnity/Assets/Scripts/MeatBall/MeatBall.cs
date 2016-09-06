@@ -279,7 +279,7 @@ public class MeatBall : NetworkBehaviour {
 		Debug.Log ("重生");
 		meatBallAnimator.Play ("Movement");
 	}
-
+		
 	[Command]
 	public void CmdSetAnimFloat(string boolName,float setFloat)
 	{

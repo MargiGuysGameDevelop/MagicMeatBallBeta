@@ -37,6 +37,11 @@ public class GameManager : NetworkBehaviour {
 	#region ScoreBoradUI
 	static public ScoreBoard scoreBoard;
 
+	/// <summary>
+	/// 用以更改記分板的欄位數值(+1)，名字請用ChangeName
+	/// </summary>
+	/// <param name="netID">Net I.</param>
+	/// <param name="kind">Kind.</param>
 	static public void ChangeScoreData(int netID,ScoreKind kind){
 		int scoreBoradIndex = netToScoreBoradIndex [netID];
 		switch (kind) {
@@ -49,6 +54,11 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// 更改記分板名字專用~
+	/// </summary>
+	/// <param name="netID">Net I.</param>
+	/// <param name="newName">New name.</param>
 	static public void ChangeName(int netID,string newName){
 		int scoreBoradIndex = netToScoreBoradIndex [netID];
 		scoreBoard.ChangeName (scoreBoradIndex,newName);

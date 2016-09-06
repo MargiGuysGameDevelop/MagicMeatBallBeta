@@ -6,6 +6,14 @@ using UnityEngine.UI;
 using Prototype.NetworkLobby;
 public class MeatBallStatus : NetworkBehaviour {
 
+	/// <summary>
+	/// 很常用到我直接Awake抓
+	/// </summary>
+	MeatBall meatBall;
+
+	//自定義物理
+	FunPhsics phsics;
+
 	[SyncVar]
 	public bool isDead = false;
 //	看起來用不到
@@ -16,6 +24,7 @@ public class MeatBallStatus : NetworkBehaviour {
 
 	Text NameText;
 	Text HPText ;
+	Text EPText;
 	Slider HPSlider;
 
 	[SyncVar]
@@ -26,6 +35,8 @@ public class MeatBallStatus : NetworkBehaviour {
 	public float HP;
 	[SyncVar]
 	public float MP;
+	[SyncVar]
+	public float EP; //耐力值
 	[SyncVar]
 	public int playerID;
 
@@ -40,6 +51,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	public int attacker = -1;
 
 	public float MaxHP;
+	public float MaxEP;
 	//public float MaxMP;
 
 	public int currentWeapon = 0; //default =0
@@ -50,28 +62,28 @@ public class MeatBallStatus : NetworkBehaviour {
 
 	void Awake () {
 		MaxHP = 100f;
+		MaxEP = 100f;
 		HP = MaxHP;
+		EP = MaxEP;
 		//MP = MaxMP;
 		TextInit ();
+
+		meatBall = GetComponent<MeatBall> ();
+		phsics = GetComponent<FunPhsics> ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		SetHpValue ();	
+		SetPresentValue ();	
+		CaculateAnimPra ();
 		if (isDead) 
 		{
 			deadTimer += Time.deltaTime;
 			if (deadTimer >= rebrithTime) {
-				GetComponent<MeatBall> ().CmdInitAnim ();
 				PlayerRebrith ();
-				HP = MaxHP;
-				deadTimer = 0f;
-				isDead = false;
 			}
 		}
 	}
-
-
 
 	void TextInit(){
 		Text[] texts;
@@ -81,6 +93,8 @@ public class MeatBallStatus : NetworkBehaviour {
 				HPText = te;
 			else if (te.name == "NameText")
 				NameText = te;
+			else if (te.name == "EPText")
+				EPText = te;
 		}
 		HPText.text = HP.ToString();
 		HPSlider = GetComponentInChildren<Slider> ();
@@ -89,7 +103,6 @@ public class MeatBallStatus : NetworkBehaviour {
 		//NameText.color = nameColor;
 
 	}
-
 
 	public override void OnStartLocalPlayer (){
 		//GameObject.Find ("GameManager").GetComponent<GameManager> ().AddPlayer (this);
@@ -103,11 +116,32 @@ public class MeatBallStatus : NetworkBehaviour {
 		playerID = PID;
 	}	
 
-	public void SetHpValue(){
+	public void SetPresentValue(){
 		NameText.text = playerName;
 		HPSlider.value = HP;
 		HPText.text = HP.ToString ();
+		EPText.text = EP.ToString ();
 		//Debug.Log ("set HP : " + selfStatus.HP);
+	}
+	public void CaculateAnimPra(){
+		bool isGround = Physics.Raycast (transform.position,Vector3.down,0.2f);
+		meatBall.CmdSetAnimFloat ("ZVelocity",phsics.GetZVelocity());
+		meatBall.CmdSetAnimBool ("OnGround",isGround);
+	}
+
+	[ServerCallback]
+	public void CheckIsHurt(Vector3 direction){
+		if (EP <= 0f) {
+			EP = 0f;
+			meatBall.CmdSetAnimBool ("Hurt", true);
+			if (direction != Vector3.zero) {
+				phsics.Force =(Vector3.up - transform.forward) * 2;
+			}
+		} else {
+			if (direction != Vector3.zero) {
+				phsics.Force = (Vector3.up - transform.forward);
+			}
+		}
 	}
 
 	[ServerCallback]
@@ -124,7 +158,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	}
 		
 	void PlayerDie(){
-		GetComponent<MeatBall> ().CmdSetAnimBool ("Dead",true);;
+		meatBall.CmdSetAnimBool ("Dead",true);;
 		Debug.Log (this.gameObject.name + "被"+
 			GameManager.playerSenceData[attacker].gameObject.name + "殺死!");
 		GameManager.ChangeScoreData (playerNetId,ScoreKind.death);
@@ -132,7 +166,11 @@ public class MeatBallStatus : NetworkBehaviour {
 	}
 
 	void PlayerRebrith(){
-		GetComponent<MeatBall> ();
+		meatBall.CmdInitAnim ();
+		HP = MaxHP;
+		EP = MaxEP;
+		deadTimer = 0f;
+		isDead = false;
 	}
 
 	public int GetPlayerNetId(){

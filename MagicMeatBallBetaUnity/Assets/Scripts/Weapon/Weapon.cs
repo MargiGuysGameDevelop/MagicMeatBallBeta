@@ -8,7 +8,9 @@ public class Weapon : NetworkBehaviour {
 
 	Collider weaponCollider ;
 
+	//攻擊參數
 	public float damage;
+	public float fatigue;
 
 	//public float damageFromMeatBallBase;
 	private float damageFromeWeapon;
@@ -33,6 +35,7 @@ public class Weapon : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		selfStatus = GetComponentInParent<MeatBallStatus> ();
+		WeaponCoilderOff ();
 	}
 	
 	// Update is called once per frame
@@ -47,7 +50,7 @@ public class Weapon : NetworkBehaviour {
 		if (combat) {
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
-				combat.TakeDamage (damage,selfStatus.playerNetId);
+				combat.TakeDamage (1f,selfStatus.playerNetId,100f);
 				//attackOnceBool = true;
 				//canAttack = false;
 			}
@@ -66,7 +69,7 @@ public class Weapon : NetworkBehaviour {
 		attackedList.Clear ();
 
 	}
-
+	/*
 	void SetCanAttackBool(){
 		
 		if (canAttackSetTrueTime > 0) {
@@ -82,7 +85,7 @@ public class Weapon : NetworkBehaviour {
 //			canAttack = false;
 		}
 
-	}
+  */
 
 	public void SetAttackKeepTime(float startTime,float keepTime){
 		//canAttack = true;
