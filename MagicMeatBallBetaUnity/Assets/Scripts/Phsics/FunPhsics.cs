@@ -7,6 +7,7 @@ public class FunPhsics : MonoBehaviour {
 	Rigidbody rigid;
 	Transform trans;
 	RaycastHit hit;
+	Vector3 hitPoint;
 
 	#region 垂直參數
 	bool isGround = true;
@@ -37,6 +38,13 @@ public class FunPhsics : MonoBehaviour {
 	bool justGround = false;
 	#endregion
 
+	void InitialParameter(){
+		justGround = true;
+		wholeTimes = 0f;
+		initialYVelocity = 0f;
+		force = Vector3.zero;
+	}
+
 	void Awake(){
 		rigid = GetComponent<Rigidbody> ();
 		trans = GetComponent<Transform> ();
@@ -44,8 +52,8 @@ public class FunPhsics : MonoBehaviour {
 
 	void Update(){
 		if (!pause) {
-			if (Input.GetKey (KeyCode.E))
-				Force = new Vector3(1f,3f,1f);
+			if (Input.GetKeyDown (KeyCode.E))
+				Force = new Vector3(1f,2f,1f);
 			ifOnGround ();
 			if (force != Vector3.zero || !isGround) {
 				//飛
@@ -53,10 +61,7 @@ public class FunPhsics : MonoBehaviour {
 				FlyXZ ();
 			} else if (!justGround && isGround) {
 				//剛著地
-				justGround = true;
-				force = Vector3.zero;
-				wholeTimes = 0f;
-				initialYVelocity = 0f;
+				InitialParameter();
 			}
 				//平常狀態
 		}
@@ -77,49 +82,49 @@ public class FunPhsics : MonoBehaviour {
 			}
 		} else {
 			isGround = false;
-			hit.point = trans.position + 0.25f * Vector3.down;
 		}
+		hitPoint = hit.point;
 	}
 
 	#region 飛行中
+	float timer = 0f;
 	void FlyY(){
-
+		timer += Time.deltaTime;
 		justGround = false;
 
-		if (Mathf.Abs (trans.position.y - force.y) < 0.3f) {
-			if (force.y != hit.point.y) {
-				force.y = hit.point.y;
-			}else{
-				force = Vector3.zero;
-			}
-		} 
+		float y	= hitPoint.y;;
 
-		var YTrans = new Vector3 (trans.position.x,
-//			initialYVelocity - 0.5f*Physics.gravity.y*Time.deltaTime
-			force.y
-			,trans.position.z);
+		if (!isGround )
+			y = (initialYVelocity + timer * Physics.gravity.y);
+		else if (timer > wholeTimes / 2) {
+			InitialParameter ();
+			return;
+		} else if(timer < wholeTimes / 2){
+			y = (initialYVelocity + timer * Physics.gravity.y);
+		}
 
-//		trans.Translate (YTrans * Time.deltaTime);
-		trans.position = Vector3.Lerp(trans.position,YTrans,damping);
+		trans.Translate (0f,y * Time.deltaTime,0f);
 	}
 
 	void FlyXZ(){
-		var XZTrans = new Vector3 (force.x,0f,force.z);
-		transform.Translate (XZTrans*Time.deltaTime);
+		if(force.x != 0f || force.z != 0f){
+			var XZTrans = new Vector3 (force.x,0f,force.z);
+			transform.Translate (XZTrans*Time.deltaTime);
+		}
 	}
 	#endregion
 
 	#region 施力
 	public Vector3  force = Vector3.zero;
 	float wholeTimes = 0f;
-	float damping = 0.1f;
 	float initialYVelocity = 0f;
 
 	public Vector3 Force{
 		set{ 
-			force = trans.position + value;
-			wholeTimes = Mathf.Sqrt (2*value.y/Physics.gravity.y);
-			initialYVelocity = Mathf.Sqrt (2*Physics.gravity.y*value.y);
+			force += value;
+			wholeTimes = Mathf.Sqrt (Mathf.Abs(8f*force.y/Physics.gravity.y));
+			initialYVelocity = -Physics.gravity.y* wholeTimes/2f;
+			timer = 0f;
 		}
 	}
 	#endregion
