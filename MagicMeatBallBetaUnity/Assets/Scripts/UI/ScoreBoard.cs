@@ -9,13 +9,16 @@ public class ScoreBoard : MonoBehaviour {
 	[SerializeField]
 	GameObject DataUI;
 	public PlayerScore[] playerData;
-
+	GameManager GM;
 	void Awake(){
 		DataUI.SetActive (false);
 	}
 
 	void Update(){
 		if(Input.GetKeyDown(KeyCode.Tab)){
+			if (!GM)
+				GM = GameObject.FindObjectOfType<GameManager> ();
+			GM.RefreshScoreBoard ();
 			DataUI.SetActive (true);
 		}else if(Input.GetKeyUp(KeyCode.Tab)){
 			DataUI.SetActive (false);

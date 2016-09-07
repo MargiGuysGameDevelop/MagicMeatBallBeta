@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class FunPhsics : MonoBehaviour {
+public class FunPhsics : NetworkBehaviour {
 
 	//Unity Component
 	Rigidbody rigid;
@@ -50,11 +51,14 @@ public class FunPhsics : MonoBehaviour {
 		trans = GetComponent<Transform> ();
 	}
 
-	void Update(){
+	void FixedUpdate(){
+
+		rigid.velocity = new Vector3( rigid.velocity.x, 0f, rigid.velocity.z) ;
+
 		if (!pause) {
 			if (Input.GetKeyDown (KeyCode.E))
-				Force = new Vector3(1f,2f,1f);
-			ifOnGround ();
+				RpcAddForce (1f, 2f, 1f);
+			OnGround ();
 			if (force != Vector3.zero || !isGround) {
 				//飛
 				FlyY ();
@@ -63,24 +67,30 @@ public class FunPhsics : MonoBehaviour {
 				//剛著地
 				InitialParameter();
 			}
+
 				//平常狀態
 		}
 	}
 
-	void ifOnGround(){
+	void OnGround(){
 		var fall = !Physics.Raycast (trans.position,Vector3.down,out hit); 
-		#if UNITY_EDITOR
-		Debug.DrawLine(trans.position,hit.point,Color.red);
-		#endif
+
+
 		if (!fall) {
 			distanceWithGround = Vector3.Distance (hit.point, trans.position);
 			if (distanceWithGround <= 0.15f) {
 				isGround = true;
 			} else {
+				#if UNITY_EDITOR
+				Debug.DrawLine(trans.position,hit.point,Color.blue);
+				#endif
 				vectorWithGround = distanceWithGround * Vector3.down;
 				isGround = false;
 			}
 		} else {
+			#if UNITY_EDITOR
+			Debug.DrawLine(trans.position,hit.point,Color.red);
+			#endif
 			isGround = false;
 		}
 		hitPoint = hit.point;
@@ -103,6 +113,8 @@ public class FunPhsics : MonoBehaviour {
 			y = (initialYVelocity + timer * Physics.gravity.y);
 		}
 
+		y = Mathf.Clamp (y, -10f, 10f);
+
 		trans.Translate (0f,y * Time.deltaTime,0f);
 	}
 
@@ -118,14 +130,14 @@ public class FunPhsics : MonoBehaviour {
 	public Vector3  force = Vector3.zero;
 	float wholeTimes = 0f;
 	float initialYVelocity = 0f;
+	 
+	[ClientRpc]
+	public void  RpcAddForce(float xSpeed, float yHight, float zSpeed){
+		force += new Vector3( xSpeed, yHight, zSpeed);
+		wholeTimes = Mathf.Sqrt (Mathf.Abs(8f*force.y/Physics.gravity.y));
+		initialYVelocity = -Physics.gravity.y* wholeTimes/2f;
+		timer = 0f;
 
-	public Vector3 Force{
-		set{ 
-			force += value;
-			wholeTimes = Mathf.Sqrt (Mathf.Abs(8f*force.y/Physics.gravity.y));
-			initialYVelocity = -Physics.gravity.y* wholeTimes/2f;
-			timer = 0f;
-		}
 	}
 	#endregion
 

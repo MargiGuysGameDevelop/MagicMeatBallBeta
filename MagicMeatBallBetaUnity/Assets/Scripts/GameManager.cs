@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 using Prototype.NetworkLobby;
 
@@ -13,12 +14,15 @@ public enum ScoreKind : int{
 }
 
 public class GameManager : NetworkBehaviour {
+
+	//static public GameManager singleton;
 	//MeatBallStatus[] playerList;
 	//[SyncVar]
 	//List<MeatBallStatus> playerList = new List<MeatBallStatus>();
 
 	public MeatBallStatus[] playerList = new MeatBallStatus[0];
 
+	//玩家數量
 	[SyncVar]
 	public int playerNumber;
 
@@ -34,8 +38,38 @@ public class GameManager : NetworkBehaviour {
 		
 	}*/
 
+	public GameManager GetGameManager(){
+		return this;
+	}
+
 	#region ScoreBoradUI
 	static public ScoreBoard scoreBoard;
+	[Command]
+	public void CmdRefreshScoreBoard (){
+		RpcRefreshScoreBoard ();
+	}
+
+	[ClientRpc]
+	public void RpcRefreshScoreBoard(){
+		RefreshScoreBoard ();
+	}
+
+	public void RefreshScoreBoard(){
+		int playerCount = 0;
+
+		foreach(PlayerScore player in scoreBoard.playerData){
+			//Debug.Log ("playerCount : " + playerCount);
+			if (playerCount < playerNumber) {
+				player.dataProperty [(int)ScoreKind.name].text = playerList [playerCount].name.ToString ();
+				player.dataProperty [(int)ScoreKind.score].text = playerList [playerCount].scoreAmount.ToString ();
+				player.dataProperty [(int)ScoreKind.kill].text = playerList [playerCount].killAmount.ToString ();
+				player.dataProperty [(int)ScoreKind.death].text = playerList [playerCount].deathAmount.ToString ();
+				playerCount++;
+			}
+		}
+
+	}
+
 
 	/// <summary>
 	/// 用以更改記分板的欄位數值(+1)，名字請用ChangeName
@@ -69,11 +103,18 @@ public class GameManager : NetworkBehaviour {
 	void Start(){
 		playerSenceData.Clear ();
 		netToScoreBoradIndex.Clear ();
+		playerList = new MeatBallStatus[0];
 		scoreBoard = GameObject.FindGameObjectWithTag ("GM")
 			.GetComponent<ScoreBoard>();
+
+		Screen.lockCursor = true;
 	}
 
 	void Update(){
+
+
+		if (Input.GetKeyDown("escape"))
+			Screen.lockCursor = ;
 		
 		UpdatePlayerNumber ();
 		if (playerList.Length != playerNumber) {

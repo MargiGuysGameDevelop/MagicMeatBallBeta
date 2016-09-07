@@ -48,6 +48,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	public int killAmount;
 
 	//存放最後攻擊者
+	[SyncVar]
 	public int attacker = -1;
 
 	public float MaxHP;
@@ -135,11 +136,13 @@ public class MeatBallStatus : NetworkBehaviour {
 			EP = 0f;
 			meatBall.CmdSetAnimBool ("Hurt", true);
 			if (direction != Vector3.zero) {
-				phsics.Force =(Vector3.up - transform.forward) * 2;
+				Vector3 forceDir = (Vector3.up - transform.forward)*2;
+				phsics.RpcAddForce ( forceDir.x, forceDir.y, forceDir.z);
 			}
 		} else {
 			if (direction != Vector3.zero) {
-				phsics.Force = (Vector3.up - transform.forward);
+				Vector3 forceDir = Vector3.up - transform.forward;
+				phsics.RpcAddForce (forceDir.x, forceDir.y, forceDir.z);
 			}
 		}
 	}
@@ -156,13 +159,25 @@ public class MeatBallStatus : NetworkBehaviour {
 			return true;
 		}
 	}
-		
+	[ServerCallback]	
 	void PlayerDie(){
-		meatBall.CmdSetAnimBool ("Dead",true);;
-		Debug.Log (this.gameObject.name + "被"+
+		meatBall.CmdSetAnimBool ("Dead",true);
+		deathAmount += 1;
+		if (attacker >= 0) {
+			GameManager GM = FindObjectOfType<GameManager> ();
+			if (GM) {
+				
+				Debug.Log ("attacker:" + GameManager.netToScoreBoradIndex [attacker]);
+				GM.playerList [GameManager.netToScoreBoradIndex [attacker]].killAmount++;
+				GM.CmdRefreshScoreBoard ();
+			}
+		}
+
+
+		/*Debug.Log (this.gameObject.name + "被"+
 			GameManager.playerSenceData[attacker].gameObject.name + "殺死!");
 		GameManager.ChangeScoreData (playerNetId,ScoreKind.death);
-		GameManager.ChangeScoreData (attacker,ScoreKind.kill);
+		GameManager.ChangeScoreData (attacker,ScoreKind.kill);*/
 	}
 
 	void PlayerRebrith(){

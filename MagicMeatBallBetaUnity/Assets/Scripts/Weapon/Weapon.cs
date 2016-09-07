@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿	using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -50,7 +50,7 @@ public class Weapon : NetworkBehaviour {
 		if (combat) {
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
-				combat.TakeDamage (1f,selfStatus.playerNetId,100f);
+				combat.TakeDamage (50f,selfStatus.playerNetId,100f);
 				//attackOnceBool = true;
 				//canAttack = false;
 			}
