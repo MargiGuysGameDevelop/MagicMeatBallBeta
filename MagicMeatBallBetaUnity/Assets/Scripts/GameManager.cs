@@ -22,6 +22,7 @@ public class GameManager : NetworkBehaviour {
 
 	public MeatBallStatus[] playerList = new MeatBallStatus[0];
 
+
 	//玩家數量
 	[SyncVar]
 	public int playerNumber;
@@ -107,14 +108,25 @@ public class GameManager : NetworkBehaviour {
 		scoreBoard = GameObject.FindGameObjectWithTag ("GM")
 			.GetComponent<ScoreBoard>();
 
-		Screen.lockCursor = true;
+		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.visible = false;
 	}
 
 	void Update(){
 
 
-		if (Input.GetKeyDown("escape"))
-			Screen.lockCursor = ;
+		if (Input.GetKeyDown ("escape")) {
+			if (Cursor.visible) {
+				Cursor.lockState = CursorLockMode.Confined;
+				Cursor.visible = false;
+			} else {
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+			}
+
+		}
+
+			
 		
 		UpdatePlayerNumber ();
 		if (playerList.Length != playerNumber) {
