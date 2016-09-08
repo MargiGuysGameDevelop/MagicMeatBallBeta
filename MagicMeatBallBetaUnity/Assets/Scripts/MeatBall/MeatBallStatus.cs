@@ -55,6 +55,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	public float MaxEP;
 	//public float MaxMP;
 
+	[SyncVar]
 	public int currentWeapon = 0; //default =0
 
 	//id

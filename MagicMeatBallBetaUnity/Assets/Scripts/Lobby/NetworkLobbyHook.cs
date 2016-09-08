@@ -12,7 +12,7 @@ public class NetworkLobbyHook : LobbyHook
 		MeatBallStatus meatBall = gamePlayer.GetComponent<MeatBallStatus>();
 		meatBall.playerName = lobby.playerName;
 		meatBall.nameColor = lobby.playerColor;
-
+		meatBall.currentWeapon = lobby.weaponCode;
 	}
 
 

@@ -15,11 +15,12 @@ namespace Prototype.NetworkLobby
         //used on server to avoid assigning the same color to two player
         static List<int> _colorInUse = new List<int>();
 
-        public Button colorButton;
+        //public Button colorButton;
         public InputField nameInput;
         public Button readyButton;
         public Button waitingPlayerButton;
         public Button removePlayerButton;
+		public Dropdown weaponDropDown;
 
         public GameObject localIcone;
         public GameObject remoteIcone;
@@ -29,6 +30,8 @@ namespace Prototype.NetworkLobby
         public string playerName = "";
         [SyncVar(hook = "OnMyColor")]
         public Color playerColor = Color.white;
+		[SyncVar(hook = "OnMyWeapon")]
+		public int weaponCode = 0;
 
         public Color OddRowColor = new Color(250.0f / 255.0f, 250.0f / 255.0f, 250.0f / 255.0f, 1.0f);
         public Color EvenRowColor = new Color(180.0f / 255.0f, 180.0f / 255.0f, 180.0f / 255.0f, 1.0f);
@@ -64,6 +67,7 @@ namespace Prototype.NetworkLobby
             //will be created with the right value currently on server
             OnMyName(playerName);
             OnMyColor(playerColor);
+			OnMyWeapon (weaponCode);
         }
 
         public override void OnStartAuthority()
@@ -105,6 +109,7 @@ namespace Prototype.NetworkLobby
             remoteIcone.gameObject.SetActive(false);
             localIcone.gameObject.SetActive(true);
 
+
             CheckRemoveButton();
 
             if (playerColor == Color.white)
@@ -120,17 +125,22 @@ namespace Prototype.NetworkLobby
                 CmdNameChanged("Player" + (LobbyPlayerList._instance.playerListContentTransform.childCount-1));
 
             //we switch from simple name display to name input
-            colorButton.interactable = true;
+            //colorButton.interactable = true;
             nameInput.interactable = true;
 
             nameInput.onEndEdit.RemoveAllListeners();
             nameInput.onEndEdit.AddListener(OnNameChanged);
 
-            colorButton.onClick.RemoveAllListeners();
-            colorButton.onClick.AddListener(OnColorClicked);
+           // colorButton.onClick.RemoveAllListeners();
+           // colorButton.onClick.AddListener(OnColorClicked);
 
             readyButton.onClick.RemoveAllListeners();
             readyButton.onClick.AddListener(OnReadyClicked);
+
+			weaponDropDown.interactable = true;
+
+			weaponDropDown.onValueChanged.RemoveAllListeners ();
+			weaponDropDown.onValueChanged.AddListener (OnChangeWeapon);
 
             //when OnClientEnterLobby is called, the loval PlayerController is not yet created, so we need to redo that here to disable
             //the add button if we reach maxLocalPlayer. We pass 0, as it was already counted on OnClientEnterLobby
@@ -160,8 +170,9 @@ namespace Prototype.NetworkLobby
                 textComponent.text = "READY";
                 textComponent.color = ReadyColor;
                 readyButton.interactable = false;
-                colorButton.interactable = false;
+                //colorButton.interactable = false;
                 nameInput.interactable = false;
+				weaponDropDown.interactable = false;
             }
             else
             {
@@ -171,8 +182,10 @@ namespace Prototype.NetworkLobby
                 textComponent.text = isLocalPlayer ? "JOIN" : "...";
                 textComponent.color = Color.white;
                 readyButton.interactable = isLocalPlayer;
-                colorButton.interactable = isLocalPlayer;
+                //colorButton.interactable = isLocalPlayer;
                 nameInput.interactable = isLocalPlayer;
+				weaponDropDown.interactable = isLocalPlayer;
+
             }
         }
 
@@ -192,9 +205,12 @@ namespace Prototype.NetworkLobby
         public void OnMyColor(Color newColor)
         {
             playerColor = newColor;
-            colorButton.GetComponent<Image>().color = newColor;
+            //colorButton.GetComponent<Image>().color = newColor;
         }
-
+		public void OnMyWeapon(int newWeaponCode){
+			weaponCode = newWeaponCode;
+			weaponDropDown.value = weaponCode;
+		}
         //===== UI Handler
 
         //Note that those handler use Command function, as we need to change the value on the server not locally
@@ -213,6 +229,9 @@ namespace Prototype.NetworkLobby
         {
             CmdNameChanged(str);
         }
+		public void OnChangeWeapon(int value){
+			CmdChangeWeapon (value);
+		}
 
         public void OnRemovePlayerClick()
         {
@@ -291,6 +310,10 @@ namespace Prototype.NetworkLobby
             playerName = name;
         }
 
+		[Command]
+		public void CmdChangeWeapon(int value){
+			weaponCode = value;
+		}
         //Cleanup thing when get destroy (which happen when client kick or disconnect)
         public void OnDestroy()
         {
