@@ -26,6 +26,14 @@ public class Weapon : NetworkBehaviour {
 
 	List<Combat> attackedList = new List<Combat>();
 
+	#region 攻擊事件
+	public delegate void OnHit(GameObject enemy,Vector3 pos,Quaternion face);
+	public OnHit onHit;
+
+	public delegate void Project(GameObject enemy,Vector3 appearPosition,Quaternion face);
+	public Project project;
+	#endregion
+
 	public MeatBallStatus selfStatus;
 
 	void Awake(){
@@ -51,6 +59,7 @@ public class Weapon : NetworkBehaviour {
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
 				combat.TakeDamage (50f,selfStatus.playerNetId,100f);
+				onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));
 				//attackOnceBool = true;
 				//canAttack = false;
 			}

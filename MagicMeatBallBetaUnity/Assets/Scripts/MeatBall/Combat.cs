@@ -30,7 +30,7 @@ public class Combat : NetworkBehaviour {
 			selfStatus.EP -= fatigue;
 			selfStatus.attacker = netID;
 
-			Debug.Log (GameManager.playerSenceData[netID].gameObject.name 
+			LogManager.Log (GameManager.playerSenceData[netID].gameObject.name 
 				+"攻擊"+this.gameObject.name+",造成了"+damage.ToString()+"點傷害");
 
 			if (!selfStatus.CheckIsDead ()) {

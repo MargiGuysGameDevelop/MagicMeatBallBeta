@@ -81,7 +81,7 @@ public class GameManager : NetworkBehaviour {
 		int scoreBoradIndex = netToScoreBoradIndex [netID];
 		switch (kind) {
 		case ScoreKind.name:
-			Debug.Log ("用錯函式啦!");
+			LogManager.Log ("糟糕!用錯函式啦!請來信告知我們此bug!");
 			break;
 		default:
 			scoreBoard.ChangeValueData (scoreBoradIndex,(int)kind);
@@ -166,7 +166,7 @@ public class GameManager : NetworkBehaviour {
 		//全放進Dictionary
 		for(int i =0;i<playerList.Length;i++){
 			var ms = playerList [i];
-			Debug.Log (ms.gameObject.name + ":" + ms.playerID);
+			LogManager.Log (ms.gameObject.name + ":" + ms.playerID);
 			if (!playerSenceData.ContainsValue (ms)) {
 				playerSenceData.Add (ms.playerNetId, ms);
 				netToScoreBoradIndex.Add (ms.playerNetId,i);

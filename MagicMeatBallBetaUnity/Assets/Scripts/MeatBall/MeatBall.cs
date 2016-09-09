@@ -33,7 +33,7 @@ public class MeatBall : NetworkBehaviour {
 	private GameObject sceneCamera;
 	//private HpCanvas hpCanvas;
 
-	[SerializeField]Weapon[] rightHandWeaponList;
+	public Weapon rightHandWeapon;
 
 
 	void Awake(){
@@ -43,9 +43,10 @@ public class MeatBall : NetworkBehaviour {
 		selfStatus = GetComponent<MeatBallStatus> ();
 
 		#region Weapon
-		SortWeaponCode ();
-		CloseAllWeapon ();
-		OpenWeapon ();
+//		SortWeaponCode ();
+//		CloseAllWeapon ();
+//		OpenWeapon ();
+		RoadWeapon();
 		#endregion
 
 		//hpCanvas = GetComponentInChildren<HpCanvas> ();
@@ -110,51 +111,54 @@ public class MeatBall : NetworkBehaviour {
 	}
 
 	#region init
-	void SortWeaponCode(){
+	public void RoadWeapon(){
+		rightHandWeapon = GetComponentInChildren<Weapon> ();
+	}
+	/*void SortWeaponCode(){
 		//get weapon
-		rightHandWeaponList = GetComponentsInChildren <Weapon>();
+		rightHandWeapon = GetComponentsInChildren <Weapon>();
 
 		//sort
 		var gameObjectArrayBuffer = GetComponentsInChildren <Weapon>();
 
 		for(int i=0;i<gameObjectArrayBuffer.Length;i++){
 			var weapon = gameObjectArrayBuffer [i].GetComponent<Weapon> ();
-			rightHandWeaponList [weapon.weaponCode] = gameObjectArrayBuffer [i];
+			rightHandWeapon [weapon.weaponCode] = gameObjectArrayBuffer [i];
 		}
 	}
 
 	public void CloseAllWeapon(){
-		foreach(Weapon weapon in rightHandWeaponList){
+		foreach(Weapon weapon in rightHandWeapon){
 			weapon.gameObject.SetActive(false);
 		}
 	}
 
 	public void OpenWeapon(){
-		rightHandWeaponList [selfStatus.currentWeapon].gameObject.SetActive(true);
-	}
+		rightHandWeapon [selfStatus.currentWeapon].gameObject.SetActive(true);
+	}*/
 	#endregion
 
 
 	#region Attacktion
 	[ServerCallback]
 	public void GeneralAttack(float attackStartTime,float attackKeepTime){
-		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (attackStartTime,attackKeepTime);
+		rightHandWeapon.SetAttackKeepTime (attackStartTime,attackKeepTime);
 	}
 
 	[Command]
 	void CmdGeneralAttack(){
-		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().SetAttackKeepTime (0.1f,0.7f);
+		rightHandWeapon.SetAttackKeepTime (0.1f,0.7f);
 	}
 
 	[ServerCallback]
 	//只要Server的Coilder開並讓其他玩家扣HP就夠了
 	public void AttackColliderOn(){
-		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().WeaponCoilderOn ();
+		rightHandWeapon.WeaponCoilderOn ();
 	}
 
 	[ServerCallback]
 	public void AttackColliderOff(){
-		rightHandWeaponList [selfStatus.currentWeapon].GetComponent<Weapon> ().WeaponCoilderOff();
+		rightHandWeapon.WeaponCoilderOff();
 	}
 
 	[Command]
