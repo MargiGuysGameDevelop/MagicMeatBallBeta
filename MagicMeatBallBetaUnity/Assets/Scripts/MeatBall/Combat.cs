@@ -24,7 +24,7 @@ public class Combat : NetworkBehaviour {
 	/**take damage only on sever**/
 	[ServerCallback]
 	public void TakeDamage(float damage,int netID,float fatigue){
-		if (!selfStatus.isDead) {
+		if (!selfStatus.CheckIsDead()) {
 			
 			selfStatus.HP -= damage;
 			selfStatus.EP -= fatigue;
@@ -36,10 +36,11 @@ public class Combat : NetworkBehaviour {
 			if (!selfStatus.CheckIsDead ()) {
 				//play hurt ani
 				selfStatus.CheckIsHurt(new Vector3(1,1,1));
-			} else {
+			}/* else {
 				//die
 				selfStatus.isDead = true;
-			}
+
+			}*/
 		}
 		//RpcTakeDamage ();
 	}

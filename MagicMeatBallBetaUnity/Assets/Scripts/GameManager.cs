@@ -14,6 +14,10 @@ public enum ScoreKind : int{
 }
 
 public class GameManager : NetworkBehaviour {
+	
+	static GameObject staticEndBoard;
+	[SerializeField]
+	GameObject endBoard;
 
 	//static public GameManager singleton;
 	//MeatBallStatus[] playerList;
@@ -22,6 +26,8 @@ public class GameManager : NetworkBehaviour {
 
 	public MeatBallStatus[] playerList = new MeatBallStatus[0];
 
+	//[SerializeField]
+	static public int endScore = 8;
 
 	//玩家數量
 	[SyncVar]
@@ -38,6 +44,11 @@ public class GameManager : NetworkBehaviour {
 	void OnStartLocalPlayer(){
 		
 	}*/
+
+
+	void Awake(){
+		staticEndBoard = endBoard;
+	}
 
 	public GameManager GetGameManager(){
 		return this;
@@ -102,6 +113,9 @@ public class GameManager : NetworkBehaviour {
 
 	#region UnityInteral
 	void Start(){
+		Unpause ();
+
+		endScore = 3;
 		playerSenceData.Clear ();
 		netToScoreBoradIndex.Clear ();
 		playerList = new MeatBallStatus[0];
@@ -201,6 +215,45 @@ public class GameManager : NetworkBehaviour {
 //			Debug.Log (playerSenceData[ms.Key].name + ":" + ms.Key);
 //		}
 	}
+
+
+	public static bool JudgeIsGameOver(int score){
+		if (score >= endScore)
+			return true;
+		else
+			return false;
+	}
+	[Command]
+	public void CmdGameOver(string winnerName){
+		RpcGameOver (winnerName);
+	}
+	[ClientRpc]
+	public void RpcGameOver(string winnerName){
+		GameOver (winnerName);
+	}
+
+	public void GameOver(string winnerName){
+		EndBoard.SetWinnerName (winnerName);
+		ShowEndBoard ();
+		Pause();
+
+	}
+
+	static void Pause(){
+		Time.timeScale = 0;
+	}
+
+	static void Unpause(){
+		Time.timeScale = 1;
+	}
+
+	static void ShowEndBoard(){
+		//endBoard = GameObject.FindGameObjectWithTag ("EndBoard");
+		staticEndBoard.SetActive (true);
+	}
+
+
+
 
 
 }

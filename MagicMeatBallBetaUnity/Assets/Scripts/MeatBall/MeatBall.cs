@@ -68,15 +68,20 @@ public class MeatBall : NetworkBehaviour {
 
 	public override void OnStartLocalPlayer ()
 	{
-
 		gameObject.name = selfStatus.playerName;
 	}
 
 	// Update is called once per frame
 	void Update () {
+
+
 		//ensure player control himself
 		if(!isLocalPlayer)
 			return;
+		
+		if (Time.timeScale == 0)
+			return;
+
 		//move
 		Move ();
 

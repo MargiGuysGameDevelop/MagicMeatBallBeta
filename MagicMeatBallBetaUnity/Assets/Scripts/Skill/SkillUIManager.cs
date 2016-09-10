@@ -23,6 +23,9 @@ public class SkillUIManager : MonoBehaviour {
 	}
 
 	void Update(){
+		if (Time.timeScale == 0)
+			return;
+
 		for(int i=0;i<4;i++){
 			if (!skills [i+1].CD.isDone && iconList[i].fillAmount == 1f) {
 //				iconList[i].fillAmount = 1f- skills[i+1].CD.currentValue/skills[i+1].CD.value;

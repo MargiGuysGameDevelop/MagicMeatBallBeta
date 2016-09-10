@@ -74,6 +74,9 @@ public class Skill : MonoBehaviour{
 	#endregion
 		
 	public void Update(){
+		if (Time.timeScale == 0)
+			return;
+
 		CD.Timer ();
 	}
 }

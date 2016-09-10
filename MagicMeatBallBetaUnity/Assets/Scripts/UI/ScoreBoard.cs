@@ -15,6 +15,9 @@ public class ScoreBoard : MonoBehaviour {
 	}
 
 	void Update(){
+		if (Time.timeScale == 0)
+			return;
+
 		if(Input.GetKeyDown(KeyCode.Tab)){
 			if (!GM)
 				GM = GameObject.FindObjectOfType<GameManager> ();

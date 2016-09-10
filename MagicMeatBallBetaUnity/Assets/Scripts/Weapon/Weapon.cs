@@ -59,7 +59,9 @@ public class Weapon : NetworkBehaviour {
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
 				combat.TakeDamage (50f,selfStatus.playerNetId,100f);
-				onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));
+
+				//onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));
+
 				//attackOnceBool = true;
 				//canAttack = false;
 			}

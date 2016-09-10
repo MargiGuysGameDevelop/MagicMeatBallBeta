@@ -51,6 +51,8 @@ public class MeatBallStatus : NetworkBehaviour {
 	[SyncVar]
 	public int attacker = -1;
 
+	float attackerResetTimer;
+
 	public float MaxHP;
 	public float MaxEP;
 	//public float MaxMP;
@@ -76,10 +78,15 @@ public class MeatBallStatus : NetworkBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (Time.timeScale == 0)
+			return;
+
 		SetPresentValue ();	
 		CaculateAnimPra ();
+		ResetAttackerByTime ();
 		if (isDead) 
 		{
+			
 			deadTimer += Time.deltaTime;
 			if (deadTimer >= rebrithTime) {
 				PlayerRebrith ();
@@ -148,7 +155,7 @@ public class MeatBallStatus : NetworkBehaviour {
 		}
 	}
 
-	[ServerCallback]
+
 	public bool CheckIsDead(){
 		if (HP > 0) {
 			return false;
@@ -167,32 +174,62 @@ public class MeatBallStatus : NetworkBehaviour {
 		if (attacker >= 0) {
 			GameManager GM = FindObjectOfType<GameManager> ();
 			if (GM) {
-				
+				MeatBallStatus attackerMeatBallStatus = GM.playerList [GameManager.netToScoreBoradIndex [attacker]];
 				Debug.Log ("attacker:" + GameManager.netToScoreBoradIndex [attacker]);
-				GM.playerList [GameManager.netToScoreBoradIndex [attacker]].killAmount++;
+				//if(attacker != -1)
+				attackerMeatBallStatus.scoreAmount++;
+				attackerMeatBallStatus.killAmount++;
 				GM.CmdRefreshScoreBoard ();
+
+				//JudgeIsGameOver
+				if (GameManager.JudgeIsGameOver (attackerMeatBallStatus.scoreAmount)) {
+					
+					GM.CmdGameOver (attackerMeatBallStatus.playerName);
+				}
+
 			}
 		}
-
-
 		/*Debug.Log (this.gameObject.name + "被"+
 			GameManager.playerSenceData[attacker].gameObject.name + "殺死!");
 		GameManager.ChangeScoreData (playerNetId,ScoreKind.death);
 		GameManager.ChangeScoreData (attacker,ScoreKind.kill);*/
 	}
 
+	[ServerCallback]
+	void ResetAttackerByTime(){
+		if (attacker != -1) {
+			attackerResetTimer = 10;
+		}
+		if (attackerResetTimer > 0) {
+			attackerResetTimer -= Time.deltaTime;
+		} else {
+			
+		}
+	}
+
+	[ServerCallback]
 	void PlayerRebrith(){
-		meatBall.CmdInitAnim ();
+
+
+		RpcSetRespawn ();
+
 		HP = MaxHP;
 		EP = MaxEP;
 		deadTimer = 0f;
 		isDead = false;
+			
 	}
 
 	public int GetPlayerNetId(){
 		playerNetId = int.Parse (GetComponent<NetworkIdentity> ().netId.ToString ());
 		return playerNetId;
 	}
-		
+
+	[ClientRpc]
+	void RpcSetRespawn(){
+		Transform rebirthTransform = LobbyManager.s_Singleton.GetStartPosition ();
+		transform.position = rebirthTransform.position;
+		meatBall.CmdInitAnim ();
+	}
 
 }

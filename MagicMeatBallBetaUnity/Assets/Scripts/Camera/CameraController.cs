@@ -62,6 +62,9 @@ public class CameraController : MonoBehaviour {
 
 	// Update is called once per frame
 	void LateUpdate () {
+		if (Time.timeScale == 0)
+			return;
+
 		if (focus) {
 
 			deltaY = playerBodyBone.position.y - offsetY;
