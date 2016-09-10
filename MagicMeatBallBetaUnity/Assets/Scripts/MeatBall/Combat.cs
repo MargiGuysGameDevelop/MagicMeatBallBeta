@@ -11,6 +11,8 @@ public class Combat : NetworkBehaviour {
 	void Awake () {
 		selfStatus = GetComponent<MeatBallStatus> ();
 	}
+		
+
 	// Update is called once per frame
 	void Update () {
 		if(isLocalPlayer){
@@ -23,7 +25,7 @@ public class Combat : NetworkBehaviour {
 
 	/**take damage only on sever**/
 	[ServerCallback]
-	public void TakeDamage(float damage,int netID,float fatigue){
+	public void TakeDamage(float damage,int netID,float fatigue,Vector3 force){
 		if (!selfStatus.CheckIsDead()) {
 			
 			selfStatus.HP -= damage;
@@ -35,7 +37,9 @@ public class Combat : NetworkBehaviour {
 
 			if (!selfStatus.CheckIsDead ()) {
 				//play hurt ani
-				selfStatus.CheckIsHurt(new Vector3(1,1,1));
+				if (selfStatus.EP <= 0f) {
+					selfStatus.CheckIsHurt (force);
+				}
 			}/* else {
 				//die
 				selfStatus.isDead = true;

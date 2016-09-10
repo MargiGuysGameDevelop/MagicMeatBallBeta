@@ -21,7 +21,7 @@ public class SuitList : MonoBehaviour {
 	[SerializeField]
 	MeatBall meatBall;
 
-	void Start () {
+	void Awake () {
 		if (meatBall) {
 			for(int i=0;i<kind.Length;i++){
 				kind [i].gameObject.SetActive (false);

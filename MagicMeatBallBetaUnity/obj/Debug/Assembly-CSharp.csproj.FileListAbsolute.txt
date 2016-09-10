@@ -16,6 +16,5 @@ C:\Users\newhandfun\OneDrive\MagicMeatBall\MagicMeatBallBeta\MagicMeatBallBetaUn
 C:\Users\newhandfun\OneDrive\MagicMeatBall\MagicMeatBallBeta\MagicMeatBallBetaUnity\Temp\bin\Debug\UnityEditor.xml
 C:\Users\newhandfun\OneDrive\MagicMeatBall\MagicMeatBallBeta\MagicMeatBallBetaUnity\Temp\bin\Debug\UnityEngine.UI.xml
 C:\Users\newhandfun\OneDrive\MagicMeatBall\MagicMeatBallBeta\MagicMeatBallBetaUnity\Temp\bin\Debug\UnityEngine.Networking.xml
-C:\Users\newhandfun\OneDrive\MagicMeatBall\MagicMeatBallBeta\MagicMeatBallBetaUnity\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\newhandfun\OneDrive\MagicMeatBall\MagicMeatBallBeta\MagicMeatBallBetaUnity\obj\Debug\Assembly-CSharp.dll
 C:\Users\newhandfun\OneDrive\MagicMeatBall\MagicMeatBallBeta\MagicMeatBallBetaUnity\obj\Debug\Assembly-CSharp.pdb

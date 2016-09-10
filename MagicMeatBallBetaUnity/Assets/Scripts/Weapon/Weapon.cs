@@ -10,7 +10,9 @@ public class Weapon : NetworkBehaviour {
 
 	//攻擊參數
 	public float damage;
-	public float fatigue;
+	public float fatigue = 100f;
+	public bool isHands= false;
+	public Vector3 force = new Vector3(1,3,1);
 
 	//public float damageFromMeatBallBase;
 	private float damageFromeWeapon;
@@ -26,12 +28,14 @@ public class Weapon : NetworkBehaviour {
 
 	List<Combat> attackedList = new List<Combat>();
 
-	#region 攻擊事件
+	#region 技能攻擊相關
 	public delegate void OnHit(GameObject enemy,Vector3 pos,Quaternion face);
 	public OnHit onHit;
 
-	public delegate void Project(GameObject enemy,Vector3 appearPosition,Quaternion face);
-	public Project project;
+//	public delegate void Project(Vector3 appearPosition,Quaternion face);
+//	public Project project;
+
+	public GameObject effect;
 	#endregion
 
 	public MeatBallStatus selfStatus;
@@ -43,6 +47,7 @@ public class Weapon : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		selfStatus = GetComponentInParent<MeatBallStatus> ();
+		weaponCode = selfStatus.currentWeapon;
 		WeaponCoilderOff ();
 	}
 	
@@ -58,7 +63,8 @@ public class Weapon : NetworkBehaviour {
 		if (combat) {
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
-				combat.TakeDamage (50f,selfStatus.playerNetId,100f);
+				combat.TakeDamage (damage,selfStatus.playerNetId,fatigue,force);
+				onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));
 
 				//onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));
 
@@ -140,5 +146,10 @@ public class Weapon : NetworkBehaviour {
 		weaponCollider.enabled = false;
 
 		SetAttackedListEmpty ();
+	}
+
+	[ServerCallback]
+	public void UseSkill(){
+		
 	}
 }

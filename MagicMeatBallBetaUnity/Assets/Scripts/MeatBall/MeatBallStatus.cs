@@ -9,7 +9,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	/// <summary>
 	/// 很常用到我直接Awake抓
 	/// </summary>
-	MeatBall meatBall;
+	public MeatBall meatBall;
 
 	//自定義物理
 	FunPhsics phsics;
@@ -76,10 +76,20 @@ public class MeatBallStatus : NetworkBehaviour {
 		phsics = GetComponent<FunPhsics> ();
 	}
 
+	void Start(){
+		meatBall.CmdSetAnimInt ("WeaponKind",currentWeapon);
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (Time.timeScale == 0)
 			return;
+
+		if (Input.GetKeyDown (KeyCode.E)) {
+//			EP = 0f;
+//			CheckIsHurt (-transform.forward);
+			phsics.RpcAddForce (1f, 2f, 1f);
+		}
 
 		SetPresentValue ();	
 		CaculateAnimPra ();
@@ -134,25 +144,28 @@ public class MeatBallStatus : NetworkBehaviour {
 	}
 	public void CaculateAnimPra(){
 		bool isGround = Physics.Raycast (transform.position,Vector3.down,0.2f);
-		meatBall.CmdSetAnimFloat ("ZVelocity",phsics.GetZVelocity());
+		meatBall.CmdSetAnimFloat ("YVelocity",phsics.GetYVelocity());
 		meatBall.CmdSetAnimBool ("OnGround",isGround);
 	}
 
 	[ServerCallback]
 	public void CheckIsHurt(Vector3 direction){
+		meatBall.CmdSetAnimBool ("Hurt", true);
 		if (EP <= 0f) {
 			EP = 0f;
-			meatBall.CmdSetAnimBool ("Hurt", true);
 			if (direction != Vector3.zero) {
-				Vector3 forceDir = (Vector3.up - transform.forward)*2;
-				phsics.RpcAddForce ( forceDir.x, forceDir.y, forceDir.z);
+				meatBall.CmdSetAnimBool ("HitFly",true);
+//				Vector3 forceDir = (Vector3.up - transform.forward)*2;
+				phsics.RpcAddForce ( direction.x, direction.y, direction.z);
 			}
-		} else {
-			if (direction != Vector3.zero) {
-				Vector3 forceDir = Vector3.up - transform.forward;
-				phsics.RpcAddForce (forceDir.x, forceDir.y, forceDir.z);
-			}
-		}
+		} 
+//		else {
+//			if (direction != Vector3.zero) {
+//				Vector3 direction = Vector3.up - transform.forward;
+//				phsics.RpcAddForce (direction.x, direction.y, direction.z);
+//
+//			}
+//		}
 	}
 
 

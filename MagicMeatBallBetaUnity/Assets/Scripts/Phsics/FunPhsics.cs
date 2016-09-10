@@ -10,6 +10,8 @@ public class FunPhsics : NetworkBehaviour {
 	RaycastHit hit;
 	Vector3 hitPoint;
 
+	#region 飛行(fly)
+
 	#region 垂直參數
 	bool isGround = true;
 	float distanceWithGround = 0f;
@@ -22,6 +24,9 @@ public class FunPhsics : NetworkBehaviour {
 	public Vector3 FallDistance{
 		get{return Physics.gravity / Application.targetFrameRate;}
 	}
+
+	float lastYPosition = 0f;
+	float Yvelocity;
 	#endregion
 
 	#region 水平參數
@@ -38,6 +43,12 @@ public class FunPhsics : NetworkBehaviour {
 	public bool pause = false;
 	bool justGround = false;
 	#endregion
+	#endregion
+
+	#region 等速(push)
+	float pushTimes = 0f;
+	Vector3 pushVector = Vector3.zero;
+	#endregion
 
 	void InitialParameter(){
 		justGround = true;
@@ -51,25 +62,52 @@ public class FunPhsics : NetworkBehaviour {
 		trans = GetComponent<Transform> ();
 	}
 
+	void Start(){
+	}
+
 	void FixedUpdate(){
+
+		if (Time.timeScale == 0f)
+			return;
 
 		rigid.velocity = new Vector3( rigid.velocity.x, 0f, rigid.velocity.z) ;
 
 		if (!pause) {
-			if (Input.GetKeyDown (KeyCode.E))
-				RpcAddForce (1f, 2f, 1f);
 			OnGround ();
 			if (force != Vector3.zero || !isGround) {
 				//飛
 				FlyY ();
 				FlyXZ ();
+				Yvelocity = (trans.position.y - lastYPosition) * 10f; 
+				if (lastYPosition != trans.position.y) 
+					lastYPosition = trans.position.y;
 			} else if (!justGround && isGround) {
 				//剛著地
 				InitialParameter();
-			}
-
+			}else{
 				//平常狀態
+				//受力推擊(Push)
+				if (pushTimes > 0f) {
+					Debug.Log (pushVector);
+					var localPushVector = trans.InverseTransformDirection(pushVector);
+					trans.Translate (localPushVector * Time.deltaTime);
+
+				} else if (pushVector != Vector3.zero) {
+					pushTimes = 0f;
+					pushVector = Vector3.zero;
+				}
+					
+			}
+			if (pushTimes > 0f) {
+				pushTimes -= Time.deltaTime;
+			} else if(pushTimes <0f){
+				pushTimes = 0f;
+			}
 		}
+	}
+
+	void Update(){
+
 	}
 
 	void OnGround(){
@@ -139,6 +177,19 @@ public class FunPhsics : NetworkBehaviour {
 		timer = 0f;
 
 	}
+
+	[ClientRpc]
+	/// <summary>
+	/// Push，平面的等速位移。(Y==0!)
+	/// </summary>
+	/// <param name="times">Times.</param>
+	/// <param name="input">Input.</param>
+	/// <param name="scale">Scale.</param>
+	public void RpcPush(float times,Vector3 input) {
+		pushVector += input;
+		pushVector.y = 0f;
+		pushTimes += times;
+	}
 	#endregion
 
 	#region 公開
@@ -146,8 +197,8 @@ public class FunPhsics : NetworkBehaviour {
 		return isGround;
 	}
 
-	public float GetZVelocity(){
-		return rigid.velocity.z;
+	public float GetYVelocity(){
+		return Yvelocity;
 	}
 	#endregion
 

@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OnStateEnterSetBool : StateMachineBehaviour {
-	[SerializeField]
-	string boolName;
-	[SerializeField]
-	bool setBool;
+public class OnStateEnterSetBool : MeatBallSBMBoolList {
+
 
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
-		animator.SetBool (boolName, setBool);
+		SetAllBool(animator);
 	}
+		
 }

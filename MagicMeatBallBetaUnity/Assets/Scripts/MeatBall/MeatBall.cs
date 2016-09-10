@@ -83,7 +83,7 @@ public class MeatBall : NetworkBehaviour {
 			return;
 
 		//move
-		Move ();
+			Move ();
 
 		//jump
 		if (Input.GetKeyDown("space")) {
@@ -168,13 +168,14 @@ public class MeatBall : NetworkBehaviour {
 
 	[Command]
 	public void CmdProject(){
-		Debug.Log ("發射物體");
+//		rightHandWeapon.
 		RpcProject ();
 	}
 
 	[ClientRpc]
 	public void RpcProject(){
-		
+//		Weapon.Project (transform.position,Quaternion.Euler(transform.forward));
+		Instantiate(rightHandWeapon.effect,transform.position,Quaternion.Euler(transform.forward));
 	}
 
 	[ServerCallback]
@@ -258,20 +259,10 @@ public class MeatBall : NetworkBehaviour {
 
 	#region Dodge
 	void Dodge(){
-		/*
-		dodgeX = dodgeY = 0f;
-
-		if (horizontal > 0.5f)
-			dodgeX = 1f;
-		else if (horizontal < -0.5f) {
-			dodgeX = -1f;
-		} else if (vertical < 0.5f)
-			dodgeY = -1f;
-		else  
-			dodgeY = 1f;
-		*/
+		
 		CmdSetAnimFloat ("Horizontal",horizontal);
-		CmdSetAnimFloat ("Vertical",vertical);
+
+		CmdSetAnimFloat ("Vertical",vertical==0f&&horizontal==0f? 1f:vertical);
 
 		CmdSetAnimBool ("Dodge",true);
 	}
@@ -301,6 +292,19 @@ public class MeatBall : NetworkBehaviour {
 		meatBallAnimator.SetFloat(boolName,setFloat);
 	}
 
+	[Command]
+	public void CmdSetAnimInt(string boolName,int setInt)
+	{
+		RpcSetAnimInt(boolName,setInt);
+	}
+
+	[ClientRpc]
+	public void RpcSetAnimInt(string boolName,int setFloat)
+	{
+		meatBallAnimator.SetInteger(boolName,setFloat);
+	}
+
+
 
 	[Command]
 	public void CmdSetAnimBool(string boolName,bool boolState)
@@ -325,6 +329,19 @@ public class MeatBall : NetworkBehaviour {
 	{
 		meatBallAnimator.SetTrigger(triggerName);
 	}
+
+	[Command]
+	public void CmdSetSkillLayer()
+	{
+		RpcSetSkillLayer();
+	}
+
+	[ClientRpc]
+	public void RpcSetSkillLayer()
+	{
+		meatBallAnimator.SetLayerWeight (3,1f);
+	}
+
 	#endregion 
 
 }

@@ -6,11 +6,13 @@ public class SkillManager : MonoBehaviour {
 	#region 基本欄位
 	[SerializeField]
 	string weaponSkillName;
+
+	ExtraStates extraStates;
+	Weapon weapon;
+	MeatBallStatus selfStatus;
 	#endregion
 
 	#region 初始化
-	ExtraStates extraStates;
-	Weapon weapon;
 
 	[ContextMenu("初始化技能及UI")]
 	void Initial(){
@@ -55,6 +57,16 @@ public class SkillManager : MonoBehaviour {
 	};
 	#endregion
 
+	#region 施展技能中
+//	bool isSkillPlaying;
+	public delegate bool SkillPlaying();
+	public SkillPlaying playing;
+
+	public bool NoAnySkill(){
+		return true;
+	}
+	#endregion
+
 	void Start(){
 		extraStates = GetComponentInParent<ExtraStates> ();
 		weapon = GetComponent<Weapon> ();
@@ -65,23 +77,85 @@ public class SkillManager : MonoBehaviour {
 		for(int i=0;i<4;i++){
 			UI.iconList [i].sprite = skillList [i+1].icon;
 		}
+
+		playing = NoAnySkill;
+
+		selfStatus = GetComponentInParent<MeatBallStatus> ();
+
+		skillList [0].GiveProperty (weapon,selfStatus,0);
+//		Debug.Log (meatBall);
 	}
 
 	void Update(){
+		if (Time.timeScale == 0)
+			return;
 
-		for(int i=0;i<buttonName.Length;i++){
-			if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone)
-				skillIndex = i;
-		}
+		if(playing()){
+			
+			if(playing != NoAnySkill)
+				playing = NoAnySkill;
 
-		if (skillIndex != lastSkillIndex) {
-			skillList [skillIndex].GiveWeaponProperty (weapon);
-			skillList [skillIndex].CD.Count ();
-			lastSkillIndex = skillIndex;
+			for(int i=0;i<buttonName.Length;i++){
+				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone)
+					skillIndex = i;
+			}
+
+			if (skillIndex != lastSkillIndex) {
+//				switch (selfStatus.currentWeapon) {
+//				case 0:
+//					UseSkill <BlackSwordManSkill>(skillList[skillIndex]);
+//					break;
+//				default:
+//					Debug.Log ("沒有此套裝!");
+//					break;
+//				}
+				skillList[skillIndex].GiveProperty (weapon,selfStatus,skillIndex);
+				skillList[skillIndex].StartSKill ();
+				playing = skillList[skillIndex].PlayingSkill;
+				skillList[skillIndex].CD.Count ();
+				lastSkillIndex = skillIndex;
+//			}
+			}
+			if (skillIndex != 0)
+				skillIndex = 0;
 		}
 	}
+
+//	public void UseSkill<skillScripts> where skillScripts : Skill{
+//		skillScripts newSkill = skillList [skillIndex] as skillScripts;
+//		if(newSkill!=null){
+//			newSkill.GiveProperty (weapon,selfStatus,skillIndex);
+//			newSkill.StartSKill ();
+//			playing = newSkill.PlayingSkill;
+//			newSkill.CD.Count ();
+//			lastSkillIndex = skillIndex;}
+//		else{
+//			orgin.GiveProperty (weapon,selfStatus,skillIndex);
+//			orgin.StartSKill ();
+//			playing = newSkill.PlayingSkill;
+//			orgin.CD.Count ();
+//			lastSkillIndex = skillIndex;}
+//			
+//	}
 
 //	[ContextMenu("抓取技能及UI")]
 //	void GetSkills(){
 //	}
 }
+
+//public class UseSkill<skillScripts> where skillScripts : Skill{
+//	skillScripts newSkill = skillList [skillIndex] as skillScripts;
+//	if(newSkill!=null){
+//		newSkill.GiveProperty (weapon,selfStatus,skillIndex);
+//		newSkill.StartSKill ();
+//		playing = newSkill.PlayingSkill;
+//		newSkill.CD.Count ();
+//		lastSkillIndex = skillIndex;}
+//	else{
+//		orgin.GiveProperty (weapon,selfStatus,skillIndex);
+//		orgin.StartSKill ();
+//		playing = newSkill.PlayingSkill;
+//		orgin.CD.Count ();
+//		lastSkillIndex = skillIndex;}
+//
+//}
