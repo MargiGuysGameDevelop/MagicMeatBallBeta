@@ -9,6 +9,7 @@ public class FunPhsics : NetworkBehaviour {
 	Transform trans;
 	RaycastHit hit;
 	Vector3 hitPoint;
+	LayerMask layer;
 
 	#region 飛行(fly)
 
@@ -63,6 +64,8 @@ public class FunPhsics : NetworkBehaviour {
 	}
 
 	void Start(){
+		layer = 1 << 2;
+		layer = ~layer;
 	}
 
 	void FixedUpdate(){
@@ -110,7 +113,11 @@ public class FunPhsics : NetworkBehaviour {
 	}
 
 	void OnGround(){
-		var fall = !Physics.Raycast (trans.position,Vector3.down,out hit); 
+//		Debug.Log ("0");
+		var fall = !Physics.Raycast (trans.position,Vector3.down,out hit,10f,
+//			LayerMask.NameToLayer("Ignore Raycast")
+			layer
+			,QueryTriggerInteraction.Ignore); 
 
 
 		if (!fall) {

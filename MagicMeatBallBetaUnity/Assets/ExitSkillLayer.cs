@@ -16,10 +16,13 @@ public class ExitSkillLayer : StateMachineBehaviour {
 	}
 
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		SetSkillLayer0 (animator);
+		animator.SetBool ("Skillable",true);
+		Debug.Log ("ExitState");
+//		SetSkillLayer0 (animator);
 	}
 
 	void SetSkillLayer0(Animator an){
 		an.SetLayerWeight (3,0f);
 	}
+		
 }

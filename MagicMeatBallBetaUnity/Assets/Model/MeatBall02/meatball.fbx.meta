@@ -427,7 +427,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0
-        functionName: SetInvincibleFalse
+        functionName: Initial
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -924,6 +924,14 @@ ModelImporter:
         functionName: AttackColliderOff
         data: 
         objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.05421687
+        functionName: PlayHurtEffect
+        data: 
+        objectReferenceParameter: {fileID: 162278, guid: 26943018ac35ef2458981fdba4619140,
+          type: 2}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -1866,9 +1874,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}

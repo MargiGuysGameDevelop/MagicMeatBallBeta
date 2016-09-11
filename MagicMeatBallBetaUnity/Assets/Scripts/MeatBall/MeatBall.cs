@@ -182,12 +182,18 @@ public class MeatBall : NetworkBehaviour {
 	public void CmdProject(){
 		//        rightHandWeapon.
 		var projector = Instantiate(rightHandWeapon.projection,
-			transform.position,Quaternion.Euler(transform.forward)) as GameObject;
+			transform.position,transform.rotation) as GameObject;
 		SkillProjection skillProjection = projector.GetComponent<SkillProjection> ();
 		skillProjection.selfStatus = this.selfStatus;
 		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
 		skillProjection.damage = rightHandWeapon.damage;
 		NetworkServer.Spawn (projector);
+	}
+
+	public void PlayHurtEffect(GameObject input){
+//		rightHandWeapon.effect = GetComponentInChildren<SkillManager> ().skillList [skillNumber].effect;
+//		rightHandWeapon.damage = GetComponentInChildren<SkillManager> ().skillList [skillNumber].GetDamage ();
+		GetComponent<Combat>().hurtEffect = input;
 	}
 
 //	[ClientRpc]
@@ -209,7 +215,7 @@ public class MeatBall : NetworkBehaviour {
 
 	[Command]
 	void CmdInvincle(bool item){
-		selfStatus.isInvincible = true;
+		selfStatus.isInvincible = item;
 	}
 
 	[ServerCallback]
@@ -245,7 +251,19 @@ public class MeatBall : NetworkBehaviour {
 
 	[ServerCallback]
 	public void CancleSuperArmor(){
+		CmdCancleSuperArmor ();
+	}
+
+	[Command]
+	public void CmdCancleSuperArmor(){
 		selfStatus.EP = selfStatus.EP > 100f ? 100f : selfStatus.EP;
+	}
+
+
+	public void Initial(){
+		CancleSuperArmor ();
+		SetInvincibleFalse ();
+		SetMoveableTrue ();
 	}
 
 	#endregion
@@ -333,6 +351,11 @@ public class MeatBall : NetworkBehaviour {
 	#endregion
 
 	#region AnimationParameterSeendingNetwork
+
+	public bool IsSkillable(){
+		return meatBallAnimator.GetBool ("Skillable");
+	}
+
 	[Command]
 	public void CmdInitAnim(){
 		RpcInitAnim ();
@@ -405,7 +428,10 @@ public class MeatBall : NetworkBehaviour {
 	{
 		meatBallAnimator.SetLayerWeight (3,1f);
 	}
-
+		
+	public bool IsHurt(){
+		return meatBallAnimator.GetBool ("Hurt");
+	}
 	#endregion 
 
 }

@@ -20,6 +20,9 @@ public class MeatBallSBMBoolList : StateMachineBehaviour {
 	protected bool OnGround= false; 
 	[SerializeField]
 	protected bool HitFly= false; 
+//	[SerializeField]
+//	[Header("無用")]
+//	protected bool Skillable = false;
 
 	[Header("上面選取的項目與下方會相同")]
 	[SerializeField]
@@ -48,7 +51,7 @@ public class MeatBallSBMBoolList : StateMachineBehaviour {
 	public void SetAttack(){
 		Attack = true;
 		Jump = Rolling = Dodge = true;
-		Dead = Hurt = OnGround = HitFly = false;
+		Dead = Hurt = OnGround = HitFly  = false;
 		isOn = false;
 	}
 
@@ -58,6 +61,7 @@ public class MeatBallSBMBoolList : StateMachineBehaviour {
 		Jump = true;
 		Dodge = true;
 		Rolling = true;
+//		Skillable = true;
 		isOn = false;
 	}
 
@@ -77,7 +81,7 @@ public class MeatBallSBMBoolList : StateMachineBehaviour {
 	public void AllFalse(){
 		Attack = 
 		Jump = Rolling = Dodge =
-		Dead = Hurt = OnGround = HitFly = false;
+				Dead = Hurt = OnGround = HitFly  = false;
 	}
 
 	public void AllTrue(){

@@ -11,6 +11,7 @@ public class SkillManager : MonoBehaviour {
 	ExtraStates extraStates;
 	Weapon weapon;
 	MeatBallStatus selfStatus;
+	MeatBall self;
 	#endregion
 
 	#region 初始化
@@ -72,6 +73,9 @@ public class SkillManager : MonoBehaviour {
 		selfStatus = GetComponentInParent<MeatBallStatus> ();
 
 		extraStates = GetComponentInParent<ExtraStates> ();
+
+		self = GetComponentInParent<MeatBall> ();
+
 		weapon = GetComponent<Weapon> ();
 
 		UI = GameObject.Find ("SkillUI").GetComponentInChildren<SkillUIManager> ();
@@ -94,12 +98,15 @@ public class SkillManager : MonoBehaviour {
 		if (!selfStatus.isLocalPlayer)
 			return;
 
-		if(playing()){
+		if (!self.IsSkillable () || self.IsHurt ())
+			return;
+
+		if (playing ()) {
 			
-			if(playing != NoAnySkill)
+			if (playing != NoAnySkill)
 				playing = NoAnySkill;
 
-			for(int i=0;i<buttonName.Length;i++){
+			for (int i = 0; i < buttonName.Length; i++) {
 				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone)
 					skillIndex = i;
 			}
@@ -109,7 +116,10 @@ public class SkillManager : MonoBehaviour {
 			}
 			if (skillIndex != 0)
 				skillIndex = 0;
-		}
+		} 
+//		else
+//			Debug.Log ("GG");
+
 	}
 
 	void UsingSkill(){

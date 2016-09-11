@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Combat : NetworkBehaviour {
 
 	public MeatBallStatus selfStatus;
+	public GameObject hurtEffect;
 
 	void Awake () {
 		selfStatus = GetComponent<MeatBallStatus> ();
@@ -26,29 +27,42 @@ public class Combat : NetworkBehaviour {
 	/**take damage only on sever**/
 	[ServerCallback]
 	public void TakeDamage(float damage,int netID,float fatigue,Vector3 force){
-		if(!selfStatus.isInvincible)
+		if (selfStatus.isInvincible)
+			return;
 		if (!selfStatus.CheckIsDead() ) {
 				
 				selfStatus.HP -= damage;
 				selfStatus.EP -= fatigue;
 				selfStatus.attacker = netID;
-
+			if(netID != -1)
 				LogManager.Log (GameManager.playerSenceData[netID].gameObject.name 
 					+"攻擊"+this.gameObject.name+",造成了"+damage.ToString()+"點傷害");
 
-				if (!selfStatus.CheckIsDead ()) {
-					//play hurt ani
-					if (selfStatus.EP <= 0f) {
-						selfStatus.CheckIsHurt (force);
-					}
-				}/* else {
-					//die
-					selfStatus.isDead = true;
+			if (!selfStatus.CheckIsDead ()) {
+				//play hurt ani
 
-				}*/
-			}
+				if (selfStatus.EP <= 0f) {
+					PlayingHurtEffect ();
+					selfStatus.CheckIsHurt (force);
+				}
+			}/* else {
+				//die
+				selfStatus.isDead = true;
+
+			}*/
+		}
 		//RpcTakeDamage ();
 	}
+
+	void PlayingHurtEffect(){
+		if (hurtEffect != null) {
+//			hurtEffect.transform.position = transform.position;
+			Instantiate (hurtEffect,transform.position,transform.rotation);
+			NetworkServer.Spawn (hurtEffect);
+//			hurtEffect = null;
+		}
+	}
+		
 
 	/*
 	[ClientRpc]

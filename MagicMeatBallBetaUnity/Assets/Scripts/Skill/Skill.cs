@@ -33,8 +33,8 @@ public class Skill : NetworkBehaviour{
 	public Sprite icon;
 
 	#region 攻擊事件
-	[SerializeField]
-	protected GameObject effect;
+//	[SerializeField]
+	public GameObject effect;
 
 	[SerializeField]
 	public GameObject projection;
@@ -104,19 +104,21 @@ public class Skill : NetworkBehaviour{
 
 	//剛施展技能
 	virtual public void StartSKill(){
-		if(name != "attack")
+		if(name != "")
 			LogManager.Log (GetComponentInParent<MeatBall>().name + "使出了" + name + "!");
 	}
 
 	//施展技能中
 	virtual public bool PlayingSkill(){
-		if (CD.value < skillTime + CD.currentValue) {
-			return false;
-		}
-		else {
-			EndSkill ();
-			return true;
-		}
+//		if (CD.value < skillTime + CD.currentValue) {
+////			Debug.Log ("GG");
+//			return tr;
+//		}
+//		else {
+//			EndSkill ();
+//			return true;
+//		}
+		return true;
 	}
 
 	//結束技能

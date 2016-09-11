@@ -9,6 +9,9 @@ public class SkillProjection : NetworkBehaviour {
 
 	public ForceType forceType;
 
+	[Header("是否每人只能打到一次(與下方平行)")]
+	public bool isHitOncePerPerson;
+
 	[Header("打到一次敵人後物件銷毀")]
 	public bool isDestroyOnOnceHit;
 
@@ -24,14 +27,14 @@ public class SkillProjection : NetworkBehaviour {
 
 	[HideInInspector]
 	public Transform selfTransform;
-	[HideInInspector]
+//	[HideInInspector]
 	public float damage;
 	[HideInInspector]
 	public MeatBallStatus selfStatus;
 
 	[Header("破甲值")]
 	public float fatigue;
-	[HideInInspector]
+//	[HideInInspector]
 	public Vector3 force;
 
 	public List<Combat> attackedList = new List<Combat>();
@@ -64,7 +67,8 @@ public class SkillProjection : NetworkBehaviour {
 			if (isDestroyOnOnceHit) {
 				NetworkServer.Destroy (gameObject);
 			} else {
-				attackedList.Remove (combat);
+				if(!isHitOncePerPerson)
+					attackedList.Remove (combat);
 			}
 
 

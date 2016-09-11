@@ -73,6 +73,7 @@ public class Weapon : NetworkBehaviour {
 		Combat combat = other.GetComponent<Combat> ();
 		if (combat) {
 			if (!attackedList.Contains (combat)) {
+				
 				attackedList.Add (combat);
 				combat.TakeDamage (damage,selfStatus.playerNetId,fatigue,force);
 				onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));

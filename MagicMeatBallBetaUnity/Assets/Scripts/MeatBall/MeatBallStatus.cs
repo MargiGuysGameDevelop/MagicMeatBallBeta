@@ -30,7 +30,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	[SyncVar]
 	public string playerName;
 	[SyncVar]
-	public bool isInvincible;
+	public bool isInvincible = false;
 	[SyncVar]
 	public Color nameColor;
 	[SyncVar]
@@ -66,6 +66,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	public int playerNetId = 0;
 	public bool allreadyGetNetId = false;
 
+
 	void Awake () {
 		MaxHP = 100f;
 		MaxEP = 100f;
@@ -76,6 +77,7 @@ public class MeatBallStatus : NetworkBehaviour {
 
 		meatBall = GetComponent<MeatBall> ();
 		phsics = GetComponent<FunPhsics> ();
+		isInvincible = false;
 	}
 
 	void Start(){
@@ -153,6 +155,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	[ServerCallback]
 	public void CheckIsHurt(Vector3 direction){
 		meatBall.CmdSetAnimBool ("Hurt", true);
+
 		if (EP <= 0f) {
 			EP = 0f;
 			if (direction != Vector3.zero) {
