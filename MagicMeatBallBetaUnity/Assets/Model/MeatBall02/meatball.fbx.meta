@@ -252,7 +252,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
@@ -425,7 +425,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -549,9 +556,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -2789,9 +2802,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -2973,7 +2992,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.16887417
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -3133,7 +3159,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.3233533
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.99101794
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -3257,9 +3297,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -3587,15 +3633,43 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.038922157
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9640719
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.08083832
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.88922155
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -3719,9 +3793,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -3873,9 +3953,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -3903,7 +3989,49 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.077844314
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.2964072
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5479042
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.89820355
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.056886226
+        functionName: SuperArmor
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.997006
+        functionName: CancleSuperArmor
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -4027,9 +4155,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -4057,7 +4191,35 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.056886226
+        functionName: SuperArmor
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.08383233
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.85029936
+        functionName: CancleSuperArmor
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6856288
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -4181,9 +4343,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
@@ -5331,7 +5499,42 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.020958083
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.3159773
+        functionName: Project
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 3
+        messageOptions: 0
+      - time: 0.8473054
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.08982036
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4041916
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -5491,7 +5694,49 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.15584724
+        functionName: SetMoveableFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9510846
+        functionName: SetMoveableTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.43712577
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7694611
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.20658682
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9041917
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -5652,7 +5897,21 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.8179272
+      - time: 0.09580839
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.8532934
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7664671
         functionName: Project
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -6138,7 +6397,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9011976
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -6298,7 +6571,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.93413174
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -6458,7 +6745,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.92814374
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -7421,6 +7722,13 @@ ModelImporter:
       events:
       - time: 0.17366944
         functionName: Cancle
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: SetInvincibleFalse
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

@@ -40,7 +40,6 @@ public class Skill : NetworkBehaviour{
 	public GameObject projection;
 	protected float projectExistTimes ;
 
-	Weapon weaponScript;
 
 	/// <summary>
 	/// 打到別人時觸發
@@ -54,9 +53,6 @@ public class Skill : NetworkBehaviour{
 
 	}
 
-	void Awake(){
-		weaponScript = GetComponentInParent<Weapon> ();
-	}
 
 
 	/// <summary>
@@ -88,21 +84,11 @@ public class Skill : NetworkBehaviour{
 		weapon.projection = this.projection;
 		MBS.meatBall.CmdSetAnimInt("SkillInt",index);
 		MBS.meatBall.CmdSetSkillLayer ();
-		//Debug.Log ("before Command");
-		//CmdGiveWeaponProperty ();
-		//Debug.Log ("after Command");
 		if (meatBallTran == null)
 			meatBallTran = MBS.GetComponent<Transform> ();
 	}
 	#endregion
 
-	[Command]
-	void CmdGiveWeaponProperty(){
-		Debug.Log ("in Command");
-		weaponScript.effect = this.effect;
-		weaponScript.projection = this.projection;
-
-	}
 
 	void Start(){
 		CD.currentValue = 0f;
@@ -137,5 +123,8 @@ public class Skill : NetworkBehaviour{
 	virtual public void EndSkill(){
 		
 	}
-
+		
+	public float GetDamage(){
+		return this.damage;
+	}
 }

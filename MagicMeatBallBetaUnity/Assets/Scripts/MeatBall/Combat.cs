@@ -26,26 +26,27 @@ public class Combat : NetworkBehaviour {
 	/**take damage only on sever**/
 	[ServerCallback]
 	public void TakeDamage(float damage,int netID,float fatigue,Vector3 force){
-		if (!selfStatus.CheckIsDead()) {
-			
-			selfStatus.HP -= damage;
-			selfStatus.EP -= fatigue;
-			selfStatus.attacker = netID;
+		if(!selfStatus.isInvincible)
+		if (!selfStatus.CheckIsDead() ) {
+				
+				selfStatus.HP -= damage;
+				selfStatus.EP -= fatigue;
+				selfStatus.attacker = netID;
 
-			LogManager.Log (GameManager.playerSenceData[netID].gameObject.name 
-				+"攻擊"+this.gameObject.name+",造成了"+damage.ToString()+"點傷害");
+				LogManager.Log (GameManager.playerSenceData[netID].gameObject.name 
+					+"攻擊"+this.gameObject.name+",造成了"+damage.ToString()+"點傷害");
 
-			if (!selfStatus.CheckIsDead ()) {
-				//play hurt ani
-				if (selfStatus.EP <= 0f) {
-					selfStatus.CheckIsHurt (force);
-				}
-			}/* else {
-				//die
-				selfStatus.isDead = true;
+				if (!selfStatus.CheckIsDead ()) {
+					//play hurt ani
+					if (selfStatus.EP <= 0f) {
+						selfStatus.CheckIsHurt (force);
+					}
+				}/* else {
+					//die
+					selfStatus.isDead = true;
 
-			}*/
-		}
+				}*/
+			}
 		//RpcTakeDamage ();
 	}
 

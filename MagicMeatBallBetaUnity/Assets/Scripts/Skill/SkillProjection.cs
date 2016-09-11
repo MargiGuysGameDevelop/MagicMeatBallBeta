@@ -1,95 +1,107 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-[RequireComponent(typeof(BoxCollider))]
-public class SkillProjection : MonoBehaviour {
+public class SkillProjection : NetworkBehaviour {
+	// 無力 攻擊者前方 物件中心發散 物件中心收斂
+	public enum ForceType{None,AttackersForward,Diverge,Converge};
 
-	//unity component
-	Transform trans;
-	CapsuleCollider cCollider;
+	public ForceType forceType;
 
-	//攻擊參數
+	[Header("打到一次敵人後物件銷毀")]
+	public bool isDestroyOnOnceHit;
+
+	[Header("生命週期")]
+	public float lifeTime;
+
+	Collider ingnorCollider;
+
+	[Header("XZVelocity")]
+	public float forceIndex;
+	[Header("YVelocity")]
+	public float forceY;
+
+	[HideInInspector]
+	public Transform selfTransform;
+	[HideInInspector]
 	public float damage;
-	public float fatigue = 100f;
-	public Vector3 force = new Vector3(1,3,1);
-	bool isMove;
-	public Vector3 velocity;
-	public float destorySecond = 3f;
+	[HideInInspector]
+	public MeatBallStatus selfStatus;
 
-	public int netID;
+	[Header("破甲值")]
+	public float fatigue;
+	[HideInInspector]
+	public Vector3 force;
 
-	List<Combat> attackedList = new List<Combat>();
+	public List<Combat> attackedList = new List<Combat>();
 
-	#region 攻擊事件
-	public delegate void OnHit(GameObject enemy,Vector3 pos,Quaternion face);
-	public OnHit onHit;
-
-//	public delegate void Project(GameObject enemy,Vector3 appearPosition,Quaternion face);
-//	public Project project;
-	#endregion
-
-	void Initial(float damage,float fatigue,Vector3 force,Vector3 velocity,float dS){
-		this.damage = damage;
-		this.fatigue = fatigue;
-		if(force != null)
-			this.force = force;
-		this.transform.LookAt (transform.position + velocity);
-		destorySecond = dS;
+	void Awake(){
+		selfTransform = GetComponent<Transform> ();
 	}
 
-	void OnEnable(){
-		
+	void SetIgnorCollider(){
+
+		ingnorCollider = selfStatus.GetComponent<Collider> ();
 	}
 
-	void Start(){
-		if (velocity == Vector3.zero)
-			isMove = false;
-		else
-			isMove = true;
+	[ServerCallback]
+	void OnTriggerStay(Collider other){
+		if (!ingnorCollider)
+			SetIgnorCollider ();
 
-		trans = GetComponent<Transform> ();
-		cCollider = GetComponent<CapsuleCollider> ();
+
+		if(ingnorCollider == other)
+			return;
+
+		Combat combat = other.GetComponent<Combat> ();
+		if (combat) {
+			CountForce (combat.transform);
+			if (!attackedList.Contains (combat)) {
+				attackedList.Add (combat);
+				combat.TakeDamage (damage, selfStatus.playerNetId, fatigue, force*forceIndex);
+			}
+			if (isDestroyOnOnceHit) {
+				NetworkServer.Destroy (gameObject);
+			} else {
+				attackedList.Remove (combat);
+			}
+
+
+		}
 	}
 
 	void Update(){
-		if (isMove)
-			transform.Translate (transform.forward*Time.deltaTime);
+		if (lifeTime > 0) {
+			lifeTime -= Time.deltaTime;
+		} else {
+			NetworkServer.Destroy (gameObject);
+		}
+
 	}
 
-	void OnTriggerEnter(Collider other){
-//		Combat combat = other.GetComponent<Combat> ();
-		Combat combat = other.gameObject.GetComponent<Combat>();
-		if (combat && !attackedList.Contains(combat)) {
-			if (!attackedList.Contains (combat)) {
-				attackedList.Add (combat);
-				combat.TakeDamage (damage, netID, fatigue, force);
-				onHit (other.gameObject,FindHitPoint(other.transform),
-					Quaternion.Euler(transform.forward));
-			}
-		}
-	}
-		
-	Vector3 FindHitPoint(Transform tran){
-		RaycastHit hit;
-		cCollider.Raycast
-		(
-			new Ray (trans.position + new Vector3 (0f, 1f, 0f), tran.position - cCollider.transform.position),
-			out hit,
-			10f
-		);
-		return hit.point;
+
+	void CountForce(Transform attackedTransform){
+		switch (forceType) {
+		case ForceType.None:
+			force = Vector3.zero;
+			break;
+		case ForceType.AttackersForward:
+			force = selfStatus.transform.forward;
+			force += force + new Vector3(0,forceY,0);
+			break;
+		case ForceType.Diverge:
+			force = attackedTransform.position - selfTransform.position;
+			force.Normalize ();
+			force += force + new Vector3(0,forceY,0);
+			break;
+		case ForceType.Converge:
+			force = selfTransform.position - attackedTransform.position;
+			force.Normalize ();
+			force += force + new Vector3(0,forceY,0);
+			break;
+		};
 	}
 
-	/*
-	void OnTriggerStay(Collider other){
-		Combat combat = other.GetComponent<Combat> ();
-		if (combat && !attackedList.Contains(combat)) {
-			force = 
-			if (!attackedList.Contains (combat)) {
-				attackedList.Add (combat);
-				combat.TakeDamage (damage, netID, fatigue, force);
-			}
-		}
-	}*/
+
 }

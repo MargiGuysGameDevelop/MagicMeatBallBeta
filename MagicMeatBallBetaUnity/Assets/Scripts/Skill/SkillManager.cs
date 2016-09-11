@@ -83,12 +83,8 @@ public class SkillManager : MonoBehaviour {
 
 		playing = NoAnySkill;
 
-		skillList [0].GiveProperty (weapon,selfStatus,0);
-//		Debug.Log (meatBall);
-
-//		foreach(Skill item in skillList){
-//			Debug.Log (item.name);
-//		}
+		skillIndex = 0;
+		UsingSkill ();
 	}
 
 	void Update(){
@@ -103,21 +99,25 @@ public class SkillManager : MonoBehaviour {
 			if(playing != NoAnySkill)
 				playing = NoAnySkill;
 
-			for(int i=0;i<buttonName.Length;i++){// 0 1 2 3 4 
+			for(int i=0;i<buttonName.Length;i++){
 				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone)
 					skillIndex = i;
 			}
 
 			if (skillIndex != lastSkillIndex) {
-				skillList[skillIndex].GiveProperty (weapon,selfStatus,skillIndex);
-				skillList[skillIndex].StartSKill ();
-				playing = skillList[skillIndex].PlayingSkill;
-				skillList[skillIndex].CD.Count ();
-				lastSkillIndex = skillIndex;
+				UsingSkill ();
 			}
 			if (skillIndex != 0)
 				skillIndex = 0;
 		}
+	}
+
+	void UsingSkill(){
+		skillList[skillIndex].GiveProperty (weapon,selfStatus,skillIndex);
+		skillList[skillIndex].StartSKill ();
+		playing = skillList[skillIndex].PlayingSkill;
+		skillList[skillIndex].CD.Count ();
+		lastSkillIndex = skillIndex;
 	}
 }
 

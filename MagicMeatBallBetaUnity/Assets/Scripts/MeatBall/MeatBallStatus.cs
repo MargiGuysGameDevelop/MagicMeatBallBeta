@@ -30,6 +30,8 @@ public class MeatBallStatus : NetworkBehaviour {
 	[SyncVar]
 	public string playerName;
 	[SyncVar]
+	public bool isInvincible;
+	[SyncVar]
 	public Color nameColor;
 	[SyncVar]
 	public float HP;
@@ -244,5 +246,6 @@ public class MeatBallStatus : NetworkBehaviour {
 		transform.position = rebirthTransform.position;
 		meatBall.CmdInitAnim ();
 	}
+
 
 }

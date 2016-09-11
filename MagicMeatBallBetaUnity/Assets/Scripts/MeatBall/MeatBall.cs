@@ -11,6 +11,9 @@ public class MeatBall : NetworkBehaviour {
 	Animator meatBallAnimator;
 
 	public MeatBallStatus selfStatus;
+	public CapsuleCollider bodyCollider;
+
+	bool isMoveable = true;
 
 	public float vertical;
 	public float horizontal;
@@ -41,6 +44,7 @@ public class MeatBall : NetworkBehaviour {
 		sceneCamera = GameObject.FindGameObjectWithTag ("MainCamera");
 		meatBallAnimator = GetComponent<Animator> ();
 		selfStatus = GetComponent<MeatBallStatus> ();
+		bodyCollider = GetComponent<CapsuleCollider> ();
 
 		#region Weapon
 //		SortWeaponCode ();
@@ -83,6 +87,7 @@ public class MeatBall : NetworkBehaviour {
 			return;
 
 		//move
+		if(isMoveable)
 			Move ();
 
 		//jump
@@ -168,15 +173,20 @@ public class MeatBall : NetworkBehaviour {
 
 	public void Project(int skillNumber){
 		rightHandWeapon.projection = GetComponentInChildren<SkillManager> ().skillList [skillNumber].projection;
+		rightHandWeapon.damage = GetComponentInChildren<SkillManager> ().skillList [skillNumber].GetDamage ();
 		if(isLocalPlayer)
 			CmdProject ();
 	}
 
 	[Command]
 	public void CmdProject(){
-		//		rightHandWeapon.
+		//        rightHandWeapon.
 		var projector = Instantiate(rightHandWeapon.projection,
 			transform.position,Quaternion.Euler(transform.forward)) as GameObject;
+		SkillProjection skillProjection = projector.GetComponent<SkillProjection> ();
+		skillProjection.selfStatus = this.selfStatus;
+		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
+		skillProjection.damage = rightHandWeapon.damage;
 		NetworkServer.Spawn (projector);
 	}
 
@@ -186,13 +196,35 @@ public class MeatBall : NetworkBehaviour {
 //	}
 
 	[ServerCallback]
-	public void Invincible(){
+	public void SetInvincibleTrue(){
+		CmdInvincle (true);
 		Debug.Log ("無敵");
+	}
+
+	[ServerCallback]
+	public void SetInvincibleFalse(){
+		CmdInvincle (false);
+		Debug.Log ("沒無敵");
+	}
+
+	[Command]
+	void CmdInvincle(bool item){
+		selfStatus.isInvincible = true;
 	}
 
 	[ServerCallback]
 	public void Cancle(){
 		RpcCancle ();
+	}
+
+	[ClientCallback]
+	public void SetMoveableFalse(){
+		isMoveable = false;
+	}
+
+	[ClientCallback]
+	public void SetMoveableTrue(){
+		isMoveable = true;
 	}
 
 	[ClientRpc]
@@ -201,6 +233,20 @@ public class MeatBall : NetworkBehaviour {
 		AttackColliderOff ();
 	}
 		
+	[ServerCallback]
+	public void SuperArmor(){
+		CmdSuperArmor ();
+	}
+
+	[Command]
+	void CmdSuperArmor(){
+		selfStatus.EP += 300f;
+	}
+
+	[ServerCallback]
+	public void CancleSuperArmor(){
+		selfStatus.EP = selfStatus.EP > 100f ? 100f : selfStatus.EP;
+	}
 
 	#endregion
 

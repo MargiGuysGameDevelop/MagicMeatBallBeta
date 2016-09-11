@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using Xft;
 
 public class Weapon : NetworkBehaviour {
 
@@ -28,6 +29,8 @@ public class Weapon : NetworkBehaviour {
 
 	List<Combat> attackedList = new List<Combat>();
 
+	public XWeaponTrail[] trails;
+
 	#region 技能攻擊相關
 	public delegate void OnHit(GameObject enemy,Vector3 pos,Quaternion face);
 	public OnHit onHit;
@@ -47,6 +50,7 @@ public class Weapon : NetworkBehaviour {
 
 	void Awake(){
 		weaponCollider = GetComponent<Collider> ();
+//		trails = GetComponentsInChildren<XWeaponTrail> ();
 	}
 
 	// Use this for initialization
@@ -146,11 +150,17 @@ public class Weapon : NetworkBehaviour {
 	public void WeaponCoilderOn(){
 		weaponCollider.enabled = true;
 
+//		foreach(XWeaponTrail trail in trails){
+//			trail.Activate ();
+//		}
 	}
 
 	[ServerCallback]
 	public void WeaponCoilderOff(){
 		weaponCollider.enabled = false;
+
+//		foreach (XWeaponTrail trai in trails)
+//			trai.Deactivate ();
 
 		SetAttackedListEmpty ();
 	}
