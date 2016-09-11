@@ -67,7 +67,7 @@ public class CameraController : MonoBehaviour {
 
 		if (focus) {
 
-			deltaY = playerBodyBone.position.y - offsetY;
+			if(playerBodyBone)deltaY = playerBodyBone.position.y - offsetY;
 
 			MouseScrollWheel ();
 			LookUpOrDown ();

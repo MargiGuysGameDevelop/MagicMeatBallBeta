@@ -8,8 +8,7 @@ public class Skill : MonoBehaviour{
 
 
 	#region 基礎欄位
-	[SerializeField]
-	new protected string name;
+	public string name;
 
 	public int skillNumber;
 
@@ -47,8 +46,8 @@ public class Skill : MonoBehaviour{
 	/// <param name="enemyPos">Enemy position.</param>
 	/// <param name="face">Face.</param>
 	public void HitSomeOne(GameObject enemy,Vector3 enemyPos,Quaternion face){
-		if(effect)
-			GameObject.DestroyObject(Instantiate (effect,enemyPos,face) as GameObject,5f);
+//		if(effect)
+//			GameObject.DestroyObject(Instantiate (effect,enemyPos,face) as GameObject,5f);
 
 	}
 
@@ -75,10 +74,9 @@ public class Skill : MonoBehaviour{
 		weapon.damage = this.damage;
 		weapon.fatigue = this.fatigue;
 		weapon.onHit = null;
-//		weapon.project = null;
 		weapon.onHit += HitSomeOne;
 		weapon.effect = this.effect;
-//		weapon.project += Project;
+		weapon.projection = this.projection;
 		MBS.meatBall.CmdSetAnimInt("SkillInt",index);
 		MBS.meatBall.CmdSetSkillLayer ();
 		if (meatBallTran == null)
@@ -86,6 +84,10 @@ public class Skill : MonoBehaviour{
 	}
 	#endregion
 		
+	void Start(){
+		CD.currentValue = 0f;
+	}
+
 	public void Update(){
 		if (Time.timeScale == 0)
 			return;

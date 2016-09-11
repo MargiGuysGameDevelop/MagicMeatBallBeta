@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 public class SkillManager : MonoBehaviour {
 
@@ -68,6 +69,8 @@ public class SkillManager : MonoBehaviour {
 	#endregion
 
 	void Start(){
+		selfStatus = GetComponentInParent<MeatBallStatus> ();
+
 		extraStates = GetComponentInParent<ExtraStates> ();
 		weapon = GetComponent<Weapon> ();
 
@@ -80,14 +83,19 @@ public class SkillManager : MonoBehaviour {
 
 		playing = NoAnySkill;
 
-		selfStatus = GetComponentInParent<MeatBallStatus> ();
-
 		skillList [0].GiveProperty (weapon,selfStatus,0);
 //		Debug.Log (meatBall);
+
+//		foreach(Skill item in skillList){
+//			Debug.Log (item.name);
+//		}
 	}
 
 	void Update(){
 		if (Time.timeScale == 0)
+			return;
+
+		if (!selfStatus.isLocalPlayer)
 			return;
 
 		if(playing()){
@@ -101,61 +109,15 @@ public class SkillManager : MonoBehaviour {
 			}
 
 			if (skillIndex != lastSkillIndex) {
-//				switch (selfStatus.currentWeapon) {
-//				case 0:
-//					UseSkill <BlackSwordManSkill>(skillList[skillIndex]);
-//					break;
-//				default:
-//					Debug.Log ("沒有此套裝!");
-//					break;
-//				}
 				skillList[skillIndex].GiveProperty (weapon,selfStatus,skillIndex);
 				skillList[skillIndex].StartSKill ();
 				playing = skillList[skillIndex].PlayingSkill;
 				skillList[skillIndex].CD.Count ();
 				lastSkillIndex = skillIndex;
-//			}
 			}
 			if (skillIndex != 0)
 				skillIndex = 0;
 		}
 	}
-
-//	public void UseSkill<skillScripts> where skillScripts : Skill{
-//		skillScripts newSkill = skillList [skillIndex] as skillScripts;
-//		if(newSkill!=null){
-//			newSkill.GiveProperty (weapon,selfStatus,skillIndex);
-//			newSkill.StartSKill ();
-//			playing = newSkill.PlayingSkill;
-//			newSkill.CD.Count ();
-//			lastSkillIndex = skillIndex;}
-//		else{
-//			orgin.GiveProperty (weapon,selfStatus,skillIndex);
-//			orgin.StartSKill ();
-//			playing = newSkill.PlayingSkill;
-//			orgin.CD.Count ();
-//			lastSkillIndex = skillIndex;}
-//			
-//	}
-
-//	[ContextMenu("抓取技能及UI")]
-//	void GetSkills(){
-//	}
 }
 
-//public class UseSkill<skillScripts> where skillScripts : Skill{
-//	skillScripts newSkill = skillList [skillIndex] as skillScripts;
-//	if(newSkill!=null){
-//		newSkill.GiveProperty (weapon,selfStatus,skillIndex);
-//		newSkill.StartSKill ();
-//		playing = newSkill.PlayingSkill;
-//		newSkill.CD.Count ();
-//		lastSkillIndex = skillIndex;}
-//	else{
-//		orgin.GiveProperty (weapon,selfStatus,skillIndex);
-//		orgin.StartSKill ();
-//		playing = newSkill.PlayingSkill;
-//		orgin.CD.Count ();
-//		lastSkillIndex = skillIndex;}
-//
-//}

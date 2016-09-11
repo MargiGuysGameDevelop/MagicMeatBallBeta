@@ -144,7 +144,7 @@ public class MeatBall : NetworkBehaviour {
 	#endregion
 
 
-	#region Attacktion
+	#region AnimationEvent
 	[ServerCallback]
 	public void GeneralAttack(float attackStartTime,float attackKeepTime){
 		rightHandWeapon.SetAttackKeepTime (attackStartTime,attackKeepTime);
@@ -166,21 +166,37 @@ public class MeatBall : NetworkBehaviour {
 		rightHandWeapon.WeaponCoilderOff();
 	}
 
+	public void Project(){
+		CmdProject ();
+	}
+
 	[Command]
 	public void CmdProject(){
 //		rightHandWeapon.
-		RpcProject ();
+		var projector = Instantiate(rightHandWeapon.projection,
+			transform.position,Quaternion.Euler(transform.forward)) as GameObject;
+		NetworkServer.Spawn (projector);
 	}
 
-	[ClientRpc]
-	public void RpcProject(){
-//		Weapon.Project (transform.position,Quaternion.Euler(transform.forward));
-		Instantiate(rightHandWeapon.effect,transform.position,Quaternion.Euler(transform.forward));
-	}
+//	[ClientRpc]
+//	public void RpcProject(){
+////		Weapon.Project (transform.position,Quaternion.Euler(transform.forward));
+//	}
 
 	[ServerCallback]
 	public void Invincible(){
 		Debug.Log ("無敵");
+	}
+
+	[ServerCallback]
+	public void Cancle(){
+		RpcCancle ();
+	}
+
+	[ClientRpc]
+	public void RpcCancle(){
+//		Debug.Log ("Cancle");
+		AttackColliderOff ();
 	}
 		
 

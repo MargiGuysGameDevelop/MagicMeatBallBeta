@@ -88,7 +88,6 @@ public class FunPhsics : NetworkBehaviour {
 				//平常狀態
 				//受力推擊(Push)
 				if (pushTimes > 0f) {
-					Debug.Log (pushVector);
 					var localPushVector = trans.InverseTransformDirection(pushVector);
 					trans.Translate (localPushVector * Time.deltaTime);
 

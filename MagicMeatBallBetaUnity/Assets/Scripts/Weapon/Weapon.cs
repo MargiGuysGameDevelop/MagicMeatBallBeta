@@ -36,6 +36,7 @@ public class Weapon : NetworkBehaviour {
 //	public Project project;
 
 	public GameObject effect;
+	public GameObject projection;
 	#endregion
 
 	public MeatBallStatus selfStatus;
