@@ -166,13 +166,15 @@ public class MeatBall : NetworkBehaviour {
 		rightHandWeapon.WeaponCoilderOff();
 	}
 
-	public void Project(){
-		CmdProject ();
+	public void Project(int skillNumber){
+		rightHandWeapon.projection = GetComponentInChildren<SkillManager> ().skillList [skillNumber].projection;
+		if(isLocalPlayer)
+			CmdProject ();
 	}
 
 	[Command]
 	public void CmdProject(){
-//		rightHandWeapon.
+		//		rightHandWeapon.
 		var projector = Instantiate(rightHandWeapon.projection,
 			transform.position,Quaternion.Euler(transform.forward)) as GameObject;
 		NetworkServer.Spawn (projector);

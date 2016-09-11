@@ -2,9 +2,10 @@
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 [SerializeField]
-public class Skill : MonoBehaviour{
+public class Skill : NetworkBehaviour{
 
 
 	#region 基礎欄位
@@ -36,8 +37,10 @@ public class Skill : MonoBehaviour{
 	protected GameObject effect;
 
 	[SerializeField]
-	protected GameObject projection;
+	public GameObject projection;
 	protected float projectExistTimes ;
+
+	Weapon weaponScript;
 
 	/// <summary>
 	/// 打到別人時觸發
@@ -50,6 +53,11 @@ public class Skill : MonoBehaviour{
 //			GameObject.DestroyObject(Instantiate (effect,enemyPos,face) as GameObject,5f);
 
 	}
+
+	void Awake(){
+		weaponScript = GetComponentInParent<Weapon> ();
+	}
+
 
 	/// <summary>
 	/// 發設物體時觸發
@@ -69,6 +77,7 @@ public class Skill : MonoBehaviour{
 
 	#region 給予武器/發射物數值
 	public void GiveProperty(Weapon weapon,MeatBallStatus MBS,int index){
+		
 		suitID = MBS.currentWeapon;
 		skillNumber = index;
 		weapon.damage = this.damage;
@@ -79,11 +88,22 @@ public class Skill : MonoBehaviour{
 		weapon.projection = this.projection;
 		MBS.meatBall.CmdSetAnimInt("SkillInt",index);
 		MBS.meatBall.CmdSetSkillLayer ();
+		//Debug.Log ("before Command");
+		//CmdGiveWeaponProperty ();
+		//Debug.Log ("after Command");
 		if (meatBallTran == null)
 			meatBallTran = MBS.GetComponent<Transform> ();
 	}
 	#endregion
-		
+
+	[Command]
+	void CmdGiveWeaponProperty(){
+		Debug.Log ("in Command");
+		weaponScript.effect = this.effect;
+		weaponScript.projection = this.projection;
+
+	}
+
 	void Start(){
 		CD.currentValue = 0f;
 	}

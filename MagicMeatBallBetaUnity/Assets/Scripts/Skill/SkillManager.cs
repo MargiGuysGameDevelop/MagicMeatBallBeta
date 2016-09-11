@@ -77,7 +77,7 @@ public class SkillManager : MonoBehaviour {
 		UI = GameObject.Find ("SkillUI").GetComponentInChildren<SkillUIManager> ();
 
 		UI.InitialSkills (skillList);
-		for(int i=0;i<4;i++){
+		for(int i=0;i<4;i++){ 
 			UI.iconList [i].sprite = skillList [i+1].icon;
 		}
 
@@ -103,7 +103,7 @@ public class SkillManager : MonoBehaviour {
 			if(playing != NoAnySkill)
 				playing = NoAnySkill;
 
-			for(int i=0;i<buttonName.Length;i++){
+			for(int i=0;i<buttonName.Length;i++){// 0 1 2 3 4 
 				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone)
 					skillIndex = i;
 			}
