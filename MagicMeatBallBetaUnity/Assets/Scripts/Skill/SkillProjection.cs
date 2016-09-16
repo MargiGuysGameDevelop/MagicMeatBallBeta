@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 
 public class SkillProjection : NetworkBehaviour {
-	// 無力 攻擊者前方 物件中心發散 物件中心收斂
-	public enum ForceType{None,AttackersForward,Diverge,Converge};
+	// 無力 攻擊者前方 物件中心發散 物件中心收斂 觸發其他物件
+	public enum ForceType{None,AttackersForward,Diverge,Converge,Trigger};
 
 	public ForceType forceType;
 
@@ -15,26 +15,29 @@ public class SkillProjection : NetworkBehaviour {
 	[Header("打到一次敵人後物件銷毀")]
 	public bool isDestroyOnOnceHit;
 
+	[Header("Trigger情況下打到人所產生的物件(係數皆與此設定相同)")]
+	public GameObject projection;
+
 	[Header("生命週期")]
 	public float lifeTime;
 
 	Collider ingnorCollider;
 
-	[Header("XZVelocity")]
+	[Header("XZVelocity的力量")]
 	public float forceIndex;
-	[Header("YVelocity")]
+	[Header("YVelocity的力量")]
 	public float forceY;
 
 	[HideInInspector]
 	public Transform selfTransform;
-//	[HideInInspector]
+	[HideInInspector]
 	public float damage;
 	[HideInInspector]
 	public MeatBallStatus selfStatus;
 
 	[Header("破甲值")]
 	public float fatigue;
-//	[HideInInspector]
+	[HideInInspector]
 	public Vector3 force;
 
 	public List<Combat> attackedList = new List<Combat>();
@@ -103,6 +106,12 @@ public class SkillProjection : NetworkBehaviour {
 			force = selfTransform.position - attackedTransform.position;
 			force.Normalize ();
 			force += force + new Vector3(0,forceY,0);
+			break;
+		case ForceType.Trigger:
+			var newProjection = 
+				Instantiate (projection, attackedTransform.position,
+					attackedTransform.rotation);
+			selfStatus.meatBall.secProjecttion = newProjection;
 			break;
 		};
 	}

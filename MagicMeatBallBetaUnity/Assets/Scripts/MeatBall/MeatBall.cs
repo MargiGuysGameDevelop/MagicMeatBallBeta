@@ -38,16 +38,17 @@ public class MeatBall : NetworkBehaviour {
 
 	public Weapon rightHandWeapon;
 
+	/// <summary>
+	/// 用以藉此欄位發動該方的額外特效等等
+	/// </summary>
+	public Object secProjecttion;
+
 	void Awake(){
 
 		sceneCamera = GameObject.FindGameObjectWithTag ("MainCamera");
 		meatBallAnimator = GetComponent<Animator> ();
 		selfStatus = GetComponent<MeatBallStatus> ();
 		bodyCollider = GetComponent<CapsuleCollider> ();
-		var suitList = GetComponentInChildren<SuitList> ();
-		suitList.InitialSuit ();
-		var skillList = GetComponentInChildren<SkillManager> ();
-		skillList.Initial ();
 		#region Weapon
 //		SortWeaponCode ();
 //		CloseAllWeapon ();
@@ -57,6 +58,15 @@ public class MeatBall : NetworkBehaviour {
 
 		//hpCanvas = GetComponentInChildren<HpCanvas> ();
 		//sceneCamera.SetActive (false);
+	}
+
+	public void InititalSkillAndSuit(){
+		var suitList = GetComponentInChildren<SuitList> ();
+		suitList.InitialSuit ();
+		var skillList = GetComponentInChildren<SkillManager> ();
+		skillList.Initial ();
+		Debug.Log (selfStatus.currentWeapon);
+		CmdSetAnimInt ("WeaponKind",selfStatus.currentWeapon);
 	}
 
 	void Start () {
@@ -69,6 +79,7 @@ public class MeatBall : NetworkBehaviour {
 			//hpCanvas.Initial();
 		}
 		gameObject.name = selfStatus.playerName;
+		InititalSkillAndSuit ();
 	}
 
 
@@ -188,11 +199,21 @@ public class MeatBall : NetworkBehaviour {
 		skillProjection.damage = rightHandWeapon.damage;
 		NetworkServer.Spawn (projection);
 	}
-
-//	[ClientRpc]
-//	public void RpcProject(){
-//		
-//	}
+	/// <summary>
+	/// 發射二次特效
+	/// </summary>
+	[Command]
+	public void CmdSecProject(){
+		if (secProjecttion == null)
+			return;
+		var projection = Instantiate(secProjecttion,
+			transform.position,transform.rotation) as GameObject;
+		SkillProjection skillProjection = projection.GetComponent<SkillProjection> ();
+		skillProjection.selfStatus = this.selfStatus;
+		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
+		skillProjection.damage = rightHandWeapon.damage;
+		NetworkServer.Spawn (projection);
+	}
 
 	public void PlayHurtEffect(GameObject input){
 //		rightHandWeapon.effect = GetComponentInChildren<SkillManager> ().skillList [skillNumber].effect;
@@ -390,9 +411,9 @@ public class MeatBall : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	public void RpcSetAnimInt(string boolName,int setFloat)
+	public void RpcSetAnimInt(string boolName,int setInt)
 	{
-		meatBallAnimator.SetInteger(boolName,setFloat);
+		meatBallAnimator.SetInteger(boolName,setInt);
 	}
 
 

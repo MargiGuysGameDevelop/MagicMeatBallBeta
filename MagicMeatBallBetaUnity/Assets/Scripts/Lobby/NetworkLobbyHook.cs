@@ -9,11 +9,11 @@ public class NetworkLobbyHook : LobbyHook
 	{
 		
 		LobbyPlayer lobby = lobbyPlayer.GetComponent<LobbyPlayer>();
-		MeatBallStatus meatBall = gamePlayer.GetComponent<MeatBallStatus>();
-		meatBall.playerName = lobby.playerName;
-		meatBall.nameColor = lobby.playerColor;
-		meatBall.currentWeapon = lobby.weaponCode;
-//		Debug.Log (meatBall.currentWeapon);
+		MeatBallStatus selfStatus = gamePlayer.GetComponent<MeatBallStatus>();
+		selfStatus.playerName = lobby.playerName;
+		selfStatus.nameColor = lobby.playerColor;
+		selfStatus.currentWeapon = lobby.weaponCode;
+
 	}
 
 

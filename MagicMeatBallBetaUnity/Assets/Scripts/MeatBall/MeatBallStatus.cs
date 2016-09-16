@@ -83,7 +83,7 @@ public class MeatBallStatus : NetworkBehaviour {
 	}
 
 	void Start(){
-		meatBall.CmdSetAnimInt ("WeaponKind",currentWeapon);
+//		meatBall.CmdSetAnimInt ("WeaponKind",currentWeapon);
 	}
 
 	// Update is called once per frame

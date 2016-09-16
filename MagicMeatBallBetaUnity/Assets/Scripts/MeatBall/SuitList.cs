@@ -25,6 +25,7 @@ public class SuitList : MonoBehaviour {
 	}
 
 	public void InitialSuit(){
+//		Debug.Log ("Su");
 		if (meatBall) {
 			for(int i=0;i<kind.Length;i++){
 				kind [i].gameObject.SetActive (false);
