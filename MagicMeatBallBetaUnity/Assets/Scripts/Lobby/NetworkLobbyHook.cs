@@ -13,6 +13,7 @@ public class NetworkLobbyHook : LobbyHook
 		meatBall.playerName = lobby.playerName;
 		meatBall.nameColor = lobby.playerColor;
 		meatBall.currentWeapon = lobby.weaponCode;
+//		Debug.Log (meatBall.currentWeapon);
 	}
 
 

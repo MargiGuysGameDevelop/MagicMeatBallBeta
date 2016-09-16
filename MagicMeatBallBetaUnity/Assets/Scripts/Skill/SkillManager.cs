@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class SkillManager : MonoBehaviour {
+public class SkillManager : NetworkBehaviour {
 
 	#region 基本欄位
 	[SerializeField]
@@ -12,30 +12,17 @@ public class SkillManager : MonoBehaviour {
 	Weapon weapon;
 	MeatBallStatus selfStatus;
 	MeatBall self;
+
+	bool usingSkill = false;
 	#endregion
 
 	#region 初始化
 
-	[ContextMenu("初始化技能及UI")]
-	void Initial(){
+//	[ContextMenu("初始化技能及UI")]
+	public void Initial(){
 
-		weapon = GetComponent<Weapon> ();
-
-		var attack = new GameObject ();
-		attack.AddComponent<Skill> ();
-		Instantiate (attack,transform.position,Quaternion.Euler(transform.forward));
-		attack.name = "attack";
-		attack.transform.parent = this.transform;
-
-		for(int i=0;i<4;i++){
-			var gameObject = new GameObject ();
-			gameObject.AddComponent<Skill> ();
-			Instantiate (gameObject,transform.position,Quaternion.Euler(transform.forward));
-			gameObject.name = "skill" + (i + 1).ToString ();
-			gameObject.transform.parent = this.transform;
-
-		}
-		skillList = GetComponentsInChildren<Skill> ();
+		weapon = GetComponentInChildren<Weapon> ();
+		skillList = weapon.GetComponentsInChildren<Skill> ();
 	}
 	#endregion
 
@@ -59,10 +46,15 @@ public class SkillManager : MonoBehaviour {
 	};
 	#endregion
 
-	#region 施展技能中
-//	bool isSkillPlaying;
+	#region 施展技能Delegate
 	public delegate bool SkillPlaying();
 	public SkillPlaying playing;
+
+	public delegate void SkillStart();
+	SkillStart start;
+
+	public delegate void SkillEnd();
+	SkillEnd end;
 
 	public bool NoAnySkill(){
 		return true;
@@ -70,17 +62,17 @@ public class SkillManager : MonoBehaviour {
 	#endregion
 
 	void Start(){
-		selfStatus = GetComponentInParent<MeatBallStatus> ();
+		selfStatus = GetComponent<MeatBallStatus> ();
 
-		extraStates = GetComponentInParent<ExtraStates> ();
+		extraStates = GetComponent<ExtraStates> ();
 
-		self = GetComponentInParent<MeatBall> ();
+		self = GetComponent<MeatBall> ();
 
 		weapon = GetComponent<Weapon> ();
 
 		UI = GameObject.Find ("SkillUI").GetComponentInChildren<SkillUIManager> ();
 
-		UI.InitialSkills (skillList);
+//		UI.InitialSkills (skillList);
 		for(int i=0;i<4;i++){ 
 			UI.iconList [i].sprite = skillList [i+1].icon;
 		}
@@ -88,21 +80,25 @@ public class SkillManager : MonoBehaviour {
 		playing = NoAnySkill;
 
 		skillIndex = 0;
-		UsingSkill ();
+		CmdUsingSkill ();
 	}
 
 	void Update(){
 		if (Time.timeScale == 0)
 			return;
 
-		if (!selfStatus.isLocalPlayer)
+		if (!isLocalPlayer)
 			return;
+
+		//skill have Isskillable 
+		//meatball ishurt
+		//isSkilling 
+		//isCD
 
 		if (!self.IsSkillable () || self.IsHurt ())
 			return;
 
 		if (playing ()) {
-			
 			if (playing != NoAnySkill)
 				playing = NoAnySkill;
 
@@ -112,7 +108,10 @@ public class SkillManager : MonoBehaviour {
 			}
 
 			if (skillIndex != lastSkillIndex) {
-				UsingSkill ();
+				CmdUsingSkill ();
+				self.CmdSetAnimInt("SkillInt",skillIndex);
+				self.CmdSetSkillLayer ();
+				return;
 			}
 			if (skillIndex != 0)
 				skillIndex = 0;
@@ -122,11 +121,30 @@ public class SkillManager : MonoBehaviour {
 
 	}
 
-	void UsingSkill(){
-		skillList[skillIndex].GiveProperty (weapon,selfStatus,skillIndex);
-		skillList[skillIndex].StartSKill ();
+	[Command]
+	void CmdUsingSkill(){
+//		Debug.Log ("CmdUsingSkill");
+		RpcUsingSkill ();
+	}
+
+	[ClientRpc]
+	void RpcUsingSkill(){
+		if(skillIndex != 0)
+			UI.CountCD (skillIndex-1,skillList[skillIndex].CD.value);
+		skillList [skillIndex].CD.Count ();
+		skillList [skillIndex].skillNumber = skillIndex;
+//		Debug.Log(skillIndex);
 		playing = skillList[skillIndex].PlayingSkill;
-		skillList[skillIndex].CD.Count ();
+//		Debug.Log (skillList[skillIndex].damage);
+		weapon.damage = skillList[skillIndex].damage;
+//		Debug.Log (weapon.damage);
+		weapon.fatigue = skillList[skillIndex].fatigue;
+		weapon.onHit = skillList[skillIndex].HitSomeOne;
+		weapon.effect = skillList[skillIndex].effect;
+		weapon.projection = skillList[skillIndex].projection;
+		start = skillList[skillIndex].StartSKill ;
+		start ();
+		usingSkill = true;
 		lastSkillIndex = skillIndex;
 	}
 }

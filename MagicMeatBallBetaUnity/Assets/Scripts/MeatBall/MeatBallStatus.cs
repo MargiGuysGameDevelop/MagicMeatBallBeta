@@ -66,6 +66,8 @@ public class MeatBallStatus : NetworkBehaviour {
 	public int playerNetId = 0;
 	public bool allreadyGetNetId = false;
 
+	//skillEffect
+	public int currSkillEffectInt = 0;
 
 	void Awake () {
 		MaxHP = 100f;
@@ -89,6 +91,9 @@ public class MeatBallStatus : NetworkBehaviour {
 		if (Time.timeScale == 0)
 			return;
 
+		if (!isLocalPlayer)
+			return;
+
 		if (Input.GetKeyDown (KeyCode.E)) {
 //			EP = 0f;
 //			CheckIsHurt (-transform.forward);
@@ -100,7 +105,6 @@ public class MeatBallStatus : NetworkBehaviour {
 		ResetAttackerByTime ();
 		if (isDead) 
 		{
-			
 			deadTimer += Time.deltaTime;
 			if (deadTimer >= rebrithTime) {
 				PlayerRebrith ();

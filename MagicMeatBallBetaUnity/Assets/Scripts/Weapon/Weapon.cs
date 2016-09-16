@@ -76,7 +76,7 @@ public class Weapon : NetworkBehaviour {
 				
 				attackedList.Add (combat);
 				combat.TakeDamage (damage,selfStatus.playerNetId,fatigue,force);
-				onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));
+				if(onHit != null)onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));
 
 				//onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));
 
@@ -169,5 +169,23 @@ public class Weapon : NetworkBehaviour {
 	[ServerCallback]
 	public void UseSkill(){
 		
+	}
+
+	[ContextMenu("增加技能")]
+	public void Initial(){
+
+		var attack = new GameObject ();
+		attack.AddComponent<Skill> ();
+		Instantiate (attack,transform.position,Quaternion.Euler(transform.forward));
+		attack.name = "attack";
+		attack.transform.parent = this.transform;
+
+		for(int i=0;i<4;i++){
+			var gameObject = new GameObject ();
+			gameObject.AddComponent<Skill> ();
+			Instantiate (gameObject,transform.position,Quaternion.Euler(transform.forward));
+			gameObject.name = "skill" + (i + 1).ToString ();
+			gameObject.transform.parent = this.transform;
+		}
 	}
 }

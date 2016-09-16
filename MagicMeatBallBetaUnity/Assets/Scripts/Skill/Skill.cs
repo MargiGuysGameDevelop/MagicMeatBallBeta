@@ -14,23 +14,43 @@ public class Skill : NetworkBehaviour{
 	public int skillNumber;
 
 //	[SerializeField]
-	protected int suitID;
+//	protected int suitID;
 
 	[SerializeField]
-	protected float damage;
+	public float damage;
 
 	[SerializeField]
-	protected float fatigue;
+	public float fatigue;
 
 	[SerializeField]
 	protected float skillTime;
 
 	protected Transform meatBallTran;
+//	protected MeatBallStatus meatBallStatus;
+//	protected Weapon weapon;
 	#endregion
 
 	//UI
 	public ColdDown CD = new ColdDown();
 	public Sprite icon;
+
+	public bool isRunSkillCDUI(){
+		if (CD.isDone)
+			return true;
+		else{
+			CD.Count ();
+			return false;
+		}
+	}
+
+//	bool usingSkill = false;
+//	public bool IsUsingSkill(){
+//		if (!usingSkill)
+//			return false;
+//		else
+//			usingSkill = false;	
+//		return true;
+//	}
 
 	#region 攻擊事件
 //	[SerializeField]
@@ -72,26 +92,39 @@ public class Skill : NetworkBehaviour{
 //	protected ExtraStates extraStates;
 
 	#region 給予武器/發射物數值
-	public void GiveProperty(Weapon weapon,MeatBallStatus MBS,int index){
-		
-		suitID = MBS.currentWeapon;
-		skillNumber = index;
-		weapon.damage = this.damage;
-		weapon.fatigue = this.fatigue;
-		weapon.onHit = null;
-		weapon.onHit += HitSomeOne;
-		weapon.effect = this.effect;
-		weapon.projection = this.projection;
-		MBS.meatBall.CmdSetAnimInt("SkillInt",index);
-		MBS.meatBall.CmdSetSkillLayer ();
-		if (meatBallTran == null)
-			meatBallTran = MBS.GetComponent<Transform> ();
-	}
+//	[Command]
+//	public void CmdUseSkill(int index){
+//		RpcUseSkill (index);
+//	}
+
+//	public void UseSkill(int index){
+//		//		suitID = MBS.currentWeapon;
+//		Debug.Log ("UsingSkill");
+//		skillNumber = index;
+//		weapon.damage = this.damage;
+//		weapon.fatigue = this.fatigue;
+//		weapon.onHit = null;
+//		weapon.onHit += HitSomeOne;
+//		weapon.effect = this.effect;
+//		weapon.projection = this.projection;
+//		meatBallStatus.meatBall.CmdSetAnimInt("SkillInt",index);
+//		meatBallStatus.meatBall.CmdSetSkillLayer ();
+//		StartSKill ();
+//		usingSkill = true;
+//	}
+
 	#endregion
 
+	void Awake(){
+		meatBallTran = GetComponentInParent<MeatBall> ().GetComponent<Transform>();
+//		meatBallStatus = GetComponentInParent<MeatBallStatus> ();
+//		weapon = GetComponentInParent<Weapon> ();
+	}
 
 	void Start(){
 		CD.currentValue = 0f;
+		if (skillTime > CD.value)
+			skillTime = CD.value;
 	}
 
 	public void Update(){
@@ -110,15 +143,14 @@ public class Skill : NetworkBehaviour{
 
 	//施展技能中
 	virtual public bool PlayingSkill(){
-//		if (CD.value < skillTime + CD.currentValue) {
-////			Debug.Log ("GG");
-//			return tr;
-//		}
-//		else {
-//			EndSkill ();
-//			return true;
-//		}
-		return true;
+		if (CD.value < skillTime + CD.currentValue) {
+//			Debug.Log ("GuG");
+			return false;
+		}
+		else {
+			EndSkill ();
+			return true;
+		}
 	}
 
 	//結束技能

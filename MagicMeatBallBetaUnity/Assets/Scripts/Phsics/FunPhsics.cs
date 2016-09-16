@@ -91,8 +91,8 @@ public class FunPhsics : NetworkBehaviour {
 				//平常狀態
 				//受力推擊(Push)
 				if (pushTimes > 0f) {
-					var localPushVector = trans.InverseTransformDirection(pushVector);
-					trans.Translate (localPushVector * Time.deltaTime);
+//					var localPushVector = trans.InverseTransformDirection(pushVector);
+					trans.Translate (pushVector * Time.deltaTime,Space.World);
 
 				} else if (pushVector != Vector3.zero) {
 					pushTimes = 0f;
@@ -165,7 +165,7 @@ public class FunPhsics : NetworkBehaviour {
 	void FlyXZ(){
 		if(force.x != 0f || force.z != 0f){
 			var XZTrans = new Vector3 (force.x,0f,force.z);
-			transform.Translate (XZTrans*Time.deltaTime);
+			transform.Translate (XZTrans*Time.deltaTime,relativeTo:Space.World);
 		}
 	}
 	#endregion
@@ -191,7 +191,20 @@ public class FunPhsics : NetworkBehaviour {
 	/// <param name="times">Times.</param>
 	/// <param name="input">Input.</param>
 	/// <param name="scale">Scale.</param>
-	public void RpcPush(float times,Vector3 input) {
+	public void RpcPushEqualVelocity(float times,Vector3 input) {
+		pushVector += input;
+		pushVector.y = 0f;
+		pushTimes += times;
+	}
+
+	[ClientRpc]
+	/// <summary>
+	/// Push，平面的內插位移。(Y==0!)
+	/// </summary>
+	/// <param name="times">Times.</param>
+	/// <param name="input">Input.</param>
+	/// <param name="scale">Scale.</param>
+	public void RpcPushLerp(float times,Vector3 input,float damping) {
 		pushVector += input;
 		pushVector.y = 0f;
 		pushTimes += times;

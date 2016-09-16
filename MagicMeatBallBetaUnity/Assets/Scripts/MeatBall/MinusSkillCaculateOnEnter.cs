@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnterSkillableTrue : StateMachineBehaviour {
+public class MinusSkillCaculateOnEnter : StateMachineBehaviour {
+
+	[SerializeField]
+	public int numder = 1;
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		animator.SetBool ("Skillable",true);
-		SetSkillLayer0 (animator);
-		Debug.Log ("StartState");
+		animator.SetInteger ("SkillCaculate",animator.GetInteger("SkillCaculate") - numder);
 	}
 
-	void SetSkillLayer0(Animator an){
-		an.SetLayerWeight (3,0f);
-	}
+
 }

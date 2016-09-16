@@ -17,7 +17,7 @@ public class ExitSkillLayer : StateMachineBehaviour {
 
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		animator.SetBool ("Skillable",true);
-		Debug.Log ("ExitState");
+//		Debug.Log ("ExitState");
 //		SetSkillLayer0 (animator);
 	}
 

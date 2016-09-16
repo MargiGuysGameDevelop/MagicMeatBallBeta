@@ -4,10 +4,11 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 
+
 public class Combat : NetworkBehaviour {
 
 	public MeatBallStatus selfStatus;
-	public GameObject hurtEffect;
+	public GameObject[] hurtEffectList;
 
 	void Awake () {
 		selfStatus = GetComponent<MeatBallStatus> ();
@@ -42,7 +43,7 @@ public class Combat : NetworkBehaviour {
 				//play hurt ani
 
 				if (selfStatus.EP <= 0f) {
-					PlayingHurtEffect ();
+					PlayingHurtEffect (netID);
 					selfStatus.CheckIsHurt (force);
 				}
 			}/* else {
@@ -54,13 +55,15 @@ public class Combat : NetworkBehaviour {
 		//RpcTakeDamage ();
 	}
 
-	void PlayingHurtEffect(){
-		if (hurtEffect != null) {
-//			hurtEffect.transform.position = transform.position;
-			Instantiate (hurtEffect,transform.position,transform.rotation);
-			NetworkServer.Spawn (hurtEffect);
+	void PlayingHurtEffect(int netID){
+//		if (hurtEffect != null) 
+////			hurtEffect.transform.position = transform.position;
+//		var hurtEffect = Instantiate (hurtEffectList[netID],
+//			transform.position,transform.rotation) as GameObject;
+//		GameManager.playerSenceData[netID].
+//		NetworkServer.Spawn (hurtEffect);
 //			hurtEffect = null;
-		}
+//		}
 	}
 		
 

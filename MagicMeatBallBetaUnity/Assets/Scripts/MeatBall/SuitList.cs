@@ -22,6 +22,9 @@ public class SuitList : MonoBehaviour {
 	MeatBall meatBall;
 
 	void Awake () {
+	}
+
+	public void InitialSuit(){
 		if (meatBall) {
 			for(int i=0;i<kind.Length;i++){
 				kind [i].gameObject.SetActive (false);
@@ -35,6 +38,7 @@ public class SuitList : MonoBehaviour {
 			currSuit.SetLeftShose (body.leftLeg);
 			currSuit.SetRightShose (body.rightLeg);
 			currSuit.SetCloak (body.back);
+//			Debug.Log (meatBall.selfStatus.currentWeapon);
 		}
 	}
 

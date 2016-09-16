@@ -38,14 +38,16 @@ public class MeatBall : NetworkBehaviour {
 
 	public Weapon rightHandWeapon;
 
-
 	void Awake(){
 
 		sceneCamera = GameObject.FindGameObjectWithTag ("MainCamera");
 		meatBallAnimator = GetComponent<Animator> ();
 		selfStatus = GetComponent<MeatBallStatus> ();
 		bodyCollider = GetComponent<CapsuleCollider> ();
-
+		var suitList = GetComponentInChildren<SuitList> ();
+		suitList.InitialSuit ();
+		var skillList = GetComponentInChildren<SkillManager> ();
+		skillList.Initial ();
 		#region Weapon
 //		SortWeaponCode ();
 //		CloseAllWeapon ();
@@ -172,28 +174,30 @@ public class MeatBall : NetworkBehaviour {
 	}
 
 	public void Project(int skillNumber){
-		rightHandWeapon.projection = GetComponentInChildren<SkillManager> ().skillList [skillNumber].projection;
-		rightHandWeapon.damage = GetComponentInChildren<SkillManager> ().skillList [skillNumber].GetDamage ();
 		if(isLocalPlayer)
 			CmdProject ();
 	}
 
 	[Command]
 	public void CmdProject(){
-		//        rightHandWeapon.
-		var projector = Instantiate(rightHandWeapon.projection,
+		var projection = Instantiate(rightHandWeapon.projection,
 			transform.position,transform.rotation) as GameObject;
-		SkillProjection skillProjection = projector.GetComponent<SkillProjection> ();
+		SkillProjection skillProjection = projection.GetComponent<SkillProjection> ();
 		skillProjection.selfStatus = this.selfStatus;
 		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
 		skillProjection.damage = rightHandWeapon.damage;
-		NetworkServer.Spawn (projector);
+		NetworkServer.Spawn (projection);
 	}
+
+//	[ClientRpc]
+//	public void RpcProject(){
+//		
+//	}
 
 	public void PlayHurtEffect(GameObject input){
 //		rightHandWeapon.effect = GetComponentInChildren<SkillManager> ().skillList [skillNumber].effect;
 //		rightHandWeapon.damage = GetComponentInChildren<SkillManager> ().skillList [skillNumber].GetDamage ();
-		GetComponent<Combat>().hurtEffect = input;
+//		GetComponent<Combat>().hurtEffect = input;
 	}
 
 //	[ClientRpc]
@@ -204,13 +208,13 @@ public class MeatBall : NetworkBehaviour {
 	[ServerCallback]
 	public void SetInvincibleTrue(){
 		CmdInvincle (true);
-		Debug.Log ("無敵");
+//		Debug.Log ("無敵");
 	}
 
 	[ServerCallback]
 	public void SetInvincibleFalse(){
 		CmdInvincle (false);
-		Debug.Log ("沒無敵");
+//		Debug.Log ("沒無敵");
 	}
 
 	[Command]

@@ -6,14 +6,14 @@ public class SkillUIManager : MonoBehaviour {
 
 	public Image[] iconList = new Image[4];
 
-	Skill[] skills;
+//	Skill[] skills;
 	public Animator[] skillAnimator = new Animator[5];
 
 	public Image icon_figure;
 
-	public void InitialSkills(Skill[] value){
-		skills = value;
-	}
+//	public void InitialSkills(Skill[] value){
+//		skills = value;
+//	}
 
 	[ContextMenu("更新Animator")]
 	void Start(){
@@ -22,16 +22,22 @@ public class SkillUIManager : MonoBehaviour {
 		}
 	}
 
-	void Update(){
-		if (Time.timeScale == 0)
-			return;
+	public void CountCD(int index,float CDValue){
+		skillAnimator [index].speed =1/ CDValue;
+		skillAnimator [index].SetTrigger ("StartCD");
+	}
 
-		for(int i=0;i<4;i++){
-			if (!skills [i+1].CD.isDone && iconList[i].fillAmount == 1f) {
-//				iconList[i].fillAmount = 1f- skills[i+1].CD.currentValue/skills[i+1].CD.value;
-				skillAnimator [i].speed =1/ skills [i + 1].CD.value;
-				skillAnimator [i].Play("SkillCD");
-			}
-		}
+	void Update(){
+//		if (Time.timeScale == 0)
+//			return;
+//
+////		for(int i=0;i<4;i++){
+////			if (skills [i+1].IsUsingSkill()) {
+////				skillAnimator [i].speed =1/ skills [i + 1].CD.value;
+////				skillAnimator [i].Play("SkillCD");
+////			}
+////		}
+		// 
+//		 skillAnimator [1].Play("SkillCD");
 	}
 }
