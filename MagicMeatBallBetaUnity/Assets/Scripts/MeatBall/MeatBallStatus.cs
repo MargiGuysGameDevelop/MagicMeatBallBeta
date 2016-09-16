@@ -80,16 +80,30 @@ public class MeatBallStatus : NetworkBehaviour {
 		meatBall = GetComponent<MeatBall> ();
 		phsics = GetComponent<FunPhsics> ();
 		isInvincible = false;
+		currentWeapon = -1;
 	}
 
 	void Start(){
-//		meatBall.CmdSetAnimInt ("WeaponKind",currentWeapon);
+//		while(currentWeapon == -1){
+//			continue;
+//		}
+
+	}
+
+//	[ServerCallback]
+	public void InitialAnimatorWeapon(){
+		GetComponent<Animator>().SetInteger("WeaponKind",currentWeapon);
+//		Debug.Log (currentWeapon);
+//		meatBall.RpcSetAnimInt ("WeaponKind", currentWeapon);
 	}
 
 	// Update is called once per frame
 	void Update () {
+
 		if (Time.timeScale == 0)
 			return;
+
+		SetPresentValue ();	
 
 		if (!isLocalPlayer)
 			return;
@@ -100,7 +114,6 @@ public class MeatBallStatus : NetworkBehaviour {
 			phsics.RpcAddForce (1f, 2f, 1f);
 		}
 
-		SetPresentValue ();	
 		CaculateAnimPra ();
 		ResetAttackerByTime ();
 		if (isDead) 

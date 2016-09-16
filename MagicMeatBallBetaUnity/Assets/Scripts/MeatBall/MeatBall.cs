@@ -49,6 +49,7 @@ public class MeatBall : NetworkBehaviour {
 		meatBallAnimator = GetComponent<Animator> ();
 		selfStatus = GetComponent<MeatBallStatus> ();
 		bodyCollider = GetComponent<CapsuleCollider> ();
+
 		#region Weapon
 //		SortWeaponCode ();
 //		CloseAllWeapon ();
@@ -60,13 +61,17 @@ public class MeatBall : NetworkBehaviour {
 		//sceneCamera.SetActive (false);
 	}
 
+	public void SnycAnimatorWeaponKind(){
+		if (meatBallAnimator.GetInteger ("WeaponKind") != selfStatus.currentWeapon)
+			meatBallAnimator.SetInteger ("WeaponKind",selfStatus.currentWeapon);
+	}
+
 	public void InititalSkillAndSuit(){
 		var suitList = GetComponentInChildren<SuitList> ();
 		suitList.InitialSuit ();
 		var skillList = GetComponentInChildren<SkillManager> ();
 		skillList.Initial ();
-		Debug.Log (selfStatus.currentWeapon);
-		CmdSetAnimInt ("WeaponKind",selfStatus.currentWeapon);
+//		if(isLocalPlayer)
 	}
 
 	void Start () {
@@ -80,6 +85,12 @@ public class MeatBall : NetworkBehaviour {
 		}
 		gameObject.name = selfStatus.playerName;
 		InititalSkillAndSuit ();
+//		if (isServer) {
+//			var weaponCode = selfStatus.currentWeapon;
+//			meatBallAnimator.SetInteger("WeaponKind",selfStatus.currentWeapon);
+//			Debug.Log (weaponCode);
+//			RpcSetAnimInt ("WeaponKind", weaponCode);
+//		}
 	}
 
 
@@ -93,8 +104,11 @@ public class MeatBall : NetworkBehaviour {
 
 
 		//ensure player control himself
-		if(!isLocalPlayer)
+//		SnycAnimatorWeaponKind();
+
+		if (!isLocalPlayer) {
 			return;
+		}
 		
 		if (Time.timeScale == 0)
 			return;
@@ -388,7 +402,7 @@ public class MeatBall : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcInitAnim(){
-		Debug.Log ("重生");
+//		Debug.Log ("重生");
 		meatBallAnimator.Play ("Movement");
 	}
 		

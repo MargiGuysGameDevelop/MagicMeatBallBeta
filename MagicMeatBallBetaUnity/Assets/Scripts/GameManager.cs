@@ -149,6 +149,10 @@ public class GameManager : NetworkBehaviour {
 			FindAndSortPlayer ();
 			PlayerDataDictionaryInitial ();
 			RefreshPlayerScore ();
+			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			for(int i=0;i<playerList.Length;i++){
+				playerList [i].InitialAnimatorWeapon ();
+			}
 		}
 
 		if (Input.GetKeyDown (KeyCode.Tab)) {

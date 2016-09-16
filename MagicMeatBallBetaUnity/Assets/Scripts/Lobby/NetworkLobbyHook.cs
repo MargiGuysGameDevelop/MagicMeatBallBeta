@@ -13,7 +13,6 @@ public class NetworkLobbyHook : LobbyHook
 		selfStatus.playerName = lobby.playerName;
 		selfStatus.nameColor = lobby.playerColor;
 		selfStatus.currentWeapon = lobby.weaponCode;
-
 	}
 
 
