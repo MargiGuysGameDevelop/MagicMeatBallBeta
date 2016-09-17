@@ -11,7 +11,7 @@ public class BlackSwordManSkill : Skill {
 			var force = meatBallTran.forward;
 			force.y = 0;
 			force = force.normalized * 8f;
-			phsics.RpcPushEqualVelocity (1f,force);
+			phsics.CmdPushEqualVelocity (0.9f,force);
 		}
 	}
 

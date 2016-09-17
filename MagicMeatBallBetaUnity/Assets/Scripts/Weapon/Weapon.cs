@@ -13,7 +13,7 @@ public class Weapon : NetworkBehaviour {
 	public float damage;
 	public float fatigue = 100f;
 	public bool isHands= false;
-	public Vector3 force = new Vector3(1,3,1);
+	public Vector3 force = Vector3.zero;
 
 	//public float damageFromMeatBallBase;
 	private float damageFromeWeapon;
@@ -73,9 +73,12 @@ public class Weapon : NetworkBehaviour {
 		Combat combat = other.GetComponent<Combat> ();
 		if (combat) {
 			if (!attackedList.Contains (combat)) {
-				
-				attackedList.Add (combat);
-				combat.TakeDamage (damage,selfStatus.playerNetId,fatigue,force);
+				var newForce = selfStatus.transform.forward;
+				newForce.y += 2;
+				newForce.x *= force.x;
+				newForce.z *= force.z;
+//				attackedList.Add (combat);
+				combat.TakeDamage (damage,selfStatus.playerNetId,fatigue,newForce);
 				if(onHit != null)onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));
 
 				//onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));

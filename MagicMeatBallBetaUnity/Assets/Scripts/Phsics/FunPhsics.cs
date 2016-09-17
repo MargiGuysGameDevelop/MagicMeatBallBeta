@@ -175,6 +175,11 @@ public class FunPhsics : NetworkBehaviour {
 	float wholeTimes = 0f;
 	float initialYVelocity = 0f;
 	 
+	[Command]
+	public void  CmdAddForce(float xSpeed, float yHight, float zSpeed){
+		RpcAddForce (xSpeed,yHight,zSpeed);
+	}
+
 	[ClientRpc]
 	public void  RpcAddForce(float xSpeed, float yHight, float zSpeed){
 		force += new Vector3( xSpeed, yHight, zSpeed);
@@ -197,17 +202,15 @@ public class FunPhsics : NetworkBehaviour {
 		pushTimes += times;
 	}
 
-	[ClientRpc]
+	[Command]
 	/// <summary>
 	/// Push，平面的內插位移。(Y==0!)
 	/// </summary>
 	/// <param name="times">Times.</param>
 	/// <param name="input">Input.</param>
 	/// <param name="scale">Scale.</param>
-	public void RpcPushLerp(float times,Vector3 input,float damping) {
-		pushVector += input;
-		pushVector.y = 0f;
-		pushTimes += times;
+	public void CmdPushEqualVelocity(float times,Vector3 input) {
+		RpcPushEqualVelocity (times, input);
 	}
 	#endregion
 

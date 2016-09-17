@@ -20,9 +20,10 @@ public class SkillManager : NetworkBehaviour {
 
 //	[ContextMenu("初始化技能及UI")]
 	public void Initial(){
-
 		weapon = GetComponentInChildren<Weapon> ();
 		skillList = weapon.GetComponentsInChildren<Skill> ();
+		skillIndex = 0;
+		CmdUsingSkill ();
 	}
 	#endregion
 
@@ -78,9 +79,6 @@ public class SkillManager : NetworkBehaviour {
 		}
 
 		playing = NoAnySkill;
-
-		skillIndex = 0;
-		CmdUsingSkill ();
 	}
 
 	void Update(){
@@ -95,7 +93,7 @@ public class SkillManager : NetworkBehaviour {
 		//isSkilling 
 		//isCD
 
-		if (!self.IsSkillable () || self.IsHurt ())
+		if (!self.IsSkillable () || self.IsHurt () || selfStatus.isDead)
 			return;
 
 		if (playing ()) {
@@ -123,17 +121,17 @@ public class SkillManager : NetworkBehaviour {
 
 	[Command]
 	void CmdUsingSkill(){
-//		Debug.Log ("CmdUsingSkill");
 		RpcUsingSkill ();
 	}
 
 	[ClientRpc]
 	void RpcUsingSkill(){
+		Debug.Log ("RpcUsingSkill");
 		if(skillIndex != 0)
 			UI.CountCD (skillIndex-1,skillList[skillIndex].CD.value);
 		skillList [skillIndex].CD.Count ();
 		skillList [skillIndex].skillNumber = skillIndex;
-//		Debug.Log(skillIndex);
+		Debug.Log(skillIndex);
 		playing = skillList[skillIndex].PlayingSkill;
 //		Debug.Log (skillList[skillIndex].damage);
 		weapon.damage = skillList[skillIndex].damage;

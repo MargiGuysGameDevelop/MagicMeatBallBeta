@@ -118,6 +118,7 @@ public class MeatBallStatus : NetworkBehaviour {
 		ResetAttackerByTime ();
 		if (isDead) 
 		{
+//			phsics.pause = true;
 			deadTimer += Time.deltaTime;
 			if (deadTimer >= rebrithTime) {
 				PlayerRebrith ();
@@ -245,19 +246,24 @@ public class MeatBallStatus : NetworkBehaviour {
 	[ServerCallback]
 	void PlayerRebrith(){
 
-
+//		CmdSetRespawn ();
 		RpcSetRespawn ();
-
+//		meatBall.CmdSetAnimBool ("");
 		HP = MaxHP;
 		EP = MaxEP;
 		deadTimer = 0f;
 		isDead = false;
-			
+//		phsics.pause = false;
 	}
 
 	public int GetPlayerNetId(){
 		playerNetId = int.Parse (GetComponent<NetworkIdentity> ().netId.ToString ());
 		return playerNetId;
+	}
+
+	[Command]
+	void CmdSetRespawn(){
+		RpcSetRespawn ();
 	}
 
 	[ClientRpc]

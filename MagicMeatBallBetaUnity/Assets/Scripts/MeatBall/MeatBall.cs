@@ -242,19 +242,24 @@ public class MeatBall : NetworkBehaviour {
 
 	[ServerCallback]
 	public void SetInvincibleTrue(){
-		CmdInvincle (true);
+		CmdInvinble (true);
 //		Debug.Log ("無敵");
 	}
 
 	[ServerCallback]
 	public void SetInvincibleFalse(){
-		CmdInvincle (false);
+		CmdInvinble (false);
 //		Debug.Log ("沒無敵");
 	}
 
 	[Command]
-	void CmdInvincle(bool item){
-		selfStatus.isInvincible = item;
+	void CmdInvinble(bool value){
+		RpcInvinble (value);
+	}
+
+	[ClientRpc]
+	void RpcInvinble(bool value){
+		selfStatus.isInvincible = value;
 	}
 
 	[ServerCallback]
