@@ -2,10 +2,9 @@
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using UnityEngine.Networking;
 
 [SerializeField]
-public class Skill : NetworkBehaviour{
+public class Skill : MonoBehaviour{
 
 
 	#region 基礎欄位
@@ -143,12 +142,12 @@ public class Skill : NetworkBehaviour{
 
 	//施展技能中
 	virtual public bool PlayingSkill(){
-		if (CD.value < skillTime + CD.currentValue) {
-//			Debug.Log ("GuG");
+		if ( skillTime > CD.value- CD.currentValue) {
 			return false;
 		}
 		else {
 			EndSkill ();
+//			Debug.Log (CD.value- CD.currentValue);
 			return true;
 		}
 	}

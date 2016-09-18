@@ -12,8 +12,7 @@ public class DeadIfTouch : MonoBehaviour {
 			var MBS = meatBallCombat.GetComponent<MeatBallStatus> ();
 			meatBallCombat.TakeDamage (100000f,
 				MBS.attacker,
-				1000f
-				,Vector3.zero);
+				1000f,Vector3.zero);
 //			if (MBS.HP >= 0) {
 //				MBS.HP = 0f;
 //				MBS.CheckIsDead ();

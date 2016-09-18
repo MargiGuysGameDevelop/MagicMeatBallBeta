@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ExitSkillLayer : StateMachineBehaviour {
+public class SingleAnimSkill : StateMachineBehaviour {
 
 //	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 //		SetSkillLayer0 (animator);
@@ -12,13 +12,15 @@ public class ExitSkillLayer : StateMachineBehaviour {
 
 	public override void OnStateEnter (Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
+		animator.SetBool ("Skillable",false);
 		animator.SetInteger ("SkillInt",0);
+		animator.SetLayerWeight (3,1f);
 	}
 
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		animator.SetBool ("Skillable",true);
-//		Debug.Log ("ExitState");
-//		SetSkillLayer0 (animator);
+		Debug.Log ("ExitState");
+		SetSkillLayer0 (animator);
 	}
 
 	void SetSkillLayer0(Animator an){

@@ -77,11 +77,11 @@ public class Weapon : NetworkBehaviour {
 				newForce.y += 2;
 				newForce.x *= force.x;
 				newForce.z *= force.z;
-//				attackedList.Add (combat);
+				attackedList.Add (combat);
 				combat.TakeDamage (damage,selfStatus.playerNetId,fatigue,newForce);
-				if(onHit != null)onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));
-
+//				if(onHit != null)onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));
 				//onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));
+//				Debug.Log ("中獎");
 
 				//attackOnceBool = true;
 				//canAttack = false;
@@ -99,7 +99,6 @@ public class Weapon : NetworkBehaviour {
 
 	void SetAttackedListEmpty(){
 		attackedList.Clear ();
-
 	}
 	/*
 	void SetCanAttackBool(){

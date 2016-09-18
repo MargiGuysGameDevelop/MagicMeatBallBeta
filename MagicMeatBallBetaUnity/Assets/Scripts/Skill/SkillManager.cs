@@ -62,6 +62,9 @@ public class SkillManager : NetworkBehaviour {
 	}
 	#endregion
 
+	//debug
+	float debug = 0f;
+
 	void Start(){
 		selfStatus = GetComponent<MeatBallStatus> ();
 
@@ -101,22 +104,28 @@ public class SkillManager : NetworkBehaviour {
 				playing = NoAnySkill;
 
 			for (int i = 0; i < buttonName.Length; i++) {
-				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone)
+				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone) {
 					skillIndex = i;
+					Debug.Log ("CmdSkill");
+					UsingSkill ();
+				}
 			}
 
-			if (skillIndex != lastSkillIndex) {
-				CmdUsingSkill ();
-				self.CmdSetAnimInt("SkillInt",skillIndex);
-				self.CmdSetSkillLayer ();
-				return;
-			}
-			if (skillIndex != 0)
-				skillIndex = 0;
+//			if (skillIndex != lastSkillIndex) {
+//
+////				debug = 0f;
+//				return;
+//			}
+//			if (skillIndex != 0)
+//				skillIndex = 0;
 		} 
-//		else
-//			Debug.Log ("GG");
 
+	}
+
+	void UsingSkill(){
+		self.CmdSetAnimInt("SkillInt",skillIndex);
+		self.CmdSetSkillLayer ();
+		CmdUsingSkill ();
 	}
 
 	[Command]
@@ -126,12 +135,11 @@ public class SkillManager : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcUsingSkill(){
-		Debug.Log ("RpcUsingSkill");
 		if(skillIndex != 0)
 			UI.CountCD (skillIndex-1,skillList[skillIndex].CD.value);
 		skillList [skillIndex].CD.Count ();
 		skillList [skillIndex].skillNumber = skillIndex;
-		Debug.Log(skillIndex);
+//		Debug.Log(skillIndex);
 		playing = skillList[skillIndex].PlayingSkill;
 //		Debug.Log (skillList[skillIndex].damage);
 		weapon.damage = skillList[skillIndex].damage;
