@@ -15,13 +15,16 @@ public class SkillProjection : NetworkBehaviour {
 	[Header("打到一次敵人後物件銷毀")]
 	public bool isDestroyOnOnceHit;
 
-	[Header("Trigger情況下打到人所產生的物件(係數皆與此設定相同)")]
-	public GameObject projection;
+	[Header("Trigger情況下打到人所出現的物件(係數皆與此設定相同)")]
+	public GameObject[] openObjectAfterHit = new GameObject[1];
+	[Header("Trigger情況下打到人後消失的物件")]
+	public GameObject[] closeObjectAfterHit = new GameObject[1];
 
-	[Header("生命週期")]
+	[Header("生命週期(Trigger情況下則為打到人後的生命週期)")]
 	public float lifeTime;
 
 	Collider ingnorCollider;
+	BoxCollider myCollider;
 
 	[Header("XZVelocity的力量")]
 	public float forceIndex;
@@ -36,6 +39,7 @@ public class SkillProjection : NetworkBehaviour {
 	public MeatBallStatus selfStatus;
 
 	[Header("破甲值")]
+	[HideInInspector]
 	public float fatigue;
 	[HideInInspector]
 	public Vector3 force;
@@ -44,6 +48,12 @@ public class SkillProjection : NetworkBehaviour {
 
 	void Awake(){
 		selfTransform = GetComponent<Transform> ();
+		myCollider = GetComponent<BoxCollider> ();
+
+		if(forceType == ForceType.Trigger)
+			foreach(GameObject go in openObjectAfterHit){
+				go.SetActive (false);
+			}
 	}
 
 	void SetIgnorCollider(){
@@ -52,6 +62,7 @@ public class SkillProjection : NetworkBehaviour {
 	}
 
 	[ServerCallback]
+	[ContextMenu("觸發!")]
 	void OnTriggerStay(Collider other){
 		if (!ingnorCollider)
 			SetIgnorCollider ();
@@ -68,7 +79,8 @@ public class SkillProjection : NetworkBehaviour {
 				combat.TakeDamage (damage, selfStatus.playerNetId, fatigue, force*forceIndex);
 			}
 			if (isDestroyOnOnceHit) {
-				NetworkServer.Destroy (gameObject);
+				if(gameObject)
+					NetworkServer.Destroy (gameObject);
 			} else {
 				if(!isHitOncePerPerson)
 					attackedList.Remove (combat);
@@ -79,6 +91,12 @@ public class SkillProjection : NetworkBehaviour {
 	}
 
 	void Update(){
+		if (Time.timeScale == 0f)
+			return;
+		
+		if(forceType == ForceType.Trigger)
+			return;
+		
 		if (lifeTime > 0) {
 			lifeTime -= Time.deltaTime;
 		} else {
@@ -108,10 +126,19 @@ public class SkillProjection : NetworkBehaviour {
 			force += force + new Vector3(0,forceY,0);
 			break;
 		case ForceType.Trigger:
-			var newProjection = 
-				Instantiate (projection, attackedTransform.position,
-					attackedTransform.rotation);
-			selfStatus.meatBall.secProjecttion = newProjection;
+			foreach (GameObject go in openObjectAfterHit) {
+				var skillProjection = go.GetComponent<SkillProjection> ();
+				skillProjection.selfStatus = this.selfStatus;
+				skillProjection.attackedList.Add (selfStatus.GetComponent<Combat>());
+				skillProjection.damage = this.damage;
+				skillProjection.lifeTime = this.lifeTime + 1f;
+				go.SetActive (true);
+			}
+			foreach (GameObject go in closeObjectAfterHit) {
+				go.SetActive (false);
+			}
+			myCollider.enabled = false;
+			forceType = ForceType.None;
 			break;
 		};
 	}

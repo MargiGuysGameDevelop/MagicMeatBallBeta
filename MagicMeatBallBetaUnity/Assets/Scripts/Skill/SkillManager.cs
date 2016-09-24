@@ -22,8 +22,9 @@ public class SkillManager : NetworkBehaviour {
 	public void Initial(){
 		weapon = GetComponentInChildren<Weapon> ();
 		skillList = weapon.GetComponentsInChildren<Skill> ();
-		skillIndex = 0;
-		CmdUsingSkill ();
+//
+//		skillIndex = 0;
+//		CmdUsingSkill (0);
 	}
 	#endregion
 
@@ -72,7 +73,7 @@ public class SkillManager : NetworkBehaviour {
 
 		self = GetComponent<MeatBall> ();
 
-		weapon = GetComponent<Weapon> ();
+		Initial ();
 
 		UI = GameObject.Find ("SkillUI").GetComponentInChildren<SkillUIManager> ();
 
@@ -105,9 +106,10 @@ public class SkillManager : NetworkBehaviour {
 
 			for (int i = 0; i < buttonName.Length; i++) {
 				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone) {
+//					if (skillIndex == 0 && Input.GetButtonDown (buttonName [0]))
+//						return;
 					skillIndex = i;
-					Debug.Log ("CmdSkill");
-					UsingSkill ();
+					UsingSkill (skillIndex);
 				}
 			}
 
@@ -122,36 +124,37 @@ public class SkillManager : NetworkBehaviour {
 
 	}
 
-	void UsingSkill(){
+	void UsingSkill(int inputIndex){
 		self.CmdSetAnimInt("SkillInt",skillIndex);
 		self.CmdSetSkillLayer ();
-		CmdUsingSkill ();
+		CmdUsingSkill (inputIndex);
 	}
 
 	[Command]
-	void CmdUsingSkill(){
-		RpcUsingSkill ();
+	void CmdUsingSkill(int inputIndex){
+		Debug.Log ("CmdUseskill" + gameObject.name + ":" +  skillList[skillIndex].name);
+		RpcUsingSkill (inputIndex);
 	}
 
 	[ClientRpc]
-	void RpcUsingSkill(){
+	void RpcUsingSkill(int inputIndex){
 		if(skillIndex != 0)
-			UI.CountCD (skillIndex-1,skillList[skillIndex].CD.value);
-		skillList [skillIndex].CD.Count ();
-		skillList [skillIndex].skillNumber = skillIndex;
+			UI.CountCD (inputIndex-1,skillList[skillIndex].CD.value);
+		skillList [inputIndex].CD.Count ();
+		skillList [inputIndex].skillNumber = skillIndex;
 //		Debug.Log(skillIndex);
-		playing = skillList[skillIndex].PlayingSkill;
+		playing = skillList[inputIndex].PlayingSkill;
 //		Debug.Log (skillList[skillIndex].damage);
-		weapon.damage = skillList[skillIndex].damage;
+		weapon.damage = skillList[inputIndex].damage;
 //		Debug.Log (weapon.damage);
-		weapon.fatigue = skillList[skillIndex].fatigue;
-		weapon.onHit = skillList[skillIndex].HitSomeOne;
-		weapon.effect = skillList[skillIndex].effect;
-		weapon.projection = skillList[skillIndex].projection;
-		start = skillList[skillIndex].StartSKill ;
+		weapon.fatigue = skillList[inputIndex].fatigue;
+		weapon.onHit = skillList[inputIndex].HitSomeOne;
+		weapon.effect = skillList[inputIndex].effect;
+		weapon.projection = skillList[inputIndex].projection;
+		start = skillList[inputIndex].StartSKill ;
 		start ();
 		usingSkill = true;
-		lastSkillIndex = skillIndex;
+//		lastSkillIndex = skillIndex;
 	}
 }
 

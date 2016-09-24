@@ -54,7 +54,6 @@ public class MeatBall : NetworkBehaviour {
 //		SortWeaponCode ();
 //		CloseAllWeapon ();
 //		OpenWeapon ();
-		RoadWeapon();
 		#endregion
 
 		//hpCanvas = GetComponentInChildren<HpCanvas> ();
@@ -69,8 +68,11 @@ public class MeatBall : NetworkBehaviour {
 	public void InititalSkillAndSuit(){
 		var suitList = GetComponentInChildren<SuitList> ();
 		suitList.InitialSuit ();
-		var skillList = GetComponentInChildren<SkillManager> ();
-		skillList.Initial ();
+		var skillManager = GetComponentInChildren<SkillManager> ();
+		skillManager.Initial ();
+		RoadWeapon();
+		if (rightHandWeapon.isHands)
+			CmdSetHandsLayer1 ();
 //		if(isLocalPlayer)
 	}
 
@@ -211,6 +213,8 @@ public class MeatBall : NetworkBehaviour {
 		skillProjection.selfStatus = this.selfStatus;
 		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
 		skillProjection.damage = rightHandWeapon.damage;
+		skillProjection.fatigue = rightHandWeapon.fatigue;
+		skillProjection.gameObject.SetActive (true);
 		NetworkServer.Spawn (projection);
 	}
 	/// <summary>
@@ -304,7 +308,7 @@ public class MeatBall : NetworkBehaviour {
 	}
 
 
-	public void Initial(){
+	public void AnimatorInitial(){
 		CancleSuperArmor ();
 		SetInvincibleFalse ();
 		SetMoveableTrue ();
@@ -473,6 +477,16 @@ public class MeatBall : NetworkBehaviour {
 		meatBallAnimator.SetLayerWeight (3,1f);
 	}
 		
+	[Command]
+	void CmdSetHandsLayer1(){
+		RpcHandfsLayer1 ();
+	}
+
+	[ClientRpc]
+	void RpcHandfsLayer1(){
+		meatBallAnimator.SetLayerWeight (1,1f);
+	}
+
 	public bool IsHurt(){
 		return meatBallAnimator.GetBool ("Hurt");
 	}
