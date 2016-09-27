@@ -10,10 +10,10 @@ public class SoundManager : MonoBehaviour {
 	public AudioSource buttonEffectSound;
 	public static SoundManager instance = null;
 
-	public AudioClip[] LobbyBGMClips;
-	public AudioClip[] GameBGMClips;
+	//public AudioClip[] LobbyBGMClips;
+	//public AudioClip[] GameBGMClips;
 
-	public AudioClip buttonEffectClip;
+	//public AudioClip buttonEffectClip;
 
 	public float BGMVolume;
 	public float effectVolume;
@@ -27,7 +27,13 @@ public class SoundManager : MonoBehaviour {
 		
 		DontDestroyOnLoad (gameObject);
 
+
+		GameSound.instance.LoadAllClip ();
+
 		IniAudioSource ();
+		BGMVolume = 0.38f;
+		effectVolume = 0.5f;
+
 	}
 
 	void IniAudioSource(){
@@ -35,7 +41,8 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	public void PlayButtonEffect(){
-		instance.buttonEffectSound.clip = buttonEffectClip;
+		instance.buttonEffectSound.clip = GameSound.instance.buttonEffectClip;
+		buttonEffectSound.volume = effectVolume;
 		instance.buttonEffectSound.Play ();
 	}
 
@@ -53,10 +60,10 @@ public class SoundManager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int level){
 		if (level == 0) {
-			RanddomBGMPlay (LobbyBGMClips);
+			RanddomBGMPlay (GameSound.instance.LobbyBGMClips);
 		} 
 		if (level == 1) {
-			RanddomBGMPlay (GameBGMClips);
+			RanddomBGMPlay (GameSound.instance.GameBGMClips);
 		}
 	}
 }
