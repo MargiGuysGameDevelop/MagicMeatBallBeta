@@ -27,13 +27,15 @@ public class SoundManager : MonoBehaviour {
 		
 		DontDestroyOnLoad (gameObject);
 
+		instance.BGMVolume = 0.28f;
+		instance.effectVolume = 0.45f;
 
+	}
+
+	void Start(){
 		GameSound.instance.LoadAllClip ();
 
 		IniAudioSource ();
-		BGMVolume = 0.38f;
-		effectVolume = 0.5f;
-
 	}
 
 	void IniAudioSource(){
@@ -41,20 +43,22 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	public void PlayButtonEffect(){
-		instance.buttonEffectSound.clip = GameSound.instance.buttonEffectClip;
-		buttonEffectSound.volume = effectVolume;
+		buttonEffectSound.clip = GameSound.instance.buttonEffectClip;
+		buttonEffectSound.volume = SoundManager.instance.effectVolume;
 		instance.buttonEffectSound.Play ();
 	}
 
 	public void RanddomBGMPlay(params AudioClip[] clips){
 		int randomIndex = Random.Range(0, clips.Length);
+		Debug.Log (randomIndex);
 		BGM.clip = clips[randomIndex];
+		BGM.volume = SoundManager.instance.BGMVolume;
 		BGM.Play();
 	}
 
 	public void PlaySound(AudioSource source, AudioClip clip){
 		source.clip = clip;
-		source.volume = effectVolume;
+		source.volume = SoundManager.instance.effectVolume;
 		source.Play ();
 	}
 

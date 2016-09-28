@@ -935,6 +935,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.31568998
+        functionName: PlaySwordAttackSound
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -1095,6 +1102,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.4604907
+        functionName: PlaySwordAttackSound
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.64285713
         functionName: AttackColliderOn
         data: 
@@ -1271,6 +1285,13 @@ ModelImporter:
       events:
       - time: 0.44505495
         functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.52716297
+        functionName: PlaySwordAttackSound
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
