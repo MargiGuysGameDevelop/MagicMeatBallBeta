@@ -106,8 +106,6 @@ public class SkillManager : NetworkBehaviour {
 
 			for (int i = 0; i < buttonName.Length; i++) {
 				if (Input.GetButtonDown (buttonName [i]) && skillList [i].CD.isDone) {
-//					if (skillIndex == 0 && Input.GetButtonDown (buttonName [0]))
-//						return;
 					skillIndex = i;
 					UsingSkill (skillIndex);
 				}
@@ -126,13 +124,13 @@ public class SkillManager : NetworkBehaviour {
 
 	void UsingSkill(int inputIndex){
 		self.CmdSetAnimInt("SkillInt",skillIndex);
-		self.CmdSetSkillLayer ();
+//		self.CmdSetSkillLayer ();
 		CmdUsingSkill (inputIndex);
 	}
 
 	[Command]
 	void CmdUsingSkill(int inputIndex){
-		Debug.Log ("CmdUseskill" + gameObject.name + ":" +  skillList[skillIndex].name);
+//		Debug.Log ("CmdUseskill" + gameObject.name + ":" +  skillList[skillIndex].name);
 		RpcUsingSkill (inputIndex);
 	}
 
@@ -142,11 +140,8 @@ public class SkillManager : NetworkBehaviour {
 			UI.CountCD (inputIndex-1,skillList[skillIndex].CD.value);
 		skillList [inputIndex].CD.Count ();
 		skillList [inputIndex].skillNumber = skillIndex;
-//		Debug.Log(skillIndex);
 		playing = skillList[inputIndex].PlayingSkill;
-//		Debug.Log (skillList[skillIndex].damage);
 		weapon.damage = skillList[inputIndex].damage;
-//		Debug.Log (weapon.damage);
 		weapon.fatigue = skillList[inputIndex].fatigue;
 		weapon.onHit = skillList[inputIndex].HitSomeOne;
 		weapon.effect = skillList[inputIndex].effect;
@@ -154,7 +149,6 @@ public class SkillManager : NetworkBehaviour {
 		start = skillList[inputIndex].StartSKill ;
 		start ();
 		usingSkill = true;
-//		lastSkillIndex = skillIndex;
 	}
 }
 

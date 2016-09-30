@@ -4,9 +4,18 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 
 public class SkillProjection : NetworkBehaviour {
+	//普通 沒有
+	public enum AttackType{Generic,Trigger}
 	// 無力 攻擊者前方 物件中心發散 物件中心收斂 觸發其他物件
-	public enum ForceType{None,AttackersForward,Diverge,Converge,Trigger};
+	public enum ForceType{None,AttackersForward,Diverge,Converge};
+	//無(預設) 前進 
+	public enum MoveType{None,Forward};
 
+	public MoveType moveType = MoveType.None;
+	[Header("速率(moveType = None請無視)")]
+	public float projectionVelocity;
+
+	public AttackType attackType = AttackType.Generic;
 	public ForceType forceType;
 
 	[Header("是否每人只能打到一次(與下方平行)")]
@@ -20,10 +29,13 @@ public class SkillProjection : NetworkBehaviour {
 	[Header("Trigger情況下打到人後消失的物件")]
 	public GameObject[] closeObjectAfterHit = new GameObject[1];
 
-	[Header("生命週期(Trigger情況下則為打到人後的生命週期)")]
+	[Header("生命週期")]
 	public float lifeTime;
+	[Header("Trigger情況下打到人後的生命週期")]
+	public float lifeTimeAfterHit;
 
-	Collider ingnorCollider;
+//	[HideInInspector]
+	public Collider ignoreCollider;
 	BoxCollider myCollider;
 
 	[Header("XZVelocity的力量")]
@@ -35,7 +47,7 @@ public class SkillProjection : NetworkBehaviour {
 	public Transform selfTransform;
 	[HideInInspector]
 	public float damage;
-	[HideInInspector]
+//	[HideInInspector]
 	public MeatBallStatus selfStatus;
 
 	[Header("破甲值")]
@@ -50,7 +62,7 @@ public class SkillProjection : NetworkBehaviour {
 		selfTransform = GetComponent<Transform> ();
 		myCollider = GetComponent<BoxCollider> ();
 
-		if(forceType == ForceType.Trigger)
+		if(attackType == AttackType.Trigger)
 			foreach(GameObject go in openObjectAfterHit){
 				go.SetActive (false);
 			}
@@ -58,22 +70,24 @@ public class SkillProjection : NetworkBehaviour {
 
 	void SetIgnorCollider(){
 
-		ingnorCollider = selfStatus.GetComponent<Collider> ();
+		ignoreCollider = selfStatus.GetComponent<Collider> ();
 	}
 
-	[ServerCallback]
-	[ContextMenu("觸發!")]
 	void OnTriggerStay(Collider other){
-		if (!ingnorCollider)
-			SetIgnorCollider ();
+		
+//		if (!ignoreCollider)
+//			SetIgnorCollider ();
 
-
-		if(ingnorCollider == other)
+		if(ignoreCollider == other)
 			return;
 
 		Combat combat = other.GetComponent<Combat> ();
 		if (combat) {
 			CountForce (combat.transform);
+			if (attackType == AttackType.Trigger) {
+				Trigger ();
+				return;
+			}
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
 				combat.TakeDamage (damage, selfStatus.playerNetId, fatigue, force*forceIndex);
@@ -85,24 +99,38 @@ public class SkillProjection : NetworkBehaviour {
 				if(!isHitOncePerPerson)
 					attackedList.Remove (combat);
 			}
-
-
 		}
 	}
+		
 
 	void Update(){
 		if (Time.timeScale == 0f)
 			return;
-		
-		if(forceType == ForceType.Trigger)
-			return;
+
+		Move ();
 		
 		if (lifeTime > 0) {
 			lifeTime -= Time.deltaTime;
 		} else {
+			if(attackType == AttackType.Trigger){
+				lifeTime += lifeTimeAfterHit;
+				CountForce (selfTransform);
+				return;
+			}
 			NetworkServer.Destroy (gameObject);
 		}
 
+	}
+
+	void Move(){
+		switch(moveType){
+		case MoveType.None:
+			return;
+		case MoveType.Forward:
+			selfTransform.Translate (selfTransform.forward * projectionVelocity * Time.deltaTime,
+				relativeTo:Space.World);
+			break;
+		}
 	}
 
 
@@ -125,23 +153,26 @@ public class SkillProjection : NetworkBehaviour {
 			force.Normalize ();
 			force += force + new Vector3(0,forceY,0);
 			break;
-		case ForceType.Trigger:
-			foreach (GameObject go in openObjectAfterHit) {
-				var skillProjection = go.GetComponent<SkillProjection> ();
-				skillProjection.selfStatus = this.selfStatus;
-				skillProjection.attackedList.Add (selfStatus.GetComponent<Combat>());
-				skillProjection.damage = this.damage;
-				skillProjection.lifeTime = this.lifeTime + 1f;
-				go.SetActive (true);
-			}
-			foreach (GameObject go in closeObjectAfterHit) {
-				go.SetActive (false);
-			}
-			myCollider.enabled = false;
-			forceType = ForceType.None;
+			default:
 			break;
 		};
 	}
 
+	void Trigger(){
+		foreach (GameObject go in openObjectAfterHit) {
+			var skillProjection = go.GetComponent<SkillProjection> ();
+			skillProjection.selfStatus = this.selfStatus;
+			skillProjection.attackedList.Add (selfStatus.GetComponent<Combat> ());
+			skillProjection.damage = this.damage;
+			skillProjection.lifeTime = this.lifeTime + 1f;
+			go.SetActive (true);
+		}
+		foreach (GameObject go in closeObjectAfterHit) {
+			go.SetActive (false);
+		}
+		myCollider.enabled = false;
+		forceType = ForceType.None;
+		moveType = MoveType.None;	
+	}
 
 }

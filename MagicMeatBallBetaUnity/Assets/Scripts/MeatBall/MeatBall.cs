@@ -38,10 +38,6 @@ public class MeatBall : NetworkBehaviour {
 
 	public Weapon rightHandWeapon;
 
-	/// <summary>
-	/// 用以藉此欄位發動該方的額外特效等等
-	/// </summary>
-	public Object secProjecttion;
 
 	void Awake(){
 
@@ -212,26 +208,17 @@ public class MeatBall : NetworkBehaviour {
 		SkillProjection skillProjection = projection.GetComponent<SkillProjection> ();
 		skillProjection.selfStatus = this.selfStatus;
 		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
+		skillProjection.ignoreCollider = GetComponent<CapsuleCollider> ();
 		skillProjection.damage = rightHandWeapon.damage;
 		skillProjection.fatigue = rightHandWeapon.fatigue;
 		skillProjection.gameObject.SetActive (true);
 		NetworkServer.Spawn (projection);
 	}
-	/// <summary>
-	/// 發射二次特效
-	/// </summary>
-	[Command]
-	public void CmdSecProject(){
-		if (secProjecttion == null)
-			return;
-		var projection = Instantiate(secProjecttion,
-			transform.position,transform.rotation) as GameObject;
-		SkillProjection skillProjection = projection.GetComponent<SkillProjection> ();
-		skillProjection.selfStatus = this.selfStatus;
-		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
-		skillProjection.damage = rightHandWeapon.damage;
-		NetworkServer.Spawn (projection);
-	}
+
+//	[ClientRpc]
+//	public void RpcProject(){
+//		
+//	}
 
 	public void PlayHurtEffect(GameObject input){
 //		rightHandWeapon.effect = GetComponentInChildren<SkillManager> ().skillList [skillNumber].effect;

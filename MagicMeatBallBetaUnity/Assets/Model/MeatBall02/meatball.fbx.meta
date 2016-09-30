@@ -1617,7 +1617,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.84615386
+        functionName: Project
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: SetInvincibleTrue
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9044289
+        functionName: SetInvincibleFalse
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -1741,9 +1762,15 @@ ModelImporter:
         weight: 1
       - path: amerture/root/weapon_IK_R/arm_IK_R/arm_IK_R_end
         weight: 1
+      - path: eyeL
+        weight: 1
+      - path: eyeR
+        weight: 1
       - path: handandleg
         weight: 1
       - path: meatball02_retop
+        weight: 1
+      - path: mouse
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
