@@ -25,6 +25,8 @@ public class Skill : MonoBehaviour{
 	protected float skillTime;
 
 	protected Transform meatBallTran;
+
+	public Vector3 force;
 //	protected MeatBallStatus meatBallStatus;
 //	protected Weapon weapon;
 	#endregion

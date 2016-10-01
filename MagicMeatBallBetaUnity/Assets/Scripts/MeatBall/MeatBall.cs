@@ -67,9 +67,10 @@ public class MeatBall : NetworkBehaviour {
 		var skillManager = GetComponentInChildren<SkillManager> ();
 		skillManager.Initial ();
 		RoadWeapon();
-		if (rightHandWeapon.isHands)
-			CmdSetHandsLayer1 ();
 //		if(isLocalPlayer)
+//			CmdSetHandsLayer ( rightHandWeapon.isHands? 1f:0f);
+//		if(isLocalPlayer)
+		meatBallAnimator.SetLayerWeight(1,rightHandWeapon.isHands? 1f:0f);
 	}
 
 	void Start () {
@@ -210,13 +211,16 @@ public class MeatBall : NetworkBehaviour {
 		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
 		skillProjection.ignoreCollider = GetComponent<CapsuleCollider> ();
 		skillProjection.damage = rightHandWeapon.damage;
+		skillProjection.forceIndex = rightHandWeapon.force.x;
+		skillProjection.forceY = rightHandWeapon.force.y;
 		skillProjection.fatigue = rightHandWeapon.fatigue;
+		skillProjection.hitEffect = rightHandWeapon.effect;
 		skillProjection.gameObject.SetActive (true);
 		NetworkServer.Spawn (projection);
 	}
 
 //	[ClientRpc]
-//	public void RpcProject(){
+//	public void RpcProject(int attackerID){
 //		
 //	}
 
@@ -465,13 +469,13 @@ public class MeatBall : NetworkBehaviour {
 	}
 		
 	[Command]
-	void CmdSetHandsLayer1(){
-		RpcHandfsLayer1 ();
+	void CmdSetHandsLayer(float value){
+		RpcHandfsLayer (value);
 	}
 
 	[ClientRpc]
-	void RpcHandfsLayer1(){
-		meatBallAnimator.SetLayerWeight (1,1f);
+	void RpcHandfsLayer(float value){
+		meatBallAnimator.SetLayerWeight (1,value);
 	}
 
 	public bool IsHurt(){

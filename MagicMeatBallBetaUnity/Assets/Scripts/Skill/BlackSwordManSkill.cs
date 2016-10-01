@@ -10,8 +10,8 @@ public class BlackSwordManSkill : Skill {
 			var phsics = GetComponentInParent <FunPhsics>();
 			var force = meatBallTran.forward;
 			force.y = 0;
-			force = force.normalized * 8f;
-			phsics.CmdPushEqualVelocity (0.9f,force);
+			force = force.normalized * 32f;
+			phsics.CmdPushEqualVelocity (0.4f,force);
 		}
 	}
 
