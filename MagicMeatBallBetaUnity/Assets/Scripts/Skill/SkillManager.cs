@@ -147,6 +147,8 @@ public class SkillManager : NetworkBehaviour {
 		weapon.effect = skillList[inputIndex].effect;
 		weapon.projection = skillList[inputIndex].projection;
 		weapon.force = skillList [inputIndex].force;
+		if(skillList [inputIndex].skillEffect)
+			weapon.skillEffect = skillList [inputIndex].skillEffect;
 		start = skillList[inputIndex].StartSKill ;
 		start ();
 		usingSkill = true;

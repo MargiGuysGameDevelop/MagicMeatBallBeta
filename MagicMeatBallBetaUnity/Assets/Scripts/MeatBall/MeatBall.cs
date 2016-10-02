@@ -219,10 +219,21 @@ public class MeatBall : NetworkBehaviour {
 		NetworkServer.Spawn (projection);
 	}
 
-//	[ClientRpc]
-//	public void RpcProject(int attackerID){
-//		
-//	}
+	public void SkillEffect(){
+		if(rightHandWeapon.skillEffect)
+		CmdSkillEffect ();
+	}
+
+	[Command]
+	public void CmdSkillEffect(){
+		var effect = Instantiate(rightHandWeapon.skillEffect,
+			transform.position,transform.rotation) as GameObject;
+		var projection = effect.GetComponent<SkillProjection> ();
+		projection.meatBallTransform = transform;
+		projection.selfStatus = this.selfStatus;
+		effect.SetActive (true);
+		NetworkServer.Spawn (effect);
+	}
 
 	public void PlayHurtEffect(GameObject input){
 //		rightHandWeapon.effect = GetComponentInChildren<SkillManager> ().skillList [skillNumber].effect;

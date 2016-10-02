@@ -43,6 +43,8 @@ public class Weapon : NetworkBehaviour {
 
 	public GameObject projection;
 
+	public GameObject skillEffect;
+
 
 	#endregion
 

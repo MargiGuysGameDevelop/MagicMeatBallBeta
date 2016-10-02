@@ -59,8 +59,8 @@ public class Skill : MonoBehaviour{
 
 	[SerializeField]
 	public GameObject projection;
-	protected float projectExistTimes ;
 
+	public GameObject skillEffect;
 
 	/// <summary>
 	/// 打到別人時觸發

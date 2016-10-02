@@ -10,7 +10,7 @@ public class SkillProjection : NetworkBehaviour {
 	// 無力 攻擊者前方 物件中心發散 物件中心收斂 觸發其他物件
 	public enum ForceType{None,AttackersForward,Diverge,Converge};
 	//無(預設) 前進 
-	public enum MoveType{None,Forward};
+	public enum MoveType{None,Forward,FollowUser};
 
 	public MoveType moveType = MoveType.None;
 	[Header("速率(moveType = None請無視)")]
@@ -48,6 +48,8 @@ public class SkillProjection : NetworkBehaviour {
 
 	[HideInInspector]
 	public Transform selfTransform;
+	[HideInInspector]
+	public Transform meatBallTransform;
 	[HideInInspector]
 	public float damage;
 //	[HideInInspector]
@@ -156,6 +158,12 @@ public class SkillProjection : NetworkBehaviour {
 		case MoveType.Forward:
 			selfTransform.Translate (selfTransform.forward * projectionVelocity * Time.deltaTime,
 				relativeTo:Space.World);
+			break;
+		case MoveType.FollowUser:
+			selfTransform.position = meatBallTransform.position;
+			selfTransform.rotation = meatBallTransform.rotation;
+			if (selfStatus.isDead)
+				NetworkServer.Destroy (gameObject);
 			break;
 		}
 	}
