@@ -7,11 +7,9 @@ public enum Stage0DoorKind{
 	Back
 }
 
-public class Stage0Door : NetworkBehaviour {
+public class Stage0Door : MonoBehaviour {
 	//doorType
 	public Stage0DoorKind doorType = Stage0DoorKind.For;
-	//if this bool not true,door can't open.
-	bool isDoorCanOpen = false;
 	//if this bool true,door opening.
 	public bool isDoorOpen  = false;
 

@@ -48,6 +48,12 @@ public class GameManager : NetworkBehaviour {
 
 	void Awake(){
 		staticEndBoard = endBoard;
+		NeedToAwake ();
+
+	}
+
+	public virtual void NeedToAwake(){
+		
 	}
 
 	public GameManager GetGameManager(){
@@ -157,8 +163,14 @@ public class GameManager : NetworkBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Tab)) {
 		}
+
+		NeetToUpdate ();
 	}
 	#endregion
+
+	public virtual void NeetToUpdate(){
+		
+	}
 
 	#region PlayerIDSort
 	[ServerCallback]

@@ -182,13 +182,6 @@ public class MeatBallStatus : NetworkBehaviour {
 				phsics.RpcAddForce ( direction.x, direction.y, direction.z);
 			}
 		} 
-//		else {
-//			if (direction != Vector3.zero) {
-//				Vector3 direction = Vector3.up - transform.forward;
-//				phsics.RpcAddForce (direction.x, direction.y, direction.z);
-//
-//			}
-//		}
 	}
 
 

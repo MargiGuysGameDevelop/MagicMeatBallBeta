@@ -10,8 +10,16 @@ public class Combat : NetworkBehaviour {
 	public MeatBallStatus selfStatus;
 	public GameObject[] hurtEffectList;
 
+
+	//Moster
+	MosterStatus mosterStatus;
+
+
 	void Awake () {
 		selfStatus = GetComponent<MeatBallStatus> ();
+		if (selfStatus == null) {
+			mosterStatus = GetComponent<MosterStatus> ();
+		}
 	}
 		
 
@@ -28,6 +36,12 @@ public class Combat : NetworkBehaviour {
 	/**take damage only on sever**/
 	[ServerCallback]
 	public void TakeDamage(float damage,int netID,float fatigue,Vector3 force){
+		if (mosterStatus) {
+			mosterStatus.Damage (damage,fatigue,force,netID);
+			return;
+		}
+
+
 		if (selfStatus.isInvincible)
 			return;
 		if (!selfStatus.CheckIsDead() ) {
