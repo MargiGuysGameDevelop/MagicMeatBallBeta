@@ -46,6 +46,9 @@ public class MosterStatus : NetworkBehaviour{
 	}
 
 	public void Damage(float hp,float fatigue,Vector3 direction,int netID){
+		if (isInvincible)
+			return;
+
 		HP -= hp;
 		EP -= fatigue;
 		if (HP <= 0f) {
@@ -55,9 +58,16 @@ public class MosterStatus : NetworkBehaviour{
 		}
 		if (EP <= 0f) {
 			EP = 0f;
-			self.Hurt ();
-			if(direction != Vector3.zero)
-				phsics.CmdAddForce (direction.x,direction.y,direction.z);
+			if (direction != Vector3.zero && self.type != MosterType.Boss) {
+				self.Hurt ();
+				phsics.CmdAddForce (direction.x, direction.y, direction.z);
+			}
 		}
+	}
+
+	public bool isDead(){
+		if (HP == 0f)
+			return true;
+		return false;
 	}
 }

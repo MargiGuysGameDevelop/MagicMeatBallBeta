@@ -91,7 +91,6 @@ public class FunPhsics : NetworkBehaviour {
 				//平常狀態
 				//受力推擊(Push)
 				if (pushTimes > 0f) {
-//					var localPushVector = trans.InverseTransformDirection(pushVector);
 					trans.Translate (pushVector * Time.deltaTime,Space.World);
 
 				} else if (pushVector != Vector3.zero) {
@@ -113,9 +112,8 @@ public class FunPhsics : NetworkBehaviour {
 	}
 
 	void OnGround(){
-//		Debug.Log ("0");
-		var fall = !Physics.Raycast (trans.position,Vector3.down,out hit,10f,
-//			LayerMask.NameToLayer("Ignore Raycast")
+		var fall = !Physics.Raycast (trans.position + new Vector3(0f,0.05f,0f)
+			,Vector3.down,out hit,10f,
 			layer
 			,QueryTriggerInteraction.Ignore); 
 
@@ -157,13 +155,15 @@ public class FunPhsics : NetworkBehaviour {
 			y = (initialYVelocity + timer * Physics.gravity.y);
 		}
 
-		y = Mathf.Clamp (y, -10f, 10f);
+		y = Mathf.Clamp (y, -7f, 7f);
 
 		trans.Translate (0f,y * Time.deltaTime,0f);
 	}
 
 	void FlyXZ(){
 		if(force.x != 0f || force.z != 0f){
+			force.x = Mathf.Clamp (force.x,-4f,4f);
+			force.z = Mathf.Clamp (force.z,-4f,4f);
 			var XZTrans = new Vector3 (force.x,0f,force.z);
 			transform.Translate (XZTrans*Time.deltaTime,relativeTo:Space.World);
 		}

@@ -10,7 +10,7 @@ public class SkillProjection : NetworkBehaviour {
 	// 無力 攻擊者前方 物件中心發散 物件中心收斂 觸發其他物件
 	public enum ForceType{None,AttackersForward,Diverge,Converge};
 	//無(預設) 前進 
-	public enum MoveType{None,Forward,FollowUser};
+	public enum MoveType{None,Forward,FollowUser,Left,Right,Back};
 
 	public MoveType moveType = MoveType.None;
 	[Header("速率(moveType = None請無視)")]
@@ -48,15 +48,16 @@ public class SkillProjection : NetworkBehaviour {
 
 	[HideInInspector]
 	public Transform selfTransform;
-	[HideInInspector]
-	public Transform meatBallTransform;
-	[HideInInspector]
+
+	public Transform myMainTransform;
+//	[HideInInspector]
 	public float damage;
 //	[HideInInspector]
 	public MeatBallStatus selfStatus;
+	public MosterStatus mosterStatus;
 
 	[Header("破甲值")]
-	[HideInInspector]
+//	[HideInInspector]
 	public float fatigue;
 
 	[HideInInspector]
@@ -76,13 +77,35 @@ public class SkillProjection : NetworkBehaviour {
 			}
 	}
 
-//	void Start(){
-//		ignoreCollider = 
-//	}
+	void OnEnable(){
+
+		if (!mosterStatus && GetComponentInParent<SkillProjection> ())
+			mosterStatus = GetComponentInParent<SkillProjection> ().mosterStatus;
+		else if (!selfStatus && GetComponentInParent<SkillProjection> ())
+			selfStatus = GetComponentInParent<SkillProjection> ().selfStatus;
+
+		switch(moveType){
+		case MoveType.None:
+			return;
+		case MoveType.Back:
+			selfTransform.Rotate (0f,-180f,0f);
+			break;
+		case MoveType.Right:
+			selfTransform.Rotate (0f,-90f,0f);
+			break;
+		case MoveType.Left:
+			selfTransform.Rotate (0f,90f,0f);
+			break;
+		}
+
+	}
 
 	void SetIgnorCollider(){
-
-		ignoreCollider = selfStatus.GetComponent<Collider> ();
+		if(selfStatus)
+			ignoreCollider = selfStatus.GetComponent<Collider> ();
+		else if(mosterStatus)
+			ignoreCollider = mosterStatus.GetComponent<Collider> ();
+			
 	}
 
 	[ServerCallback]
@@ -107,7 +130,14 @@ public class SkillProjection : NetworkBehaviour {
 			CountForce (combat.transform);
 			if (!attackedList.Contains (combat)) {
 				attackedList.Add (combat);
-				combat.TakeDamage (damage, selfStatus.playerNetId, fatigue, force*forceIndex);
+				if(selfStatus)
+				combat.TakeDamage (damage, 
+					selfStatus!=null? selfStatus.playerNetId : -1
+					, fatigue, force*forceIndex);
+				else if(!other.GetComponent<Moster>())
+					combat.TakeDamage (damage, 
+						selfStatus!=null? selfStatus.playerNetId : -1
+						, fatigue, force*forceIndex);
 			}
 			if (isDestroyOnOnceHit) {
 				if(gameObject)
@@ -127,6 +157,7 @@ public class SkillProjection : NetworkBehaviour {
 		if (hitEffect) {
 			var effect = Instantiate (hitEffect,
 				other.transform.position, other.transform.rotation) as GameObject;
+			effect.SetActive (true);
 			NetworkServer.Spawn (effect);
 		}
 	}
@@ -160,10 +191,26 @@ public class SkillProjection : NetworkBehaviour {
 				relativeTo:Space.World);
 			break;
 		case MoveType.FollowUser:
-			selfTransform.position = meatBallTransform.position;
-			selfTransform.rotation = meatBallTransform.rotation;
-			if (selfStatus.isDead)
+			selfTransform.position = myMainTransform.position;
+			selfTransform.rotation = myMainTransform.rotation;
+			if (selfStatus) {
+				if (selfStatus.isDead)
+					NetworkServer.Destroy (gameObject);
+			} else if (mosterStatus.isDead ()) {
 				NetworkServer.Destroy (gameObject);
+			}
+			break;
+		case MoveType.Back:
+			selfTransform.Translate (-selfTransform.forward * projectionVelocity * Time.deltaTime,
+				relativeTo: Space.World);
+			break;
+		case MoveType.Left:
+			selfTransform.Translate (-selfTransform.right * projectionVelocity * Time.deltaTime,
+				relativeTo: Space.World);
+			break;
+		case MoveType.Right:
+			selfTransform.Translate (selfTransform.right * projectionVelocity * Time.deltaTime,
+				relativeTo: Space.World);
 			break;
 		}
 	}
@@ -175,7 +222,7 @@ public class SkillProjection : NetworkBehaviour {
 			force = Vector3.zero;
 			break;
 		case ForceType.AttackersForward:
-			force = selfStatus.transform.forward.normalized * forceIndex;
+			force = selfTransform.forward.normalized * forceIndex;
 			force += force + new Vector3(0,forceY,0);
 			break;
 		case ForceType.Diverge:
@@ -215,4 +262,21 @@ public class SkillProjection : NetworkBehaviour {
 		projectionType = ProjectionType.Generic;
 	}
 
+
+	#region AnimationEvent
+	[ServerCallback]
+	void AttackColliderOn(){
+		myCollider.enabled = true;
+	}
+
+	[ServerCallback]
+	void AttackColliderOff(){
+		myCollider.enabled = false;
+		attackedList.Clear ();
+		if (attackedList.Count != 0) {
+			var my = attackedList [0];
+			attackedList.Add (my);
+		}
+	}
+	#endregion
 }

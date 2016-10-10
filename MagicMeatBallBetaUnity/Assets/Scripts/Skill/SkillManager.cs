@@ -6,20 +6,20 @@ public class SkillManager : NetworkBehaviour {
 
 	#region 基本欄位
 	[SerializeField]
-	string weaponSkillName;
+	protected string weaponSkillName;
 
-	ExtraStates extraStates;
-	Weapon weapon;
-	MeatBallStatus selfStatus;
-	MeatBall self;
+	protected ExtraStates extraStates;
+	protected Weapon weapon;
+	protected MeatBallStatus selfStatus;
+	protected MeatBall self;
 
-	bool usingSkill = false;
+	protected bool usingSkill = false;
 	#endregion
 
 	#region 初始化
 
 //	[ContextMenu("初始化技能及UI")]
-	public void Initial(){
+	virtual public void Initial(){
 		weapon = GetComponentInChildren<Weapon> ();
 		skillList = weapon.GetComponentsInChildren<Skill> ();
 //
@@ -29,7 +29,7 @@ public class SkillManager : NetworkBehaviour {
 	#endregion
 
 	#region 技能列
-	int skillIndex = 0;
+	protected int skillIndex = 0;
 	public Skill[] skillList;
 	#endregion
 
@@ -53,7 +53,7 @@ public class SkillManager : NetworkBehaviour {
 	public SkillPlaying playing;
 
 	public delegate void SkillStart();
-	SkillStart start;
+	protected SkillStart start;
 
 	public delegate void SkillEnd();
 	SkillEnd end;
@@ -63,10 +63,11 @@ public class SkillManager : NetworkBehaviour {
 	}
 	#endregion
 
-	//debug
-	float debug = 0f;
-
 	void Start(){
+		NeedToStart ();
+	}
+
+	virtual public void NeedToStart(){
 		selfStatus = GetComponent<MeatBallStatus> ();
 
 		extraStates = GetComponent<ExtraStates> ();
@@ -77,7 +78,6 @@ public class SkillManager : NetworkBehaviour {
 
 		UI = GameObject.Find ("SkillUI").GetComponentInChildren<SkillUIManager> ();
 
-//		UI.InitialSkills (skillList);
 		for(int i=0;i<4;i++){ 
 			UI.iconList [i].sprite = skillList [i+1].icon;
 		}
@@ -89,14 +89,13 @@ public class SkillManager : NetworkBehaviour {
 		if (Time.timeScale == 0)
 			return;
 
+		NeedToUpdate ();
+	}
+
+	virtual public void NeedToUpdate(){
 		if (!isLocalPlayer)
 			return;
-
-		//skill have Isskillable 
-		//meatball ishurt
-		//isSkilling 
-		//isCD
-
+		
 		if (!self.IsSkillable () || self.IsHurt () || selfStatus.isDead)
 			return;
 
@@ -110,32 +109,23 @@ public class SkillManager : NetworkBehaviour {
 					UsingSkill (skillIndex);
 				}
 			}
-
-//			if (skillIndex != lastSkillIndex) {
-//
-////				debug = 0f;
-//				return;
-//			}
-//			if (skillIndex != 0)
-//				skillIndex = 0;
 		} 
-
 	}
 
-	void UsingSkill(int inputIndex){
+	virtual public void UsingSkill(int inputIndex){
 		self.CmdSetAnimInt("SkillInt",skillIndex);
 //		self.CmdSetSkillLayer ();
 		CmdUsingSkill (inputIndex);
 	}
 
 	[Command]
-	void CmdUsingSkill(int inputIndex){
+	virtual public void CmdUsingSkill(int inputIndex){
 //		Debug.Log ("CmdUseskill" + gameObject.name + ":" +  skillList[skillIndex].name);
 		RpcUsingSkill (inputIndex);
 	}
 
 	[ClientRpc]
-	void RpcUsingSkill(int inputIndex){
+	virtual public void RpcUsingSkill(int inputIndex){
 		if(skillIndex != 0)
 			UI.CountCD (inputIndex-1,skillList[skillIndex].CD.value);
 		skillList [inputIndex].CD.Count ();

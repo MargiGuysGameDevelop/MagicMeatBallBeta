@@ -17,13 +17,23 @@ public class ScoreBoard : MonoBehaviour {
 	void Update(){
 		if (Time.timeScale == 0)
 			return;
-
 		if(Input.GetKeyDown(KeyCode.Tab)){
 			if (!GM)
 				GM = GameObject.FindObjectOfType<GameManager> ();
 			GM.RefreshScoreBoard ();
 			DataUI.SetActive (true);
 		}else if(Input.GetKeyUp(KeyCode.Tab)){
+			DataUI.SetActive (false);
+		}
+	}
+
+	public void SetScoreBoard(bool input){
+		if(input){
+			if (!GM)
+				GM = GameObject.FindObjectOfType<GameManager> ();
+//			GM.RefreshScoreBoard ();
+			DataUI.SetActive (true);
+		}else{
 			DataUI.SetActive (false);
 		}
 	}

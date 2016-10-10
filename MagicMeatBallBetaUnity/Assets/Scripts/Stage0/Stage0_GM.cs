@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Stage0_GM : GameManager {
 
@@ -90,8 +91,15 @@ public class Stage0_GM : GameManager {
 	Stage0RoomType roomType = Stage0RoomType.None;
 	//怪物種類
 	public GameObject[] mosterType;
+	string[] mosterName;
+	public GameObject[] bossType;
+	string[] bossName;
+	public GameObject[] fallingType;
+	string[] fallingName;
 	//場上怪物 管理
 	public List<Moster> mosters;
+	//掉落物
+	public List<GameObject> fallingThings;
 	//目前房間
 	[SerializeField]
 	Stage0_Room currRoom;
@@ -108,19 +116,38 @@ public class Stage0_GM : GameManager {
 	public bool isClearStage = false;
 	/// 進入關卡
 	public bool isEnterStage = false;
-	//None情況下，計算過關所需時間
+	//，計算過關所需時間
 	float timer = 0f;
+	//Falling情況下，計算何時該掉落物品
+	float fallingCounter = 1f;
 	//update
-	delegate void update();
-	update updateFunction;
+	delegate void NormalDelegate();
+	NormalDelegate updateFunction;
+
+	//UI
+	public Text timeCounter;
+	public Text stageName;
 
 	public override void NeedToAwake ()
 	{
 		currRoom.onTriggerEnter = StageStart;
 		currRoom.onTriggerExit = StageExit;
+
+		mosterName = new string[mosterType.Length];
+		for(int i=0;i<mosterType.Length;i++){
+			mosterName[i] = mosterType [i].name;
+		}
+		bossName = new string[bossType.Length];
+		for(int i=0;i<bossType.Length;i++){
+			bossName[i] = bossType [i].name;
+		}
+
 	}
 
 	void StageStart(){
+		if(playerList[0] != null)
+		playerList [0].DeadFun = NeetToDoInRefreshScoreBoard;
+
 		if (!isEnterStage) {
 			isEnterStage = true;
 			currRoom.CloseBackDoor ();
@@ -131,32 +158,46 @@ public class Stage0_GM : GameManager {
 	void StagePlaying(){
 		currentStage++;
 		currRoom.CloseForwardDoor (transform);
-		CreateMosters  ();
-		return;
+		LogManager.Clear ();
+		stageName.text = currentStage.ToString () + ":";
+//		CreateMosters  ();
+//		CreateBoss();
+//		return;
 		switch(roomType){
 		case Stage0RoomType.BOSS:
-			LogManager.Log ("您選中魔王關!你即將接受0A的洗禮!");
+			stageName.text += "魔王關";
+			LogManager.Log ("選中魔王關!你即將接受0A的洗禮!");
 			CreateBoss ();
+//			Falling ();
+//			CreateMosters  ();
 			break;
 		case Stage0RoomType.ManyMoster:
+			stageName.text += "無雙關";
 			CreateMosters  ();
-			LogManager.Log ("您抽中無雙關卡，準備大殺四方吧!");
+//			CreateBoss ();
+//			Falling ();
+			LogManager.Log ("抽中無雙關卡，準備大殺四方吧!");
 			break;
 		case Stage0RoomType.Suvival:
-			LogManager.Log ("甚麼?是生存關卡?");
+			stageName.text += "生存關";
+			LogManager.Log ("生存關卡!小心A車和水桶!");
+//			CreateBoss ();
+//			CreateMosters  ();
 			Falling ();
 			break;
 		case Stage0RoomType.None:
-			LogManager.Log ("恭喜您直接過關~");
+			stageName.text += "直接過關!";
+			LogManager.Log ("恭喜您直接過關~3秒後就可走囉");
 			None ();
 			break;
 		default:
-			LogManager.Log ("怎麼會這樣?Bug出現了!請來信通知!");
+			LogManager.Log ("怎麼會這樣!Bug出現了!請來信通知!");
 			break;
 		}
 	}
 		
 	void StagePass(){
+		timeCounter.text = "剩餘時間:X";
 		isClearStage = true;
 		timer = 0;
 		currRoom.OpenForwardDoor ();
@@ -175,35 +216,52 @@ public class Stage0_GM : GameManager {
 		}
 	}
 
+	[ServerCallback]
 	public void CreateMosters(){
+		timeCounter.text = "剩餘時間:X";
 		for(int i =0;i<B;i++){
 			int ramdon =  Random.Range (0,mosterType.Length);
 			GameObject moster = Instantiate (mosterType[ramdon],
-				transform.position,transform.rotation) as GameObject;
+				currRoom.RandomPosition(),transform.rotation) as GameObject;
 			Moster mosterScript = moster.GetComponent<Moster> ();
 			mosters.Add (mosterScript);
 			mosterScript.myIndexOnGM = mosters.Count - 1;
-			moster.name = "Moster" + (mosters.Count -1).ToString();
-			mosterScript.deadFunc = RemoveMosterByIndex;
+			moster.name = mosterName[ramdon] + (mosters.Count -1).ToString();
+			mosterScript.player = playerList [0].GetComponent<Combat>();
+			mosterScript.addKill = addKillAmount;
+			moster.gameObject.SetActive(true);
 			NetworkServer.Spawn (moster);
 		}
 		updateFunction = ManyMosterUpdate;
 	}
 
-	void RemoveMosterByIndex(){
-		mosters.Remove (mosters[mosters.Count -1 ]);
+	void addKillAmount(){
+		playerList [0].killAmount++;
+		RefreshScoreBoard ();
 	}
+				
 
 	public void CreateBoss(){
+		timeCounter.text = "剩餘時間:X";
 		for(int i =0;i<A;i++){
-			int ramdon =  Random.Range (0,mosterType.Length);
-			GameObject moster = Instantiate (mosterType[ramdon],
+			int ramdon =  Random.Range (0,bossType.Length);
+			GameObject boss = Instantiate (bossType[ramdon],
 				transform.position,transform.rotation) as GameObject;
-			Moster mosterScript = moster.GetComponent<Moster> ();
-			NetworkServer.Spawn (moster);
-			mosters.Add (mosterScript);
+			boss.name = bossName [ramdon];
+			Moster bossScript = boss.GetComponent<Moster> ();
+			bossScript.player =  playerList [0].GetComponent<Combat>();
+			mosters.Add (bossScript);
+			bossScript.gameObject.SetActive(true);
+			bossScript.callMoster = this.CallMoster;
+			bossScript.addScore = addScoreAmount ;
+			NetworkServer.Spawn (boss);		
 		}
 		updateFunction = BossUpdate;
+	}
+
+	void addScoreAmount(){
+		playerList [0].scoreAmount++;
+		RefreshScoreBoard ();
 	}
 
 	public void Falling(){
@@ -219,6 +277,11 @@ public class Stage0_GM : GameManager {
 	}
 
 	void BossUpdate(){
+		foreach(Moster moster in mosters){
+			if (!moster.NeedToUpdate ()) {
+				mosters.Remove(moster);
+			}
+		}
 		if (mosters.Count == 0) {
 			mosters.Clear();
 			StagePass ();
@@ -227,15 +290,33 @@ public class Stage0_GM : GameManager {
 	}
 
 	void FallingUpdate(){
+		timeCounter.text = "剩餘時間:" + ((int)(C - timer)).ToString ();
 		timer += Time.deltaTime;
+		if (timer > fallingCounter ){
+			for(int i=0;i<4*C;i++){
+//				int random =  Random.Range (0,1);
+//				Debug.Log (random);
+				var fall = Instantiate (fallingThings[i%2] , currRoom.RandomPosition()  
+					, transform.rotation)as GameObject;
+				fall.SetActive (true);
+				var	fallScript = fall.GetComponent<SkillProjection> ();
+				fallScript.damage = 5*E;
+				fallScript.forceY = 2f;
+				fallScript.myMainTransform = fall.transform;
+				NetworkServer.Spawn (fall);
+			}
+			fallingCounter += 1f;
+		}
 		if (timer >= C) {
 			StagePass ();
 			updateFunction = null;
-			timer = 0;
+			timer = 0f;
+			fallingCounter = 1f;
 		}
 	}
 
 	void NoneUpdate(){
+		timeCounter.text = "剩餘時間:" + ((int)(3 - timer)).ToString ();
 		timer += Time.deltaTime;
 		if (timer >= 3f) {
 			StagePass ();
@@ -247,5 +328,29 @@ public class Stage0_GM : GameManager {
 	{
 		if(updateFunction != null)
 			updateFunction ();
+	}
+		
+	public void CallMoster(){
+		for(int i=0;i<B/4;i++){
+			GameObject moster = Instantiate (mosterType[0],
+				currRoom.RandomPosition(),transform.rotation) as GameObject;
+			Moster mosterScript = moster.GetComponent<Moster> ();
+			mosters.Add (mosterScript);
+			mosterScript.myIndexOnGM = mosters.Count - 1;
+			moster.name = mosterName[0] + (mosters.Count -1).ToString();
+			mosterScript.player = playerList [0].GetComponent<Combat>();
+			moster.gameObject.SetActive(true);
+			NetworkServer.Spawn (moster);
+		}
+	}
+
+	public override void NeetToDoInRefreshScoreBoard ()
+	{
+		if (playerList [0].deathAmount >= 3) {
+			if (!scoreBoard)
+				scoreBoard = GameObject.FindObjectOfType<ScoreBoard> ();
+			scoreBoard.SetScoreBoard (true);
+			CmdGameOver (currentStage.ToString ());
+		}
 	}
 }

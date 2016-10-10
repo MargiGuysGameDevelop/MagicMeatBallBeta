@@ -69,6 +69,11 @@ public class MeatBallStatus : NetworkBehaviour {
 	//skillEffect
 	public int currSkillEffectInt = 0;
 
+
+	//detect if Dead
+	public delegate void NoramlDelegate();
+	public NoramlDelegate DeadFun;
+
 	void Awake () {
 		MaxHP = 100f;
 		MaxEP = 100f;
@@ -208,16 +213,18 @@ public class MeatBallStatus : NetworkBehaviour {
 				//if(attacker != -1)
 				attackerMeatBallStatus.scoreAmount++;
 				attackerMeatBallStatus.killAmount++;
-				GM.CmdRefreshScoreBoard ();
+				GM.RefreshScoreBoard ();
+
 
 				//JudgeIsGameOver
 				if (GameManager.JudgeIsGameOver (attackerMeatBallStatus.scoreAmount)) {
-					
 					GM.CmdGameOver (attackerMeatBallStatus.playerName);
 				}
-
+				return;
 			}
 		}
+		if (DeadFun != null)
+			DeadFun ();
 		/*Debug.Log (this.gameObject.name + "被"+
 			GameManager.playerSenceData[attacker].gameObject.name + "殺死!");
 		GameManager.ChangeScoreData (playerNetId,ScoreKind.death);

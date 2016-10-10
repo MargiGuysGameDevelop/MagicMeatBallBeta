@@ -74,7 +74,7 @@ public class GameManager : NetworkBehaviour {
 
 	public void RefreshScoreBoard(){
 		int playerCount = 0;
-
+	
 		foreach(PlayerScore player in scoreBoard.playerData){
 			//Debug.Log ("playerCount : " + playerCount);
 			if (playerCount < playerNumber) {
@@ -86,6 +86,12 @@ public class GameManager : NetworkBehaviour {
 			}
 		}
 
+		NeetToDoInRefreshScoreBoard ();
+
+	}
+
+	public virtual void NeetToDoInRefreshScoreBoard(){
+			Debug.Log (1);
 	}
 
 
@@ -233,7 +239,7 @@ public class GameManager : NetworkBehaviour {
 	}
 
 
-	public static bool JudgeIsGameOver(int score){
+	public static  bool JudgeIsGameOver(int score){
 		if (score >= endScore)
 			return true;
 		else
@@ -268,7 +274,9 @@ public class GameManager : NetworkBehaviour {
 		staticEndBoard.SetActive (true);
 	}
 
-
+	public void ifGameOver(){
+		
+	}
 
 
 

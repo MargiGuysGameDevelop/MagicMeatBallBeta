@@ -30,7 +30,8 @@ public class SuitList : MonoBehaviour {
 			for(int i=0;i<kind.Length;i++){
 				kind [i].gameObject.SetActive (false);
 			}
-			var currSuit = kind [meatBall.selfStatus.currentWeapon];
+			Suit currSuit;
+			currSuit = kind [meatBall.selfStatus.currentWeapon];
 			currSuit.gameObject.SetActive (true);
 			currSuit.SetCloth (body.body);
 			currSuit.SetLeftWeapon (body.leftHand);
@@ -40,6 +41,26 @@ public class SuitList : MonoBehaviour {
 			currSuit.SetRightShose (body.rightLeg);
 			currSuit.SetCloak (body.back);
 //			Debug.Log (meatBall.selfStatus.currentWeapon);
+		}
+	}
+
+	public void InitialSuit(int index){
+		for(int i=0;i<kind.Length;i++){
+			if (i == index) {
+				Suit currSuit;
+				currSuit = kind [index];
+				currSuit.gameObject.SetActive (true);
+				currSuit.SetCloth (body.body);
+				currSuit.SetLeftWeapon (body.leftHand);
+				currSuit.SetRightWeapon (body.rightHand);
+				currSuit.SetHat (body.head);
+				currSuit.SetLeftShose (body.leftLeg);
+				currSuit.SetRightShose (body.rightLeg);
+				currSuit.SetCloak (body.back);
+				currSuit.AllOpen ();
+			} else {
+				kind [i].AllClose ();
+			}
 		}
 	}
 

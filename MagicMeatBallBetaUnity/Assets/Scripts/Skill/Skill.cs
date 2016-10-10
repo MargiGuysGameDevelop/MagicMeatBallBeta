@@ -24,16 +24,16 @@ public class Skill : MonoBehaviour{
 	[SerializeField]
 	protected float skillTime;
 
-	protected Transform meatBallTran;
+	protected Transform selfTran;
 
 	public Vector3 force;
-//	protected MeatBallStatus meatBallStatus;
-//	protected Weapon weapon;
 	#endregion
 
 	//UI
 	public ColdDown CD = new ColdDown();
 	public Sprite icon;
+
+	//for moster
 
 	public bool isRunSkillCDUI(){
 		if (CD.isDone)
@@ -117,9 +117,14 @@ public class Skill : MonoBehaviour{
 	#endregion
 
 	void Awake(){
-		meatBallTran = GetComponentInParent<MeatBall> ().GetComponent<Transform>();
-//		meatBallStatus = GetComponentInParent<MeatBallStatus> ();
-//		weapon = GetComponentInParent<Weapon> ();
+		NeetToAwake ();
+	
+	}
+
+	virtual public void NeetToAwake(){
+		var mb = GetComponentInParent<MeatBall> ();
+		if(mb)
+		selfTran = mb.GetComponent<Transform>();
 	}
 
 	void Start(){
@@ -138,8 +143,9 @@ public class Skill : MonoBehaviour{
 
 	//剛施展技能
 	virtual public void StartSKill(){
-		if(name != "")
-			LogManager.Log (GetComponentInParent<MeatBall>().name + "使出了" + name + "!");
+		if (name != "") {
+				LogManager.Log (GetComponentInParent<MeatBall> ().name + "使出了" + name + "!");
+		}
 	}
 
 	//施展技能中

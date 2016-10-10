@@ -16,7 +16,7 @@ public class EndBoard : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+//		endBoardBG.localPosition.z = 0f;
 	}
 	
 	// Update is called once per frame
@@ -25,9 +25,9 @@ public class EndBoard : MonoBehaviour {
 			endBoardBG.localScale += new Vector3 (0.02f, 0f, 0f);
 		}
 		if (endBoardBG.localScale.y < 1) {
-			endBoardBG.localScale += new Vector3(0,0.02f,0f);
+			endBoardBG.localScale += new Vector3 (0, 0.02f, 0f);
 			winnerIndex.text = winnerName;
-		}
+		} 
 	}
 
 	void OnEnable(){

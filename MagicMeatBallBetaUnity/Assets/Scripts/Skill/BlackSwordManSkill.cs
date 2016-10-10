@@ -8,9 +8,9 @@ public class BlackSwordManSkill : Skill {
 //		Debug.Log (skillNumber);
 		if(skillNumber == 1){
 			var phsics = GetComponentInParent <FunPhsics>();
-			var force = meatBallTran.forward;
+			var force = selfTran.forward;
 			force.y = 0;
-			force = force.normalized * 32f;
+			force = force.normalized * 24f;
 			phsics.CmdPushEqualVelocity (0.4f,force);
 		}
 	}

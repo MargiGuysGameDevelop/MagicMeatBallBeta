@@ -1,11 +1,11 @@
-﻿	using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEngine.Networking;
+//using UnityEngine.Networking;
 using Xft;
 
-public class Weapon : NetworkBehaviour {
+public class Weapon : MonoBehaviour {
 
 	Collider weaponCollider ;
 
@@ -25,7 +25,7 @@ public class Weapon : NetworkBehaviour {
 
 	public int weaponCode;
 
-	public Text HPText;
+//	public Text HPText;
 
 	List<Combat> attackedList = new List<Combat>();
 
@@ -49,6 +49,8 @@ public class Weapon : NetworkBehaviour {
 	#endregion
 
 	public MeatBallStatus selfStatus;
+	//Moster
+	public MosterStatus mosterStatus;
 
 	void Awake(){
 		weaponCollider = GetComponent<Collider> ();
@@ -58,7 +60,10 @@ public class Weapon : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		selfStatus = GetComponentInParent<MeatBallStatus> ();
-		weaponCode = selfStatus.currentWeapon;
+		if (selfStatus)
+			weaponCode = selfStatus.currentWeapon;
+		else
+			mosterStatus = GetComponentInParent<MosterStatus> ();
 		WeaponCoilderOff ();
 	}
 	
@@ -75,12 +80,23 @@ public class Weapon : NetworkBehaviour {
 		Combat combat = other.GetComponent<Combat> ();
 		if (combat) {
 			if (!attackedList.Contains (combat)) {
-				var newForce = selfStatus.transform.forward;
+				Vector3 newForce;
+				if (selfStatus == null) {
+					newForce = mosterStatus.transform.forward;
+				} else {
+					newForce = selfStatus.transform.forward;
+				}
 				newForce.y += 2;
 				newForce.x *= force.x;
 				newForce.z *= force.z;
 				attackedList.Add (combat);
-				combat.TakeDamage (damage,selfStatus.playerNetId,fatigue,newForce);
+				if (selfStatus != null)
+					combat.TakeDamage (damage, selfStatus.playerNetId, fatigue, newForce);
+				else {
+					if (other.GetComponent<Moster> ())
+						return;
+					combat.TakeDamage (damage, -1, fatigue, newForce);
+				}
 //				if(onHit != null)onHit (other.gameObject,other.gameObject.transform.position,Quaternion.Euler(transform.forward));
 				//onHit(other.gameObject,other.transform.position,Quaternion.Euler(transform.forward));
 //				Debug.Log ("中獎");
@@ -151,33 +167,29 @@ public class Weapon : NetworkBehaviour {
 	
 	}*/
 
-	[ServerCallback]
+//	[ServerCallback]
 	public void WeaponCoilderOn(){
 		weaponCollider.enabled = true;
-
 //		foreach(XWeaponTrail trail in trails){
 //			trail.Activate ();
 //		}
 	}
 
-	[ServerCallback]
+//	[ServerCallback]
 	public void WeaponCoilderOff(){
 		weaponCollider.enabled = false;
-
 //		foreach (XWeaponTrail trai in trails)
 //			trai.Deactivate ();
-
 		SetAttackedListEmpty ();
 	}
 
-	[ServerCallback]
+//	[ServerCallback]
 	public void UseSkill(){
 		
 	}
 
-	[ContextMenu("增加技能")]
+	[ContextMenu("增加技能for貢丸")]
 	public void Initial(){
-
 		var attack = new GameObject ();
 		attack.AddComponent<Skill> ();
 		Instantiate (attack,transform.position,Quaternion.Euler(transform.forward));
@@ -187,6 +199,23 @@ public class Weapon : NetworkBehaviour {
 		for(int i=0;i<4;i++){
 			var gameObject = new GameObject ();
 			gameObject.AddComponent<Skill> ();
+			Instantiate (gameObject,transform.position,Quaternion.Euler(transform.forward));
+			gameObject.name = "skill" + (i + 1).ToString ();
+			gameObject.transform.parent = this.transform;
+		}
+	}
+
+	[ContextMenu("新增技能for怪物")]
+	public void NewSkillForMoster(){
+		var attack = new GameObject ();
+		attack.AddComponent<MosterSkill> ();
+		Instantiate (attack,transform.position,Quaternion.Euler(transform.forward));
+		attack.name = "attack";
+		attack.transform.parent = this.transform;
+
+		for(int i=0;i<4;i++){
+			var gameObject = new GameObject ();
+			gameObject.AddComponent<MosterSkill> ();
 			Instantiate (gameObject,transform.position,Quaternion.Euler(transform.forward));
 			gameObject.name = "skill" + (i + 1).ToString ();
 			gameObject.transform.parent = this.transform;
