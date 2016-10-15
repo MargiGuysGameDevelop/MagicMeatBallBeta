@@ -47,30 +47,5 @@ public class Suit : MonoBehaviour {
 		if(cloak)
 		cloak.transform.parent = parent.transform;
 	}
-
-	public void AllOpen(){
-		SetAll (true);
-	}
-
-	public void AllClose(){
-		SetAll (false);
-	}
-
-	public void SetAll(bool input){
-		if(rightWeapon)
-			rightWeapon.SetActive (input);
-		if(leftWeapon)
-			leftWeapon.SetActive (input); 
-		if(cloth)
-			cloth.SetActive (input);
-		if(rightShose)
-			rightShose.SetActive (input); 
-		if(leftShose)
-			leftShose.SetActive (input); 
-		if(hat)
-			hat.SetActive (input);
-		if(cloak)
-			cloak.SetActive (input);
-	}
 		
 }

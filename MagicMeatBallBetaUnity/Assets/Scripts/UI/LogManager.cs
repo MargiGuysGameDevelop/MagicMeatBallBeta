@@ -26,8 +26,4 @@ public class LogManager : MonoBehaviour {
 	static public void LogError(string message){
 		Log (message);
 	}
-
-	static public void Clear(){
-		context.text = "";
-	}
 }

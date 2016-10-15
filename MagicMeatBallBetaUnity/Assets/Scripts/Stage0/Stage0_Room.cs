@@ -56,15 +56,6 @@ public class Stage0_Room : NetworkBehaviour {
 		}
 	}
 
-	public Vector3 RandomPosition(){
-		Vector3 position = new Vector3 (
-			roomTran.position.x + Random.Range(-15,15),
-			0f,
-			roomTran.position.z + Random.Range(-15,15)
-		);
-		return position;
-	}
-
 	[ServerCallback]
 	void GoToNextStage(Transform trans){
 		foreach(Stage0Door door in forwardDoors){
@@ -86,8 +77,7 @@ public class Stage0_Room : NetworkBehaviour {
 	}
 
 	void DestoryRoom(){
-		if(this.gameObject)
-			NetworkServer.Destroy (this.gameObject);
+		NetworkServer.Destroy (this.gameObject);
 	}
 
 	public void CloseForwardDoor(Transform trans){

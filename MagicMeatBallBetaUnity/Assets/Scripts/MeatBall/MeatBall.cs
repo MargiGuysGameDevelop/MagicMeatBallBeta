@@ -210,7 +210,6 @@ public class MeatBall : NetworkBehaviour {
 		skillProjection.selfStatus = this.selfStatus;
 		skillProjection.attackedList.Add (this.GetComponent<Combat> ());
 		skillProjection.ignoreCollider = GetComponent<CapsuleCollider> ();
-		skillProjection.myMainTransform = transform;
 		skillProjection.damage = rightHandWeapon.damage;
 		skillProjection.forceIndex = rightHandWeapon.force.x;
 		skillProjection.forceY = rightHandWeapon.force.y;
@@ -230,7 +229,7 @@ public class MeatBall : NetworkBehaviour {
 		var effect = Instantiate(rightHandWeapon.skillEffect,
 			transform.position,transform.rotation) as GameObject;
 		var projection = effect.GetComponent<SkillProjection> ();
-		projection.myMainTransform = transform;
+		projection.meatBallTransform = transform;
 		projection.selfStatus = this.selfStatus;
 		effect.SetActive (true);
 		NetworkServer.Spawn (effect);

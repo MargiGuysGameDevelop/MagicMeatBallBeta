@@ -327,7 +327,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -338,24 +338,7 @@ ModelImporter:
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves:
-      - name: Curve
-        curve:
-          serializedVersion: 2
-          curve:
-          - time: 0
-            value: 0
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 10
-          - time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 10
-          preInfinity: 2
-          postInfinity: 1
-          rotationOrder: 0
+      curves: []
       events: []
       transformMask:
       - path: 
@@ -500,21 +483,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.30804598
-        functionName: AttackColliderOn
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.6666666
-        functionName: AttackColliderOff
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -790,7 +759,151 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: marginal
+        weight: 1
+      - path: marginal_arm
+        weight: 1
+      - path: marginal_arm/root
+        weight: 1
+      - path: marginal_arm/root/feet_IK_L
+        weight: 1
+      - path: marginal_arm/root/feet_IK_L/feet_IK_L_end
+        weight: 1
+      - path: marginal_arm/root/feet_IK_R
+        weight: 1
+      - path: marginal_arm/root/feet_IK_R/feet_IK_R_end
+        weight: 1
+      - path: marginal_arm/root/hand_IK_pole_L
+        weight: 1
+      - path: marginal_arm/root/hand_IK_pole_L/hand_IK_pole_L_end
+        weight: 1
+      - path: marginal_arm/root/hand_IK_pole_R
+        weight: 1
+      - path: marginal_arm/root/hand_IK_pole_R/hand_IK_pole_R_end
+        weight: 1
+      - path: marginal_arm/root/leg_IK_pole_L
+        weight: 1
+      - path: marginal_arm/root/leg_IK_pole_L/leg_IK_pole_L_end
+        weight: 1
+      - path: marginal_arm/root/leg_IK_pole_R
+        weight: 1
+      - path: marginal_arm/root/leg_IK_pole_R/leg_IK_pole_R_end
+        weight: 1
+      - path: marginal_arm/root/peliv
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/neck
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/neck/head
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/neck/head/head_end
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_L
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_L/arm_1_L
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_L/arm_1_L/arm_2_L
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_L/arm_1_L/arm_2_L/hand_L
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_L/arm_1_L/arm_2_L/hand_L/finger_1_L
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_L/arm_1_L/arm_2_L/hand_L/finger_1_L/finger_2_L
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_L/arm_1_L/arm_2_L/hand_L/finger_1_L/finger_2_L/finger_2_L_end
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_R
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_R/arm_1_R
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_R/arm_1_R/arm_2_R
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_R/arm_1_R/arm_2_R/hand_R
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_R/arm_1_R/arm_2_R/hand_R/finger_1_R
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_R/arm_1_R/arm_2_R/hand_R/finger_1_R/finger_2_R
+        weight: 1
+      - path: marginal_arm/root/peliv/backbone_0/backbone_1/backbone_2/backbone_3/shoulder_R/arm_1_R/arm_2_R/hand_R/finger_1_R/finger_2_R/finger_2_R_end
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_L
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_L/leg_1_L
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_L/leg_1_L/leg_2_L
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_L/leg_1_L/leg_2_L/feet_L
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_L/leg_1_L/leg_2_L/feet_L/toe_L
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_L/leg_1_L/leg_2_L/feet_L/toe_L/toe_L_end
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_R
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_R/leg_1_R
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_R/leg_1_R/leg_2_R
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_R/leg_1_R/leg_2_R/feet_R
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_R/leg_1_R/leg_2_R/feet_R/toe_R
+        weight: 1
+      - path: marginal_arm/root/peliv/peliv_R/leg_1_R/leg_2_R/feet_R/toe_R/toe_R_end
+        weight: 1
+      - path: marginal_arm/root/weapon_L
+        weight: 1
+      - path: marginal_arm/root/weapon_L/hand_IK_L
+        weight: 1
+      - path: marginal_arm/root/weapon_L/hand_IK_L/hand_IK_L_end
+        weight: 1
+      - path: marginal_arm/root/weapon_R
+        weight: 1
+      - path: marginal_arm/root/weapon_R/hand_IK_R
+        weight: 1
+      - path: marginal_arm/root/weapon_R/hand_IK_R/hand_IK_R_end
+        weight: 1
+      - path: pliow
+        weight: 1
+      - path: spray
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: marginal_armAction
+      takeName: marginal_armAction
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -1090,14 +1203,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.9908046
-        functionName: Destroy
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -1521,11 +1627,11 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
-      loopBlendPositionXZ: 1
+      loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 0
+      keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
-      heightFromFeet: 1
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -1642,6 +1748,8 @@ ModelImporter:
       - path: marginal_arm/root/weapon_R/hand_IK_R
         weight: 1
       - path: marginal_arm/root/weapon_R/hand_IK_R/hand_IK_R_end
+        weight: 1
+      - path: pliow
         weight: 1
       - path: spray
         weight: 1
@@ -2103,14 +2211,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.63678163
-        functionName: Project
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
