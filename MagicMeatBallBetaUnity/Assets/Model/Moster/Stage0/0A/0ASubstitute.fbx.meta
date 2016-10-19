@@ -1,0 +1,186 @@
+fileFormatVersion: 2
+guid: 89c031e7dfa3ae641aaff4fd3810f77a
+timeCreated: 1475896591
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: 0AS_arm
+    100002: //RootNode
+    100004: 0ASubstitute
+    100006: arm_1_L
+    100008: arm_1_R
+    100010: arm_2_L
+    100012: arm_2_L_end
+    100014: arm_2_R
+    100016: arm_2_R_end
+    100018: body
+    100020: head
+    100022: head_end
+    400000: 0AS_arm
+    400002: //RootNode
+    400004: 0ASubstitute
+    400006: arm_1_L
+    400008: arm_1_R
+    400010: arm_2_L
+    400012: arm_2_L_end
+    400014: arm_2_R
+    400016: arm_2_R_end
+    400018: body
+    400020: head
+    400022: head_end
+    4300000: 0ASubstitute
+    7400000: Substitute_SubstituteBucket
+    9500000: //RootNode
+    13700000: 0ASubstitute
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Substitute_SubstituteBucket
+      takeName: Substitute_SubstituteBucket
+      firstFrame: 0
+      lastFrame: 240
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.3862069
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.43448275
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6045977
+        functionName: AttackColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6827586
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: AttackColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: 0AS_arm
+        weight: 1
+      - path: 0AS_arm/body
+        weight: 1
+      - path: 0AS_arm/body/arm_1_L
+        weight: 1
+      - path: 0AS_arm/body/arm_1_L/arm_2_L
+        weight: 1
+      - path: 0AS_arm/body/arm_1_L/arm_2_L/arm_2_L_end
+        weight: 1
+      - path: 0AS_arm/body/arm_1_R
+        weight: 1
+      - path: 0AS_arm/body/arm_1_R/arm_2_R
+        weight: 1
+      - path: 0AS_arm/body/arm_1_R/arm_2_R/arm_2_R_end
+        weight: 1
+      - path: 0AS_arm/body/head
+        weight: 1
+      - path: 0AS_arm/body/head/head_end
+        weight: 1
+      - path: 0ASubstitute
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 5
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
